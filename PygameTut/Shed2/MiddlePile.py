@@ -307,7 +307,7 @@ class Pile:
             #     self.add_Threes()
             #     self.add_Fours()
             #     self.add_Fives()
-            #     self.add_Sixes()
+            #     self.add_Sixes()á
             #     self.add_Sevens()
             #     self.add_Eights()
             #     self.add_Nines()
