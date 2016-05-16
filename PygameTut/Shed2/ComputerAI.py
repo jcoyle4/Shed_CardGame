@@ -47,33 +47,65 @@ class ComputerAI:
                 return the_play
 
     @staticmethod
-    def animate_Play_Card(card, screen, card_sprites, FPSCLOCK, player_hand_sprites, phand, chand, back_of_card, middle_pile,
-                                          card_Sprites, cards, back_of_card_Rect, background, background_Rect):
+    def animate_Play_Card(card, screen, card_sprites, FPSCLOCK, player_hand_sprites, phand, chand, back_of_card,
+                          middle_pile, card_Sprites, cards, back_of_card_Rect, background, background_Rect, player):
         moveSpeed = 0.5
 
         # Middle pile has position = 300, 255
         # Middle of Computer hand = 310, 5
 
-        y = 5
+        if not player:
+            y = 5
+        else:
+            y = 550
+
         x = 300     # not exactly middle of pile but makes moving easier
 
         ENDY = 255
 
         while True:
-            y += moveSpeed
+            if not player:
+                y += moveSpeed
+            else:
+                y -= moveSpeed
             if y == ENDY:
                 return
 
             # the following two functions let the other images render so the moving images do not leave black lines
             screen.blit(background, background_Rect)
             BlitPlayerCards.BlitPlayer.blit_Cards(player_hand_sprites, phand, chand, back_of_card, screen, middle_pile,
-                                          card_Sprites, cards, back_of_card_Rect)
+                                                  card_Sprites, cards, back_of_card_Rect)
             BlitPlayerCards.BlitPlayer.computer_card_move(card_sprites, card, x, y, screen)
 
             pygame.display.update()
             FPSCLOCK.tick()
 
 
+    # # Putting this here as I am not sure where to put it
+    # @staticmethod
+    # def animate_play_card_player(card, screen, card_sprites, FPSCLOCK, player_hand_sprites, phand, chand, back_of_card,
+    #                              middle_pile, card_Sprites, cards, back_of_card_Rect, background, background_Rect):
+    #
+    #     movespeed = 0.5
+    #     # Middle pile has position = 300, 255
+    #     # Middle of Computer hand = 310, 550
+    #     ENDY = 255
+    #
+    #     y = 550
+    #     x = 300
+    #
+    #     while True:
+    #         y -= movespeed
+    #         if y == ENDY:
+    #             return
+    #
+    #         screen.blit(background, background_Rect)
+    #         BlitPlayerCards.BlitPlayer.blit_Cards(player_hand_sprites, phand, chand, back_of_card, screen, middle_pile,
+    #                                               card_Sprites, cards, back_of_card_Rect)
+    #         BlitPlayerCards.BlitPlayer.computer_card_move(card_sprites, card, x, y, screen)
+    #
+    #         pygame.display.update()
+    #         FPSCLOCK.tick()
 
 
 

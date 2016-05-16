@@ -387,7 +387,7 @@ class Pile:
             self.add_Queens()
             self.add_Kings()
             self.add_Aces()
-            print("THE CARD IN THE MIDDLE IS A 10 (9, 22, 35, 48)")
+            # print("THE CARD IN THE MIDDLE IS A 10 (9, 22, 35, 48)")
             # print("10 - Discarded cards =", self.discarded_cards)
             # print("10 - Cards in the middle =", self.cards_in_middle)
 
@@ -455,9 +455,9 @@ class Pile:
         #     self.add_Kings()
         #     self.add_Aces()
 
-        print("Discarded cards =", self.discarded_cards)
-        print("Cards in the middle =", self.cards_in_middle)
-        print("Card on top =", self.card_on_top)
+        # print("Discarded cards =", self.discarded_cards)
+        # print("Cards in the middle =", self.cards_in_middle)
+        # print("Card on top =", self.card_on_top)
         self.playable_cards_list.sort()
 
 

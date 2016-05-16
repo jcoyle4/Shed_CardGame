@@ -141,6 +141,7 @@ while running:
             print(x, y)
             print("Player Hand =", player_hand.hand)
             print("Computer Hand =", computer_hand.hand)
+            print("Cards in the middle =", middle_pile.cards_in_middle)
 
             if x in x_mid:
                 if y in y_mid:
@@ -148,16 +149,30 @@ while running:
                     while this == 1:
                         if c1 == 0:  # ie clicked. This says that if a card is clicked, and therefore able to be played,
                             #  the card in the middle is now the clicked number. and etc.
-                            if middle_pile.card_on_top not in middle_pile.cards_in_middle:
+                            if middle_pile.card_on_top not in middle_pile.cards_in_middle and middle_pile.card_on_top != 0:
                                 middle_pile.cards_in_middle.append(middle_pile.card_on_top)
+                            ComputerAI.ComputerAI.animate_Play_Card(player_hand.hand[0], screen,
+                                                                    game_deck.card_Sprites, FPSCLOCK,
+                                                                    player_hand_sprites, player_hand.hand,
+                                                                    computer_hand.hand, back_of_card,
+                                                                    middle_pile, game_deck.card_Sprites,
+                                                                    deck.Deck.cards, back_of_card_Rect,
+                                                                    background, background_Rect, True)
                             middle_pile.card_on_top = player_hand.hand[0]
                             used1 = 'spent'
                             c1 = 1
                             this = 0
 
                         elif c2 == 0:
-                            if middle_pile.card_on_top not in middle_pile.cards_in_middle:
+                            if middle_pile.card_on_top not in middle_pile.cards_in_middle and middle_pile.card_on_top != 0:
                                 middle_pile.cards_in_middle.append(middle_pile.card_on_top)
+                            ComputerAI.ComputerAI.animate_Play_Card(player_hand.hand[1], screen,
+                                                                    game_deck.card_Sprites, FPSCLOCK,
+                                                                    player_hand_sprites, player_hand.hand,
+                                                                    computer_hand.hand, back_of_card,
+                                                                    middle_pile, game_deck.card_Sprites,
+                                                                    deck.Deck.cards, back_of_card_Rect,
+                                                                    background, background_Rect, True)
                             middle_pile.card_on_top = player_hand.hand[1]
                             used2 = 'spent'
                             c2 = 1
@@ -165,8 +180,15 @@ while running:
 
                         elif c3 == 0:
                             # print(player_hand.hand)
-                            if middle_pile.card_on_top not in middle_pile.cards_in_middle:
+                            if middle_pile.card_on_top not in middle_pile.cards_in_middle and middle_pile.card_on_top != 0:
                                 middle_pile.cards_in_middle.append(middle_pile.card_on_top)
+                            ComputerAI.ComputerAI.animate_Play_Card(player_hand.hand[2], screen,
+                                                                    game_deck.card_Sprites, FPSCLOCK,
+                                                                    player_hand_sprites, player_hand.hand,
+                                                                    computer_hand.hand, back_of_card,
+                                                                    middle_pile, game_deck.card_Sprites,
+                                                                    deck.Deck.cards, back_of_card_Rect,
+                                                                    background, background_Rect, True)
                             middle_pile.card_on_top = player_hand.hand[2]
                             used3 = 'spent'
                             c3 = 1
@@ -174,8 +196,15 @@ while running:
 
                         elif c4 == 0:
                             # print(player_hand.hand)
-                            if middle_pile.card_on_top not in middle_pile.cards_in_middle:
+                            if middle_pile.card_on_top not in middle_pile.cards_in_middle and middle_pile.card_on_top != 0:
                                 middle_pile.cards_in_middle.append(middle_pile.card_on_top)
+                            ComputerAI.ComputerAI.animate_Play_Card(player_hand.hand[3], screen,
+                                                                    game_deck.card_Sprites, FPSCLOCK,
+                                                                    player_hand_sprites, player_hand.hand,
+                                                                    computer_hand.hand, back_of_card,
+                                                                    middle_pile, game_deck.card_Sprites,
+                                                                    deck.Deck.cards, back_of_card_Rect,
+                                                                    background, background_Rect, True)
                             middle_pile.card_on_top = player_hand.hand[3]
                             used4 = 'spent'
                             c4 = 1
@@ -183,8 +212,15 @@ while running:
 
                         elif c5 == 0:
                             # print(player_hand.hand)
-                            if middle_pile.card_on_top not in middle_pile.cards_in_middle:
+                            if middle_pile.card_on_top not in middle_pile.cards_in_middle and middle_pile.card_on_top != 0:
                                 middle_pile.cards_in_middle.append(middle_pile.card_on_top)
+                            ComputerAI.ComputerAI.animate_Play_Card(player_hand.hand[4], screen,
+                                                                    game_deck.card_Sprites, FPSCLOCK,
+                                                                    player_hand_sprites, player_hand.hand,
+                                                                    computer_hand.hand, back_of_card,
+                                                                    middle_pile, game_deck.card_Sprites,
+                                                                    deck.Deck.cards, back_of_card_Rect,
+                                                                    background, background_Rect, True)
                             middle_pile.card_on_top = player_hand.hand[4]
                             used5 = 'spent'
                             c5 = 1
@@ -352,8 +388,7 @@ while running:
             ComputerAI.ComputerAI.animate_Play_Card(computer_move, screen, game_deck.card_Sprites, FPSCLOCK,
                                                     player_hand_sprites, player_hand.hand, computer_hand.hand,
                                                     back_of_card, middle_pile, game_deck.card_Sprites, deck.Deck.cards,
-                                                    back_of_card_Rect, background, background_Rect)
-            print("~~~~~~~#######~~~~~~~")
+                                                    back_of_card_Rect, background, background_Rect, False)
 
             # put the card in the middle to blit
             middle_pile.card_on_top = computer_move
@@ -370,6 +405,9 @@ while running:
 
         # if the computer has no move
         elif computer_move is None:
+            computer_hand.hand.extend(middle_pile.cards_in_middle)
+            middle_pile.cards_in_middle = []
+            middle_pile.card_on_top = 0
             print("No Computer move")
         move = True
 
