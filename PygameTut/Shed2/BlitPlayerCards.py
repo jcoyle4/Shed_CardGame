@@ -90,7 +90,38 @@ class BlitPlayer:
         SEMI_TRANSPARANT.fill((255, 255, 255, 2))
 
         """"""
-        if len(computer_hand) == 6:
+
+        if len(computer_hand) == 1:     # if there are 5 cards in this computers hand, blit that many "back of cards"
+
+            screen.blit(back_of_card, (230, 5))
+
+        elif len(computer_hand) == 2:
+
+            screen.blit(back_of_card, (230, 5))
+            screen.blit(back_of_card, (270, 5))
+
+        elif len(computer_hand) == 3:
+
+            screen.blit(back_of_card, (230, 5))
+            screen.blit(back_of_card, (270, 5))
+            screen.blit(back_of_card, (310, 5))
+
+        elif len(computer_hand) == 4:
+
+            screen.blit(back_of_card, (230, 5))
+            screen.blit(back_of_card, (270, 5))
+            screen.blit(back_of_card, (310, 5))
+            screen.blit(back_of_card, (350, 5))
+
+        elif len(computer_hand) == 5:
+
+            screen.blit(back_of_card, (230, 5))
+            screen.blit(back_of_card, (270, 5))
+            screen.blit(back_of_card, (310, 5))
+            screen.blit(back_of_card, (350, 5))
+            screen.blit(back_of_card, (390, 5))
+
+        elif len(computer_hand) == 6:
             screen.blit(back_of_card, (190, 5))
             screen.blit(back_of_card, (230, 5))
             screen.blit(back_of_card, (270, 5))
@@ -98,7 +129,7 @@ class BlitPlayer:
             screen.blit(back_of_card, (350, 5))
             screen.blit(back_of_card, (390, 5))
 
-        if len(computer_hand) == 7:
+        elif len(computer_hand) == 7:
             screen.blit(back_of_card, (190, 5))
             screen.blit(back_of_card, (230, 5))
             screen.blit(back_of_card, (270, 5))
@@ -107,7 +138,7 @@ class BlitPlayer:
             screen.blit(back_of_card, (390, 5))
             screen.blit(back_of_card, (430, 5))
 
-        if len(computer_hand) == 8:
+        elif len(computer_hand) == 8:
             screen.blit(back_of_card, (190, 5))
             screen.blit(back_of_card, (220, 5))
             screen.blit(back_of_card, (250, 5))
@@ -117,7 +148,7 @@ class BlitPlayer:
             screen.blit(back_of_card, (370, 5))
             screen.blit(back_of_card, (400, 5))
 
-        if len(computer_hand) == 9:
+        elif len(computer_hand) == 9:
             screen.blit(back_of_card, (190, 5))
             screen.blit(back_of_card, (220, 5))
             screen.blit(back_of_card, (250, 5))
@@ -128,7 +159,7 @@ class BlitPlayer:
             screen.blit(back_of_card, (400, 5))
             screen.blit(back_of_card, (430, 5))
 
-        if len(computer_hand) == 10:
+        elif len(computer_hand) == 10:
             screen.blit(back_of_card, (160, 5))
             screen.blit(back_of_card, (190, 5))
             screen.blit(back_of_card, (220, 5))
@@ -140,8 +171,7 @@ class BlitPlayer:
             screen.blit(back_of_card, (400, 5))
             screen.blit(back_of_card, (430, 5))
 
-        if len(computer_hand) == 11:
-            screen.blit(back_of_card, (170, 5))
+        elif len(computer_hand) == 11:
             screen.blit(back_of_card, (190, 5))
             screen.blit(back_of_card, (210, 5))
             screen.blit(back_of_card, (230, 5))
@@ -151,10 +181,10 @@ class BlitPlayer:
             screen.blit(back_of_card, (310, 5))
             screen.blit(back_of_card, (330, 5))
             screen.blit(back_of_card, (350, 5))
+            screen.blit(back_of_card, (370, 5))
             screen.blit(back_of_card, (390, 5))
 
-        if len(computer_hand) == 12:
-            screen.blit(back_of_card, (170, 5))
+        elif len(computer_hand) == 12:
             screen.blit(back_of_card, (190, 5))
             screen.blit(back_of_card, (210, 5))
             screen.blit(back_of_card, (230, 5))
@@ -164,11 +194,11 @@ class BlitPlayer:
             screen.blit(back_of_card, (310, 5))
             screen.blit(back_of_card, (330, 5))
             screen.blit(back_of_card, (350, 5))
+            screen.blit(back_of_card, (370, 5))
             screen.blit(back_of_card, (390, 5))
             screen.blit(back_of_card, (410, 5))
 
-        if len(computer_hand) == 13:
-            screen.blit(back_of_card, (170, 5))
+        elif len(computer_hand) == 13:
             screen.blit(back_of_card, (190, 5))
             screen.blit(back_of_card, (210, 5))
             screen.blit(back_of_card, (230, 5))
@@ -178,11 +208,12 @@ class BlitPlayer:
             screen.blit(back_of_card, (310, 5))
             screen.blit(back_of_card, (330, 5))
             screen.blit(back_of_card, (350, 5))
+            screen.blit(back_of_card, (370, 5))
             screen.blit(back_of_card, (390, 5))
             screen.blit(back_of_card, (410, 5))
             screen.blit(back_of_card, (430, 5))
 
-        if len(computer_hand) == 14:
+        elif len(computer_hand) == 14:
             screen.blit(back_of_card, (200, 5))
             screen.blit(back_of_card, (210, 5))
             screen.blit(back_of_card, (220, 5))
@@ -198,7 +229,7 @@ class BlitPlayer:
             screen.blit(back_of_card, (320, 5))
             screen.blit(back_of_card, (330, 5))
 
-        if len(computer_hand) == 15:
+        elif len(computer_hand) == 15:
             screen.blit(back_of_card, (200, 5))
             screen.blit(back_of_card, (210, 5))
             screen.blit(back_of_card, (220, 5))
@@ -215,39 +246,233 @@ class BlitPlayer:
             screen.blit(back_of_card, (330, 5))
             screen.blit(back_of_card, (340, 5))
 
-
-        if len(computer_hand) == 5:  # if there are 5 cards in this computers hand, blit that many "back of cards"
-
+        elif len(computer_hand) == 16:
+            screen.blit(back_of_card, (210, 5))
+            screen.blit(back_of_card, (220, 5))
             screen.blit(back_of_card, (230, 5))
+            screen.blit(back_of_card, (240, 5))
+            screen.blit(back_of_card, (250, 5))
+            screen.blit(back_of_card, (260, 5))
             screen.blit(back_of_card, (270, 5))
+            screen.blit(back_of_card, (280, 5))
+            screen.blit(back_of_card, (290, 5))
+            screen.blit(back_of_card, (300, 5))
             screen.blit(back_of_card, (310, 5))
+            screen.blit(back_of_card, (320, 5))
+            screen.blit(back_of_card, (330, 5))
+            screen.blit(back_of_card, (340, 5))
             screen.blit(back_of_card, (350, 5))
+            screen.blit(back_of_card, (360, 5))
+
+        elif len(computer_hand) == 17:
+            screen.blit(back_of_card, (210, 5))
+            screen.blit(back_of_card, (220, 5))
+            screen.blit(back_of_card, (230, 5))
+            screen.blit(back_of_card, (240, 5))
+            screen.blit(back_of_card, (250, 5))
+            screen.blit(back_of_card, (260, 5))
+            screen.blit(back_of_card, (270, 5))
+            screen.blit(back_of_card, (280, 5))
+            screen.blit(back_of_card, (290, 5))
+            screen.blit(back_of_card, (300, 5))
+            screen.blit(back_of_card, (310, 5))
+            screen.blit(back_of_card, (320, 5))
+            screen.blit(back_of_card, (330, 5))
+            screen.blit(back_of_card, (340, 5))
+            screen.blit(back_of_card, (350, 5))
+            screen.blit(back_of_card, (360, 5))
+            screen.blit(back_of_card, (370, 5))
+
+        elif len(computer_hand) == 18:
+            screen.blit(back_of_card, (210, 5))
+            screen.blit(back_of_card, (220, 5))
+            screen.blit(back_of_card, (230, 5))
+            screen.blit(back_of_card, (240, 5))
+            screen.blit(back_of_card, (250, 5))
+            screen.blit(back_of_card, (260, 5))
+            screen.blit(back_of_card, (270, 5))
+            screen.blit(back_of_card, (280, 5))
+            screen.blit(back_of_card, (290, 5))
+            screen.blit(back_of_card, (300, 5))
+            screen.blit(back_of_card, (310, 5))
+            screen.blit(back_of_card, (320, 5))
+            screen.blit(back_of_card, (330, 5))
+            screen.blit(back_of_card, (340, 5))
+            screen.blit(back_of_card, (350, 5))
+            screen.blit(back_of_card, (360, 5))
+            screen.blit(back_of_card, (370, 5))
+            screen.blit(back_of_card, (380, 5))
+
+        elif len(computer_hand) == 19:
+            screen.blit(back_of_card, (210, 5))
+            screen.blit(back_of_card, (220, 5))
+            screen.blit(back_of_card, (230, 5))
+            screen.blit(back_of_card, (240, 5))
+            screen.blit(back_of_card, (250, 5))
+            screen.blit(back_of_card, (260, 5))
+            screen.blit(back_of_card, (270, 5))
+            screen.blit(back_of_card, (280, 5))
+            screen.blit(back_of_card, (290, 5))
+            screen.blit(back_of_card, (300, 5))
+            screen.blit(back_of_card, (310, 5))
+            screen.blit(back_of_card, (320, 5))
+            screen.blit(back_of_card, (330, 5))
+            screen.blit(back_of_card, (340, 5))
+            screen.blit(back_of_card, (350, 5))
+            screen.blit(back_of_card, (360, 5))
+            screen.blit(back_of_card, (370, 5))
+            screen.blit(back_of_card, (380, 5))
             screen.blit(back_of_card, (390, 5))
 
-        if len(computer_hand) == 4:
-
+        elif len(computer_hand) == 20:
+            screen.blit(back_of_card, (210, 5))
+            screen.blit(back_of_card, (220, 5))
             screen.blit(back_of_card, (230, 5))
+            screen.blit(back_of_card, (240, 5))
+            screen.blit(back_of_card, (250, 5))
+            screen.blit(back_of_card, (260, 5))
             screen.blit(back_of_card, (270, 5))
+            screen.blit(back_of_card, (280, 5))
+            screen.blit(back_of_card, (290, 5))
+            screen.blit(back_of_card, (300, 5))
             screen.blit(back_of_card, (310, 5))
+            screen.blit(back_of_card, (320, 5))
+            screen.blit(back_of_card, (330, 5))
+            screen.blit(back_of_card, (340, 5))
             screen.blit(back_of_card, (350, 5))
+            screen.blit(back_of_card, (360, 5))
+            screen.blit(back_of_card, (370, 5))
+            screen.blit(back_of_card, (380, 5))
+            screen.blit(back_of_card, (390, 5))
+            screen.blit(back_of_card, (400, 5))
 
-        if len(computer_hand) == 3:
-
+        elif len(computer_hand) == 21:
+            screen.blit(back_of_card, (200, 5))
+            screen.blit(back_of_card, (210, 5))
+            screen.blit(back_of_card, (220, 5))
             screen.blit(back_of_card, (230, 5))
+            screen.blit(back_of_card, (240, 5))
+            screen.blit(back_of_card, (250, 5))
+            screen.blit(back_of_card, (260, 5))
             screen.blit(back_of_card, (270, 5))
+            screen.blit(back_of_card, (280, 5))
+            screen.blit(back_of_card, (290, 5))
+            screen.blit(back_of_card, (300, 5))
             screen.blit(back_of_card, (310, 5))
+            screen.blit(back_of_card, (320, 5))
+            screen.blit(back_of_card, (330, 5))
+            screen.blit(back_of_card, (340, 5))
+            screen.blit(back_of_card, (350, 5))
+            screen.blit(back_of_card, (360, 5))
+            screen.blit(back_of_card, (370, 5))
+            screen.blit(back_of_card, (380, 5))
+            screen.blit(back_of_card, (390, 5))
+            screen.blit(back_of_card, (400, 5))
 
-        if len(computer_hand) == 2:
-
+        elif len(computer_hand) == 22:
+            screen.blit(back_of_card, (200, 5))
+            screen.blit(back_of_card, (210, 5))
+            screen.blit(back_of_card, (220, 5))
             screen.blit(back_of_card, (230, 5))
+            screen.blit(back_of_card, (240, 5))
+            screen.blit(back_of_card, (250, 5))
+            screen.blit(back_of_card, (260, 5))
             screen.blit(back_of_card, (270, 5))
+            screen.blit(back_of_card, (280, 5))
+            screen.blit(back_of_card, (290, 5))
+            screen.blit(back_of_card, (300, 5))
+            screen.blit(back_of_card, (310, 5))
+            screen.blit(back_of_card, (320, 5))
+            screen.blit(back_of_card, (330, 5))
+            screen.blit(back_of_card, (340, 5))
+            screen.blit(back_of_card, (350, 5))
+            screen.blit(back_of_card, (360, 5))
+            screen.blit(back_of_card, (370, 5))
+            screen.blit(back_of_card, (380, 5))
+            screen.blit(back_of_card, (390, 5))
+            screen.blit(back_of_card, (400, 5))
+            screen.blit(back_of_card, (410, 5))
 
-        if len(computer_hand) == 1:
-
+        elif len(computer_hand) == 23:
+            screen.blit(back_of_card, (190, 5))
+            screen.blit(back_of_card, (200, 5))
+            screen.blit(back_of_card, (210, 5))
+            screen.blit(back_of_card, (220, 5))
             screen.blit(back_of_card, (230, 5))
+            screen.blit(back_of_card, (240, 5))
+            screen.blit(back_of_card, (250, 5))
+            screen.blit(back_of_card, (260, 5))
+            screen.blit(back_of_card, (270, 5))
+            screen.blit(back_of_card, (280, 5))
+            screen.blit(back_of_card, (290, 5))
+            screen.blit(back_of_card, (300, 5))
+            screen.blit(back_of_card, (310, 5))
+            screen.blit(back_of_card, (320, 5))
+            screen.blit(back_of_card, (330, 5))
+            screen.blit(back_of_card, (340, 5))
+            screen.blit(back_of_card, (350, 5))
+            screen.blit(back_of_card, (360, 5))
+            screen.blit(back_of_card, (370, 5))
+            screen.blit(back_of_card, (380, 5))
+            screen.blit(back_of_card, (390, 5))
+            screen.blit(back_of_card, (400, 5))
+            screen.blit(back_of_card, (410, 5))
 
+        elif len(computer_hand) == 24:
+            screen.blit(back_of_card, (190, 5))
+            screen.blit(back_of_card, (200, 5))
+            screen.blit(back_of_card, (210, 5))
+            screen.blit(back_of_card, (220, 5))
+            screen.blit(back_of_card, (230, 5))
+            screen.blit(back_of_card, (240, 5))
+            screen.blit(back_of_card, (250, 5))
+            screen.blit(back_of_card, (260, 5))
+            screen.blit(back_of_card, (270, 5))
+            screen.blit(back_of_card, (280, 5))
+            screen.blit(back_of_card, (290, 5))
+            screen.blit(back_of_card, (300, 5))
+            screen.blit(back_of_card, (310, 5))
+            screen.blit(back_of_card, (320, 5))
+            screen.blit(back_of_card, (330, 5))
+            screen.blit(back_of_card, (340, 5))
+            screen.blit(back_of_card, (350, 5))
+            screen.blit(back_of_card, (360, 5))
+            screen.blit(back_of_card, (370, 5))
+            screen.blit(back_of_card, (380, 5))
+            screen.blit(back_of_card, (390, 5))
+            screen.blit(back_of_card, (400, 5))
+            screen.blit(back_of_card, (410, 5))
+            screen.blit(back_of_card, (420, 5))
+
+        elif len(computer_hand) == 25:
+            screen.blit(back_of_card, (190, 5))
+            screen.blit(back_of_card, (200, 5))
+            screen.blit(back_of_card, (210, 5))
+            screen.blit(back_of_card, (220, 5))
+            screen.blit(back_of_card, (230, 5))
+            screen.blit(back_of_card, (240, 5))
+            screen.blit(back_of_card, (250, 5))
+            screen.blit(back_of_card, (260, 5))
+            screen.blit(back_of_card, (270, 5))
+            screen.blit(back_of_card, (280, 5))
+            screen.blit(back_of_card, (290, 5))
+            screen.blit(back_of_card, (300, 5))
+            screen.blit(back_of_card, (310, 5))
+            screen.blit(back_of_card, (320, 5))
+            screen.blit(back_of_card, (330, 5))
+            screen.blit(back_of_card, (340, 5))
+            screen.blit(back_of_card, (350, 5))
+            screen.blit(back_of_card, (360, 5))
+            screen.blit(back_of_card, (370, 5))
+            screen.blit(back_of_card, (380, 5))
+            screen.blit(back_of_card, (390, 5))
+            screen.blit(back_of_card, (400, 5))
+            screen.blit(back_of_card, (410, 5))
+            screen.blit(back_of_card, (420, 5))
+            screen.blit(back_of_card, (430, 5))
+
+        # Player Cards
         if len(player_hand) == 5:
-        #   may only need to do this once as there will be transparent cards
             screen.blit(player_hand_sprites[0], (230, 550))
             screen.blit(player_hand_sprites[1], (270, 550))
             screen.blit(player_hand_sprites[2], (310, 550))
@@ -282,7 +507,7 @@ class BlitPlayer:
             if len(pile.cards_in_middle) == 0:
                 screen.blit(SEMI_TRANSPARANT, (300, 255))
             elif pile.card_on_top == x and pile.card_on_top in eights:
-                card_under_eight = pile.cards_in_middle[-1:]
+                card_under_eight = pile.cards_in_middle[-2:]
                 card_under_eight_sprite = card_sprites[card_under_eight[0] - 1]
                 screen.blit(card_under_eight_sprite, (300, 255))
                 transparent_copy_eight = card_sprites[x-1].copy()

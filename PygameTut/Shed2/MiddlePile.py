@@ -182,14 +182,17 @@ class Pile:
             self.add_Sixes()
             self.add_Sevens()
             self.add_Eights()
+            self.add_Tens()
 
         # MAGIC
         # 8 on top
         elif self.card_on_top in [7, 20, 33, 46]:
             # change value of card on top to card played before the 8
             # then re-run this method
-
-            card_under_8 = self.cards_in_middle[-1]
+            if len(self.cards_in_middle) <= 1:
+                card_under_8 = 1
+            else:
+                card_under_8 = self.cards_in_middle[-2]
             if card_under_8 in [1, 14, 27, 40]:
                 # resets the value of the pile
                 self.add_Twos()
@@ -307,7 +310,7 @@ class Pile:
             #     self.add_Threes()
             #     self.add_Fours()
             #     self.add_Fives()
-            #     self.add_Sixes()á
+            #     self.add_Sixes()
             #     self.add_Sevens()
             #     self.add_Eights()
             #     self.add_Nines()

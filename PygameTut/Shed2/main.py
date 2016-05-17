@@ -142,6 +142,7 @@ while running:
             print("Player Hand =", player_hand.hand)
             print("Computer Hand =", computer_hand.hand)
             print("Cards in the middle =", middle_pile.cards_in_middle)
+            print("Discarded cards =", middle_pile.discarded_cards)
 
             if x in x_mid:
                 if y in y_mid:
@@ -149,8 +150,6 @@ while running:
                     while this == 1:
                         if c1 == 0:  # ie clicked. This says that if a card is clicked, and therefore able to be played,
                             #  the card in the middle is now the clicked number. and etc.
-                            if middle_pile.card_on_top not in middle_pile.cards_in_middle and middle_pile.card_on_top != 0:
-                                middle_pile.cards_in_middle.append(middle_pile.card_on_top)
                             ComputerAI.ComputerAI.animate_Play_Card(player_hand.hand[0], screen,
                                                                     game_deck.card_Sprites, FPSCLOCK,
                                                                     player_hand_sprites, player_hand.hand,
@@ -159,13 +158,13 @@ while running:
                                                                     deck.Deck.cards, back_of_card_Rect,
                                                                     background, background_Rect, True)
                             middle_pile.card_on_top = player_hand.hand[0]
+                            if middle_pile.card_on_top not in middle_pile.cards_in_middle and middle_pile.card_on_top != 0:
+                                middle_pile.cards_in_middle.append(middle_pile.card_on_top)
                             used1 = 'spent'
                             c1 = 1
                             this = 0
 
                         elif c2 == 0:
-                            if middle_pile.card_on_top not in middle_pile.cards_in_middle and middle_pile.card_on_top != 0:
-                                middle_pile.cards_in_middle.append(middle_pile.card_on_top)
                             ComputerAI.ComputerAI.animate_Play_Card(player_hand.hand[1], screen,
                                                                     game_deck.card_Sprites, FPSCLOCK,
                                                                     player_hand_sprites, player_hand.hand,
@@ -174,14 +173,14 @@ while running:
                                                                     deck.Deck.cards, back_of_card_Rect,
                                                                     background, background_Rect, True)
                             middle_pile.card_on_top = player_hand.hand[1]
+                            if middle_pile.card_on_top not in middle_pile.cards_in_middle and middle_pile.card_on_top != 0:
+                                middle_pile.cards_in_middle.append(middle_pile.card_on_top)
                             used2 = 'spent'
                             c2 = 1
                             this = 0
 
                         elif c3 == 0:
                             # print(player_hand.hand)
-                            if middle_pile.card_on_top not in middle_pile.cards_in_middle and middle_pile.card_on_top != 0:
-                                middle_pile.cards_in_middle.append(middle_pile.card_on_top)
                             ComputerAI.ComputerAI.animate_Play_Card(player_hand.hand[2], screen,
                                                                     game_deck.card_Sprites, FPSCLOCK,
                                                                     player_hand_sprites, player_hand.hand,
@@ -190,14 +189,14 @@ while running:
                                                                     deck.Deck.cards, back_of_card_Rect,
                                                                     background, background_Rect, True)
                             middle_pile.card_on_top = player_hand.hand[2]
+                            if middle_pile.card_on_top not in middle_pile.cards_in_middle and middle_pile.card_on_top != 0:
+                                middle_pile.cards_in_middle.append(middle_pile.card_on_top)
                             used3 = 'spent'
                             c3 = 1
                             this = 0
 
                         elif c4 == 0:
                             # print(player_hand.hand)
-                            if middle_pile.card_on_top not in middle_pile.cards_in_middle and middle_pile.card_on_top != 0:
-                                middle_pile.cards_in_middle.append(middle_pile.card_on_top)
                             ComputerAI.ComputerAI.animate_Play_Card(player_hand.hand[3], screen,
                                                                     game_deck.card_Sprites, FPSCLOCK,
                                                                     player_hand_sprites, player_hand.hand,
@@ -206,14 +205,14 @@ while running:
                                                                     deck.Deck.cards, back_of_card_Rect,
                                                                     background, background_Rect, True)
                             middle_pile.card_on_top = player_hand.hand[3]
+                            if middle_pile.card_on_top not in middle_pile.cards_in_middle and middle_pile.card_on_top != 0:
+                                middle_pile.cards_in_middle.append(middle_pile.card_on_top)
                             used4 = 'spent'
                             c4 = 1
                             this = 0
 
                         elif c5 == 0:
                             # print(player_hand.hand)
-                            if middle_pile.card_on_top not in middle_pile.cards_in_middle and middle_pile.card_on_top != 0:
-                                middle_pile.cards_in_middle.append(middle_pile.card_on_top)
                             ComputerAI.ComputerAI.animate_Play_Card(player_hand.hand[4], screen,
                                                                     game_deck.card_Sprites, FPSCLOCK,
                                                                     player_hand_sprites, player_hand.hand,
@@ -222,6 +221,8 @@ while running:
                                                                     deck.Deck.cards, back_of_card_Rect,
                                                                     background, background_Rect, True)
                             middle_pile.card_on_top = player_hand.hand[4]
+                            if middle_pile.card_on_top not in middle_pile.cards_in_middle and middle_pile.card_on_top != 0:
+                                middle_pile.cards_in_middle.append(middle_pile.card_on_top)
                             used5 = 'spent'
                             c5 = 1
                             this = 0
@@ -333,37 +334,26 @@ while running:
             if used1 == "spent":
                 player_hand.hand[0] = None
                 game_deck.draw(player_hand.hand, 0)
-                # if player_hand.hand[0] is None:
-                #     player_hand.hand.pop(0)
                 used1 = ""
                 move = False
             if used2 == "spent":
                 player_hand.hand[1] = None
                 game_deck.draw(player_hand.hand, 1)
-                # if player_hand.hand[1] is None:
-                #     player_hand.hand.pop(1)
-                # if player_hand.hand[1] is not None:
                 used2 = ""
                 move = False
             if used3 == "spent":
                 player_hand.hand[2] = None
                 game_deck.draw(player_hand.hand, 2)
-                # if player_hand.hand[2] is None:
-                #     player_hand.hand.pop(2)
                 used3 = ""
                 move = False
             if used4 == "spent":
                 player_hand.hand[3] = None
                 game_deck.draw(player_hand.hand, 3)
-                # if player_hand.hand[3] is None:
-                #     player_hand.hand.pop(3)
                 used4 = ""
                 move = False
             if used5 == "spent":
                 player_hand.hand[4] = None
                 game_deck.draw(player_hand.hand, 4)
-                # if player_hand.hand[4] is None:
-                #     player_hand.hand.pop(4)
                 used5 = ""
                 move = False
 
@@ -381,9 +371,6 @@ while running:
             # What position said card is in
             comp_move_position = computer_hand.hand.index(computer_move)
 
-            # Add the card on top of the pile to a stack of cards
-            middle_pile.cards_in_middle.append(middle_pile.card_on_top)
-
             # Play moving the card to the middle, needs lots of variables for rendering
             ComputerAI.ComputerAI.animate_Play_Card(computer_move, screen, game_deck.card_Sprites, FPSCLOCK,
                                                     player_hand_sprites, player_hand.hand, computer_hand.hand,
@@ -393,11 +380,16 @@ while running:
             # put the card in the middle to blit
             middle_pile.card_on_top = computer_move
 
+            # Add the card on top of the pile to a stack of cards
+            middle_pile.cards_in_middle.append(middle_pile.card_on_top)
+
             # remove the card from the hand
             computer_hand.hand[comp_move_position] = None
 
-            # draw another one
-            game_deck.draw(computer_hand.hand, comp_move_position)
+            if len(computer_hand.hand) <= 5:
+                # draw another one
+                print("The computer is drawing a card")
+                game_deck.draw(computer_hand.hand, comp_move_position)
 
             # if no cards can be added
             if computer_hand.hand[comp_move_position] is None:
