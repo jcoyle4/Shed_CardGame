@@ -40,7 +40,7 @@ class Deck:
         if (len(self.cards)) != 0:
             card = random.choice(self.cards)
             self.cards.remove(card)
-            for x in range(0, 15):  # arbitrary max size of hand
+            for x in range(0, 25):  # arbitrary max size of hand
                 if cardPosition == x:
                     hand[cardPosition] = card
 
