@@ -46,7 +46,7 @@ class ComputerAI:
     @staticmethod
     def animate_Play_Card(card, screen, card_sprites, FPSCLOCK, player_hand_sprites, phand, chand, back_of_card,
                           middle_pile, card_Sprites, cards, back_of_card_Rect, background, background_Rect, player):
-        moveSpeed = 0.5
+        moveSpeed = 1
 
         # Middle pile has position = 300, 255
         # Middle of Computer hand = 310, 5

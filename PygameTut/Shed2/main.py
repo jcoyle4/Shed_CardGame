@@ -43,7 +43,13 @@ middle_pile = MiddlePile.Pile()
 game_deck.cards = computer_hand.setUp(game_deck.cards)
 # Set up the player hand
 game_deck.cards = player_hand.setUp(game_deck.cards)
-player_hand.hand += [None] * 20  # Add 20 None spaces that can be used for extra cards if needed
+
+player_hand.initialRejig()  # Use this to center the cards for playing
+# print(player_hand.hand[9])
+# print(player_hand.hand[10])
+# print(player_hand.hand[11])
+# print(player_hand.hand[12])
+# print(player_hand.hand[13])
 
 # When cx is equal to 1, this means that the image is not high-lighted
 c1 = 1
@@ -158,6 +164,7 @@ while running:
 
     player_hand_sprites = []
     # Generates sprites for player cards
+    # TODO Change the return of the function to a list
     card1, card2, card3, card4, card5, card6, card7, card8, card9, card10, card11, card12, card13, card14, card15, card16, card17, card18, card19, \
         card20, card21, card22, card23, card24, card25 = BlitPlayerCards.BlitPlayer.gen_player_blit_cards(player_hand.hand, game_deck.card_Sprites,
                                                                                                           game_deck.highlighted_Card_Sprites,
@@ -195,6 +202,7 @@ while running:
 
     if turn == 0:
         game_deck.cards = middle_pile.Start_game(game_deck.cards)
+        #TODO Render instructions
         turn += 1
 
     # puts ALL (computer, player and pile) the cards on the screen, and keeps updating them during the while loop
@@ -610,7 +618,7 @@ while running:
                             used25 = 'spent'
                             c25 = 1
                             this = 0
-                        else: # when the middle pile is clicked when no card is highlighted, pick up the middle pile
+                        else:  # when the middle pile is clicked when no card is highlighted, pick up the middle pile
                             if len(computer_hand.hand) != 0:
                                 this = 0
                             if len(middle_pile.cards_in_middle) > 0:
@@ -620,6 +628,7 @@ while running:
                                             player_hand.hand[card_in_hand] = middle_pile.cards_in_middle[card_in_pile]
                                 middle_pile.cards_in_middle = []
                                 middle_pile.card_on_top = 0
+                                player_hand.rejig()
                                 move = False
 
             # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2133,150 +2142,175 @@ while running:
                 player_hand.hand[0] = None
                 if number_of_player_cards <= 5:
                     game_deck.draw(player_hand.hand, 0)
+                player_hand.rejig()
                 used1 = ""
                 move = False
             if used2 == "spent":
                 player_hand.hand[1] = None
                 if number_of_player_cards <= 5:
                     game_deck.draw(player_hand.hand, 1)
+                player_hand.rejig()
                 used2 = ""
                 move = False
             if used3 == "spent":
                 player_hand.hand[2] = None
                 if number_of_player_cards <= 5:
                     game_deck.draw(player_hand.hand, 2)
+                player_hand.rejig()
                 used3 = ""
                 move = False
             if used4 == "spent":
                 player_hand.hand[3] = None
                 if number_of_player_cards <= 5:
                     game_deck.draw(player_hand.hand, 3)
+                player_hand.rejig()
                 used4 = ""
                 move = False
             if used5 == "spent":
                 player_hand.hand[4] = None
                 if number_of_player_cards <= 5:
                     game_deck.draw(player_hand.hand, 4)
+                player_hand.rejig()
                 used5 = ""
                 move = False
             if used6 == "spent":
                 player_hand.hand[5] = None
                 if number_of_player_cards <= 5:
                     game_deck.draw(player_hand.hand, 5)
+                player_hand.rejig()
                 used6 = ""
                 move = False
             if used7 == "spent":
                 player_hand.hand[6] = None
                 if number_of_player_cards <= 5:
                     game_deck.draw(player_hand.hand, 6)
+                player_hand.rejig()
                 used7 = ""
                 move = False
             if used8 == "spent":
                 player_hand.hand[7] = None
                 if number_of_player_cards <= 5:
                     game_deck.draw(player_hand.hand, 7)
+                player_hand.rejig()
                 used8 = ""
                 move = False
             if used9 == "spent":
                 player_hand.hand[8] = None
                 if number_of_player_cards <= 5:
                     game_deck.draw(player_hand.hand, 8)
+                player_hand.rejig()
                 used9 = ""
                 move = False
             if used10 == "spent":
                 player_hand.hand[9] = None
                 if number_of_player_cards <= 5:
                     game_deck.draw(player_hand.hand, 9)
+                player_hand.rejig()
                 used10 = ""
                 move = False
             if used11 == "spent":
                 player_hand.hand[10] = None
                 if number_of_player_cards <= 5:
                     game_deck.draw(player_hand.hand, 10)
+                player_hand.rejig()
                 used11 = ""
                 move = False
             if used12 == "spent":
                 player_hand.hand[11] = None
                 if number_of_player_cards <= 5:
                     game_deck.draw(player_hand.hand, 11)
+                player_hand.rejig()
                 used12 = ""
                 move = False
             if used13 == "spent":
                 player_hand.hand[12] = None
                 if number_of_player_cards <= 5:
                     game_deck.draw(player_hand.hand, 12)
+                player_hand.rejig()
                 used13 = ""
                 move = False
             if used14 == "spent":
                 player_hand.hand[13] = None
                 if number_of_player_cards <= 5:
                     game_deck.draw(player_hand.hand, 13)
+                player_hand.rejig()
                 used14 = ""
                 move = False
             if used15 == "spent":
                 player_hand.hand[14] = None
                 if number_of_player_cards <= 5:
                     game_deck.draw(player_hand.hand, 14)
+                player_hand.rejig()
                 used15 = ""
                 move = False
             if used16 == "spent":
                 player_hand.hand[15] = None
                 if number_of_player_cards <= 5:
                     game_deck.draw(player_hand.hand, 15)
+                player_hand.rejig()
                 used16 = ""
                 move = False
             if used17 == "spent":
                 player_hand.hand[16] = None
                 if number_of_player_cards <= 5:
                     game_deck.draw(player_hand.hand, 16)
+                player_hand.rejig()
                 used17 = ""
                 move = False
             if used18 == "spent":
                 player_hand.hand[17] = None
                 if number_of_player_cards <= 5:
                     game_deck.draw(player_hand.hand, 17)
+                player_hand.rejig()
                 used18 = ""
                 move = False
             if used19 == "spent":
                 player_hand.hand[18] = None
                 if number_of_player_cards <= 5:
                     game_deck.draw(player_hand.hand, 18)
+                player_hand.rejig()
                 used19 = ""
                 move = False
             if used20 == "spent":
                 player_hand.hand[19] = None
                 if number_of_player_cards <= 5:
                     game_deck.draw(player_hand.hand, 19)
+                player_hand.rejig()
                 used20 = ""
                 move = False
             if used21 == "spent":
                 player_hand.hand[20] = None
                 if number_of_player_cards <= 5:
                     game_deck.draw(player_hand.hand, 20)
+                player_hand.rejig()
                 used21 = ""
                 move = False
             if used22 == "spent":
                 player_hand.hand[21] = None
                 if number_of_player_cards <= 5:
                     game_deck.draw(player_hand.hand, 21)
+                player_hand.rejig()
                 used22 = ""
                 move = False
             if used23 == "spent":
                 player_hand.hand[22] = None
                 if number_of_player_cards <= 5:
                     game_deck.draw(player_hand.hand, 22)
+                player_hand.rejig()
                 used23 = ""
                 move = False
             if used24 == "spent":
                 player_hand.hand[23] = None
                 if number_of_player_cards <= 5:
                     game_deck.draw(player_hand.hand, 23)
+                player_hand.rejig()
                 used24 = ""
                 move = False
             if used25 == "spent":
                 player_hand.hand[24] = None
                 if number_of_player_cards <= 5:
                     game_deck.draw(player_hand.hand, 24)
+                player_hand.rejig()
                 used25 = ""
                 move = False
             # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

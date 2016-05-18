@@ -723,34 +723,34 @@ class BlitPlayer:
             screen.blit(player_hand_sprites[23], (735 - 140, 550))
             screen.blit(player_hand_sprites[24], (760 - 140, 550))
 
-        if len(player_hand) == 5:
-            screen.blit(player_hand_sprites[0], (160, 550))
-            screen.blit(player_hand_sprites[1], (270, 550))
-            screen.blit(player_hand_sprites[2], (310, 550))
-            screen.blit(player_hand_sprites[3], (350, 550))
-            screen.blit(player_hand_sprites[4], (390, 550))
-
-        if len(player_hand) == 4:
-
-            screen.blit(player_hand_sprites[0], (230, 550))
-            screen.blit(player_hand_sprites[1], (270, 550))
-            screen.blit(player_hand_sprites[2], (310, 550))
-            screen.blit(player_hand_sprites[3], (350, 550))
-
-        if len(player_hand) == 3:
-
-            screen.blit(player_hand_sprites[0], (230, 550))
-            screen.blit(player_hand_sprites[1], (270, 550))
-            screen.blit(player_hand_sprites[2], (310, 550))
-
-        if len(player_hand) == 2:
-
-            screen.blit(player_hand_sprites[0], (230, 550))
-            screen.blit(player_hand_sprites[1], (270, 550))
-
-        if len(player_hand) == 1:
-
-            screen.blit(player_hand_sprites[0], (230, 550))
+        # if len(player_hand) == 5:
+        #     screen.blit(player_hand_sprites[0], (160, 550))
+        #     screen.blit(player_hand_sprites[1], (270, 550))
+        #     screen.blit(player_hand_sprites[2], (310, 550))
+        #     screen.blit(player_hand_sprites[3], (350, 550))
+        #     screen.blit(player_hand_sprites[4], (390, 550))
+        #
+        # if len(player_hand) == 4:
+        #
+        #     screen.blit(player_hand_sprites[0], (230, 550))
+        #     screen.blit(player_hand_sprites[1], (270, 550))
+        #     screen.blit(player_hand_sprites[2], (310, 550))
+        #     screen.blit(player_hand_sprites[3], (350, 550))
+        #
+        # if len(player_hand) == 3:
+        #
+        #     screen.blit(player_hand_sprites[0], (230, 550))
+        #     screen.blit(player_hand_sprites[1], (270, 550))
+        #     screen.blit(player_hand_sprites[2], (310, 550))
+        #
+        # if len(player_hand) == 2:
+        #
+        #     screen.blit(player_hand_sprites[0], (230, 550))
+        #     screen.blit(player_hand_sprites[1], (270, 550))
+        #
+        # if len(player_hand) == 1:
+        #
+        #     screen.blit(player_hand_sprites[0], (230, 550))
 
         #card_in_middle = 0
         eights = [7, 20, 33, 46]
