@@ -2295,6 +2295,7 @@ while running:
             # What position said card is in
             comp_move_position = computer_hand.hand.index(computer_move)
 
+
             # Play moving the card to the middle, needs lots of variables for rendering
             ComputerAI.ComputerAI.animate_Play_Card(computer_move, screen, game_deck.card_Sprites, FPSCLOCK,
                                                     player_hand_sprites, player_hand.hand, computer_hand.hand,
