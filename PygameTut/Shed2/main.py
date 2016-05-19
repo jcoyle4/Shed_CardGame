@@ -1,14 +1,11 @@
 import pygame
-import random
 import os
-import time
 import Hand
 import Load_Image
 import deck
 import BlitPlayerCards
 import MiddlePile
 import ComputerAI
-import keyboard
 
 pygame.init()
 
@@ -30,6 +27,8 @@ TRANSPARANT = pygame.Surface((width, height), pygame.SRCALPHA)
 TRANSPARANT.set_alpha(0)
 TRANSPARANT.fill((255, 255, 255, 0))
 
+playerWinnerIMG, playerWinnerIMG_Rect = Load_Image.ImageLoad.imageLoadfnc("win.jpg", False)
+computerWinnerIMG, computerWinnerIMG_Rect = Load_Image.ImageLoad.imageLoadfnc("lose.jpg", False)
 
 game_deck = deck.Deck()  # deck of 52 cards, sprites are also in here
 
@@ -128,33 +127,9 @@ while running:
 
     # Y-Coord of hand
     y_card_all = list(range(550, 660))
+    x_all = list(range(0, 700))
+    y_all = list(range(0, 700))
 
-    # X-Coord's of each card
-    x_card_1 = list(range(20, 44))
-    x_card_2 = list(range(45, 69))
-    x_card_3 = list(range(70, 95))
-    x_card_4 = list(range(96, 119))
-    x_card_5 = list(range(120, 144))
-    x_card_6 = list(range(145, 170))
-    x_card_7 = list(range(171, 194))
-    x_card_8 = list(range(195, 219))
-    x_card_9 = list(range(220, 244))
-    x_card_10 = list(range(245, 270))
-    x_card_11 = list(range(271, 295))
-    x_card_12 = list(range(296, 320))
-    x_card_13 = list(range(321, 345))
-    x_card_14 = list(range(346, 370))
-    x_card_15 = list(range(371, 395))
-    x_card_16 = list(range(396, 420))
-    x_card_17 = list(range(421, 445))
-    x_card_18 = list(range(446, 470))
-    x_card_19 = list(range(471, 495))
-    x_card_20 = list(range(496, 520))
-    x_card_21 = list(range(521, 545))
-    x_card_22 = list(range(546, 570))
-    x_card_23 = list(range(571, 595))
-    x_card_24 = list(range(596, 620))
-    x_card_25 = list(range(621, 690))
 
     # x_new = list(range(461, 544))
     # y_new = list(range(2, 24))
@@ -200,14 +175,187 @@ while running:
     player_hand_sprites.append(card24)
     player_hand_sprites.append(card25)
 
+    # X-Coord's of each card
+    x_card_1 = list(range(20, 44))
+    x_card_2 = list(range(45, 69))
+    x_card_3 = list(range(70, 95))
+    x_card_4 = list(range(96, 119))
+    x_card_5 = list(range(120, 144))
+    x_card_6 = list(range(145, 170))
+    x_card_7 = list(range(171, 194))
+    x_card_8 = list(range(195, 219))
+    x_card_9 = list(range(220, 244))
+    x_card_10 = list(range(245, 270))
+    if player_hand.hand[11] is None:
+        x_card_11 = list(range(271, 310))
+        x_card_12 = list(range(296, 320))
+        x_card_13 = list(range(321, 345))
+        x_card_14 = list(range(346, 417))
+        x_card_15 = list(range(420, 440))
+        x_card_16 = list(range(441, 460))
+        x_card_17 = list(range(461, 480))
+        x_card_18 = list(range(481, 500))
+        x_card_19 = list(range(501, 520))
+        x_card_20 = list(range(521, 540))
+        x_card_21 = list(range(541, 560))
+        x_card_22 = list(range(561, 580))
+        x_card_23 = list(range(581, 600))
+        x_card_24 = list(range(601, 620))
+    else:
+        x_card_11 = list(range(271, 295))
+
+        if player_hand.hand[12] is None:
+            x_card_12 = list(range(296, 320))
+            x_card_13 = list(range(321, 345))
+            x_card_14 = list(range(346, 417))
+            x_card_15 = list(range(420, 440))
+            x_card_16 = list(range(441, 460))
+            x_card_17 = list(range(461, 480))
+            x_card_18 = list(range(481, 500))
+            x_card_19 = list(range(501, 520))
+            x_card_20 = list(range(521, 540))
+            x_card_21 = list(range(541, 560))
+            x_card_22 = list(range(561, 580))
+            x_card_23 = list(range(581, 600))
+            x_card_24 = list(range(601, 620))
+        else:
+            x_card_12 = list(range(296, 320))
+
+            if player_hand.hand[13] is None:
+                x_card_13 = list(range(321, 395))
+                x_card_14 = list(range(346, 417))
+                x_card_15 = list(range(420, 440))
+                x_card_16 = list(range(441, 460))
+                x_card_17 = list(range(461, 480))
+                x_card_18 = list(range(481, 500))
+                x_card_19 = list(range(501, 520))
+                x_card_20 = list(range(521, 540))
+                x_card_21 = list(range(541, 560))
+                x_card_22 = list(range(561, 580))
+                x_card_23 = list(range(581, 600))
+                x_card_24 = list(range(601, 620))
+            else:
+                x_card_13 = list(range(321, 345))
+
+                if player_hand.hand[14] is None:
+                    x_card_14 = list(range(346, 417))
+                    x_card_15 = list(range(420, 440))
+                    x_card_16 = list(range(441, 460))
+                    x_card_17 = list(range(461, 480))
+                    x_card_18 = list(range(481, 500))
+                    x_card_19 = list(range(501, 520))
+                    x_card_20 = list(range(521, 540))
+                    x_card_21 = list(range(541, 560))
+                    x_card_22 = list(range(561, 580))
+                    x_card_23 = list(range(581, 600))
+                    x_card_24 = list(range(601, 620))
+                else:
+                    x_card_14 = list(range(346, 370))
+
+                    if player_hand.hand[15] is None:
+                        x_card_15 = list(range(371, 440))
+                        x_card_16 = list(range(441, 460))
+                        x_card_17 = list(range(461, 480))
+                        x_card_18 = list(range(481, 500))
+                        x_card_19 = list(range(501, 520))
+                        x_card_20 = list(range(521, 540))
+                        x_card_21 = list(range(541, 560))
+                        x_card_22 = list(range(561, 580))
+                        x_card_23 = list(range(581, 600))
+                        x_card_24 = list(range(601, 620))
+                    else:
+                        x_card_15 = list(range(371, 395))
+
+                        if player_hand.hand[16] is None:
+                            x_card_16 = list(range(396, 466))
+                            x_card_17 = list(range(461 + 10, 480 + 10))
+                            x_card_18 = list(range(481 + 10, 500 + 10))
+                            x_card_19 = list(range(501 + 10, 520 + 10))
+                            x_card_20 = list(range(521 + 10, 540 + 10))
+                            x_card_21 = list(range(541 + 10, 560 + 10))
+                            x_card_22 = list(range(561 + 10, 580 + 10))
+                            x_card_23 = list(range(581 + 10, 600 + 10))
+                            x_card_24 = list(range(601 + 10, 620 + 10))
+                        else:
+                            x_card_16 = list(range(396, 420))
+
+                            if player_hand.hand[17] is None:
+                                x_card_17 = list(range(421, 490))
+                                x_card_18 = list(range(481 + 10, 500 + 10))
+                                x_card_19 = list(range(501 + 10, 520 + 10))
+                                x_card_20 = list(range(521 + 10, 540 + 10))
+                                x_card_21 = list(range(541 + 10, 560 + 10))
+                                x_card_22 = list(range(561 + 10, 580 + 10))
+                                x_card_23 = list(range(581 + 10, 600 + 10))
+                                x_card_24 = list(range(601 + 10, 620 + 10))
+                            else:
+                                x_card_17 = list(range(421, 445))
+
+                                if player_hand.hand[18] is None:
+                                    x_card_18 = list(range(446, 518))
+                                    x_card_19 = list(range(501 + 20, 520 + 20))
+                                    x_card_20 = list(range(521 + 20, 540 + 20))
+                                    x_card_21 = list(range(541 + 20, 560 + 20))
+                                    x_card_22 = list(range(561 + 20, 580 + 20))
+                                    x_card_23 = list(range(581 + 20, 600 + 20))
+                                    x_card_24 = list(range(601 + 20, 620 + 20))
+                                else:
+                                    x_card_18 = list(range(446, 470))
+
+                                    if player_hand.hand[19] is None:
+                                        x_card_19 = list(range(471, 542))
+                                        x_card_20 = list(range(521 + 25, 540 + 25))
+                                        x_card_21 = list(range(541 + 25, 560 + 25))
+                                        x_card_22 = list(range(561 + 25, 580 + 25))
+                                        x_card_23 = list(range(581 + 25, 600 + 25))
+                                        x_card_24 = list(range(601 + 25, 620 + 25))
+                                    else:
+                                        x_card_19 = list(range(471, 495))
+
+                                        if player_hand.hand[20] is None:
+                                            x_card_20 = list(range(496, 566))
+                                            x_card_21 = list(range(541 + 25, 560 + 25))
+                                            x_card_22 = list(range(561 + 25, 580 + 25))
+                                            x_card_23 = list(range(581 + 25, 600 + 25))
+                                            x_card_24 = list(range(601 + 25, 620 + 25))
+                                        else:
+                                            x_card_20 = list(range(496, 520))
+
+                                            if player_hand.hand[21] is None:
+                                                x_card_21 = list(range(521, 586))
+                                                x_card_22 = list(range(561 + 30, 580 + 30))
+                                                x_card_23 = list(range(581 + 30, 600 + 30))
+                                                x_card_24 = list(range(601 + 30, 620 + 30))
+                                            else:
+                                                x_card_21 = list(range(521, 545))
+
+                                                if player_hand.hand[22] is None:
+                                                    x_card_22 = list(range(546, 611))
+                                                    x_card_23 = list(range(581 + 31, 600 + 31))
+                                                    x_card_24 = list(range(601 + 31, 620 + 31))
+                                                else:
+                                                    x_card_22 = list(range(546, 570))
+
+                                                    if player_hand.hand[23] is None:
+                                                        x_card_23 = list(range(571, 636))
+                                                        x_card_24 = list(range(601 + 41, 620 + 41))
+                                                    else:
+                                                        x_card_23 = list(range(571, 595))
+
+                                                        if player_hand.hand[24] is None:
+                                                            x_card_24 = list(range(596, 661))
+                                                        else:
+                                                            x_card_24 = list(range(596, 620))
+
+    x_card_25 = list(range(621, 690))
+
     if turn == 0:
         game_deck.cards = middle_pile.Start_game(game_deck.cards)
-        #TODO Render instructions
-        turn += 1
+        turn += 1  # counter to show the rules
 
     # puts ALL (computer, player and pile) the cards on the screen, and keeps updating them during the while loop
     BlitPlayerCards.BlitPlayer.blit_Cards(player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card, screen, middle_pile,
-                                          game_deck.card_Sprites, deck.Deck.cards, back_of_card_Rect)
+                                          game_deck.card_Sprites, deck.Deck.cards, back_of_card_Rect, turn)
 
 
     #print(middle_pile.playable_cards_list)
@@ -230,6 +378,23 @@ while running:
             print("Computer Hand =", computer_hand.hand)
             print("Cards in the middle =", middle_pile.cards_in_middle)
             print("Discarded cards =", middle_pile.discarded_cards)
+
+            # Closes the game if all cards in the hand are gone
+            if all(card is None for card in player_hand.hand):
+                BlitPlayerCards.BlitPlayer.gameOver(playerWinnerIMG, screen)
+                pygame.display.flip()
+                if x in x_all and y in y_all:
+                    running = False
+                    pygame.time.delay(5000)
+
+            if len(computer_hand.hand) == 0:
+                BlitPlayerCards.BlitPlayer.gameOver(computerWinnerIMG, screen)
+                pygame.display.flip()
+                if x in x_all and y in y_all:
+                    print("QUITTING")
+                    running = False
+                    pygame.time.delay(5000)
+
 
             # Code to move a card from the players hand to the middle
             # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1122,6 +1287,7 @@ while running:
 
             if x in x_card_9:
                 if y in y_card_all:
+                    turn += 1
                     print("Card 9 selected")
                     if player_hand.hand[8] in middle_pile.playable_cards_list:
 
@@ -1182,6 +1348,7 @@ while running:
 
             if x in x_card_10:
                 if y in y_card_all:
+                    turn += 1
                     print("Card 10 selected")
                     if player_hand.hand[9] in middle_pile.playable_cards_list:
 
@@ -1242,6 +1409,7 @@ while running:
 
             if x in x_card_11:
                 if y in y_card_all:
+                    turn += 1
                     print("Card 11 selected")
                     if player_hand.hand[10] in middle_pile.playable_cards_list:
 
@@ -1302,6 +1470,7 @@ while running:
 
             if x in x_card_12:
                 if y in y_card_all:
+                    turn += 1
                     print("Card 12 selected")
                     if player_hand.hand[11] in middle_pile.playable_cards_list:
 
@@ -1362,6 +1531,7 @@ while running:
 
             if x in x_card_13:
                 if y in y_card_all:
+                    turn += 1
                     print("Card 13 selected")
                     if player_hand.hand[12] in middle_pile.playable_cards_list:
 
@@ -1422,6 +1592,7 @@ while running:
 
             if x in x_card_14:
                 if y in y_card_all:
+                    turn += 1
                     print("Card 14 selected")
                     if player_hand.hand[13] in middle_pile.playable_cards_list:
 
@@ -2316,6 +2487,7 @@ while running:
             # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
+
     # This logic is for the computers turn
     if not move:
 
@@ -2328,7 +2500,6 @@ while running:
         if computer_move is not None:
             # What position said card is in
             comp_move_position = computer_hand.hand.index(computer_move)
-
 
             # Play moving the card to the middle, needs lots of variables for rendering
             ComputerAI.ComputerAI.animate_Play_Card(computer_move, screen, game_deck.card_Sprites, FPSCLOCK,
@@ -2361,10 +2532,9 @@ while running:
             middle_pile.card_on_top = 0
             print("No Computer move")
         move = True
+        turn += 1
 
-    # Closes the game if all cards in the hand are gone
-    if all(card is None for card in player_hand.hand):
-        running = False
+
 
     pygame.display.flip()
 

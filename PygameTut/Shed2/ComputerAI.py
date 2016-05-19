@@ -31,9 +31,11 @@ class ComputerAI:
         if len(playable_values) > 0:
             the_play = min(playable_values, key=playable_values.get)
             print(playable_values)
+
             if the_play is not None:
-                if the_play == 13:
-                    the_play -= 13
+                if playable_values[the_play] == 13:
+                    playable_values[the_play] -= 13
+                    the_play = min(playable_values, key=playable_values.get)
                 print("The computer is playing card number", the_play)
                 return the_play
             elif the_play is None:
@@ -67,11 +69,11 @@ class ComputerAI:
                 y -= moveSpeed
             if y == ENDY:
                 return
-
+            turn = None
             # the following two functions let the other images render so the moving images do not leave black lines
             screen.blit(background, background_Rect)
             BlitPlayerCards.BlitPlayer.blit_Cards(player_hand_sprites, phand, chand, back_of_card, screen, middle_pile,
-                                                  card_Sprites, cards, back_of_card_Rect)
+                                                  card_Sprites, cards, back_of_card_Rect, turn)
             BlitPlayerCards.BlitPlayer.computer_card_move(card_sprites, card, x, y, screen)
 
             pygame.display.update()

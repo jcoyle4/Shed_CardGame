@@ -1,8 +1,12 @@
 import pygame
 
 #TRANSPARANT = (0, 0, 0)
+import Load_Image
+
 
 class BlitPlayer:
+
+
 
     @staticmethod
     def gen_player_blit_cards(player_hand, deck_card_sprites, deck_card_hl_sprites, player_sprites,
@@ -296,7 +300,9 @@ class BlitPlayer:
             card18, card19, card20, card21, card22, card23, card24, card25
 
     @staticmethod
-    def blit_Cards(player_hand_sprites, player_hand, computer_hand, back_of_card, screen, pile, card_sprites, deck, backRect):
+    def blit_Cards(player_hand_sprites, player_hand, computer_hand, back_of_card, screen, pile, card_sprites, deck, backRect, turn):
+
+
 
         width = backRect.w
         height = backRect.h
@@ -723,36 +729,6 @@ class BlitPlayer:
             screen.blit(player_hand_sprites[23], (735 - 140, 550))
             screen.blit(player_hand_sprites[24], (760 - 140, 550))
 
-        # if len(player_hand) == 5:
-        #     screen.blit(player_hand_sprites[0], (160, 550))
-        #     screen.blit(player_hand_sprites[1], (270, 550))
-        #     screen.blit(player_hand_sprites[2], (310, 550))
-        #     screen.blit(player_hand_sprites[3], (350, 550))
-        #     screen.blit(player_hand_sprites[4], (390, 550))
-        #
-        # if len(player_hand) == 4:
-        #
-        #     screen.blit(player_hand_sprites[0], (230, 550))
-        #     screen.blit(player_hand_sprites[1], (270, 550))
-        #     screen.blit(player_hand_sprites[2], (310, 550))
-        #     screen.blit(player_hand_sprites[3], (350, 550))
-        #
-        # if len(player_hand) == 3:
-        #
-        #     screen.blit(player_hand_sprites[0], (230, 550))
-        #     screen.blit(player_hand_sprites[1], (270, 550))
-        #     screen.blit(player_hand_sprites[2], (310, 550))
-        #
-        # if len(player_hand) == 2:
-        #
-        #     screen.blit(player_hand_sprites[0], (230, 550))
-        #     screen.blit(player_hand_sprites[1], (270, 550))
-        #
-        # if len(player_hand) == 1:
-        #
-        #     screen.blit(player_hand_sprites[0], (230, 550))
-
-        #card_in_middle = 0
         eights = [7, 20, 33, 46]
         for x in range(1, 53):
             if len(pile.cards_in_middle) == 0:
@@ -791,6 +767,10 @@ class BlitPlayer:
             screen.blit(back_of_card, (515, 255))
             screen.blit(back_of_card, (520, 255))
 
+        if turn == 1:
+            RULES, RULES_rect = Load_Image.ImageLoad.imageLoadfnc("rules.jpg", False)
+            screen.blit(RULES, (50, 50))
+
     @staticmethod
     def computer_card_move(card_sprites, card, x, y, screen):
         for cardInDeck in range(1, 53):
@@ -798,5 +778,17 @@ class BlitPlayer:
                 card = card_sprites[cardInDeck-1]
 
                 screen.blit(card, (x, y))
+
+    # @staticmethod
+    # def rules(screen):
+    #     RULES, RULES_rect = Load_Image.ImageLoad.imageLoadfnc("rules.jpg", False)
+    #     screen.blit(RULES, (100, 100))
+    #     # pygame.display.update()
+
+    @staticmethod
+    def gameOver(img, screen):
+        screen.blit(img, (100, 100))
+
+        pygame.display.update()
 
 
