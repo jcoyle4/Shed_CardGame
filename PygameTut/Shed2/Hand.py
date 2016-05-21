@@ -102,7 +102,19 @@ class Hand:
 
         self.hand = new_hand
 
-    #
-    # @staticmethod
-    # def flip(toFlip):
-    #
+
+    @staticmethod
+    def flipC(C_To_Flip):
+
+        if C_To_Flip == 1:
+            C_To_Flip = 0
+
+        return C_To_Flip
+
+    @staticmethod
+    def unflipAll(cList):
+
+         for x in range(len(cList)):
+            cList[x] = 1
+
+         return cList

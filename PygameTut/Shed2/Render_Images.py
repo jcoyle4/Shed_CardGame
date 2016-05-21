@@ -9,9 +9,7 @@ class BlitPlayer:
 
 
     @staticmethod
-    def gen_player_blit_cards(player_hand, deck_card_sprites, deck_card_hl_sprites, player_sprites,
-                              c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, c15, c16,
-                              c17, c18, c19, c20, c21, c22, c23, c24, c25, transcard, used1, used2, used3, used4, used5):
+    def gen_player_blit_cards(player_hand, deck_card_sprites, deck_card_hl_sprites, list_of_c, transcard):
         global card1
         global card2
         global card3
@@ -37,7 +35,34 @@ class BlitPlayer:
         global card23
         global card24
         global card25
-        # THIS CAN, MUST AND WILL BE DONE BETTER
+
+        c1 = list_of_c[0]
+        c2 = list_of_c[1]
+        c3 = list_of_c[2]
+        c4 = list_of_c[3]
+        c5 = list_of_c[4]
+        c6 = list_of_c[5]
+        c7 = list_of_c[6]
+        c8 = list_of_c[7]
+        c9 = list_of_c[8]
+        c10 = list_of_c[9]
+        c11 = list_of_c[10]
+        c12 = list_of_c[11]
+        c13 = list_of_c[12]
+        c14 = list_of_c[13]
+        c15 = list_of_c[14]
+        c16 = list_of_c[15]
+        c17 = list_of_c[16]
+        c18 = list_of_c[17]
+        c19 = list_of_c[18]
+        c20 = list_of_c[19]
+        c21 = list_of_c[20]
+        c22 = list_of_c[21]
+        c23 = list_of_c[22]
+        c24 = list_of_c[23]
+        c25 = list_of_c[24]
+
+        # todo no need for if statement as player hand is always len 25
         if len(player_hand) >= 1:
 
             for x in range(1, 53):
@@ -296,8 +321,9 @@ class BlitPlayer:
                                                                                                                 if player_hand[24] is None:
                                                                                                                     card25 = transcard
 
-        return card1, card2, card3, card4, card5, card6, card7, card8, card9, card10, card11, card12, card13, card14, card15, card16, card17, \
-            card18, card19, card20, card21, card22, card23, card24, card25
+        list_to_return = [card1, card2, card3, card4, card5, card6, card7, card8, card9, card10, card11, card12, card13, card14, card15, card16,
+                          card17, card18, card19, card20, card21, card22, card23, card24, card25]
+        return list_to_return
 
     @staticmethod
     def blit_Cards(player_hand_sprites, player_hand, computer_hand, back_of_card, screen, pile, card_sprites, deck, backRect, turn):

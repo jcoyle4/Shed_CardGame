@@ -3,7 +3,7 @@ import os
 import Hand
 import Load_Image
 import deck
-import BlitPlayerCards
+import Render_Images
 import MiddlePile
 import ComputerAI
 
@@ -44,11 +44,6 @@ game_deck.cards = computer_hand.setUp(game_deck.cards)
 game_deck.cards = player_hand.setUp(game_deck.cards)
 
 player_hand.initialRejig()  # Use this to center the cards for playing
-# print(player_hand.hand[9])
-# print(player_hand.hand[10])
-# print(player_hand.hand[11])
-# print(player_hand.hand[12])
-# print(player_hand.hand[13])
 
 # When cx is equal to 1, this means that the image is not high-lighted
 c1 = 1
@@ -77,6 +72,7 @@ c23 = 1
 c24 = 1
 c25 = 1
 
+list_of_c = [c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, c15, c16, c17, c18, c19, c20, c21, c22, c23, c24, c25]
 clicked = 0
 
 # if card is used, used will be equal to 'spent' and the player cannot select that card anymore.
@@ -112,8 +108,6 @@ move = True  # boolean to keep track of whose move it is True for player, False 
 # Switch to int if more than one computer
 turn = 0  # Which turn of the game we are on
 
-
-
 while running:
     font = pygame.font.Font(None, 36)
     FPSCLOCK = pygame.time.Clock()
@@ -137,43 +131,11 @@ while running:
     LEFT = 1  # need these for the x's and y's clickers.
     RIGHT = 1
 
-    player_hand_sprites = []
+    # player_hand_sprites = []
     # Generates sprites for player cards
-    # TODO Change the return of the function to a list
-    card1, card2, card3, card4, card5, card6, card7, card8, card9, card10, card11, card12, card13, card14, card15, card16, card17, card18, card19, \
-        card20, card21, card22, card23, card24, card25 = BlitPlayerCards.BlitPlayer.gen_player_blit_cards(player_hand.hand, game_deck.card_Sprites,
-                                                                                                          game_deck.highlighted_Card_Sprites,
-                                                                                                          player_hand_sprites, c1, c2, c3, c4, c5,
-                                                                                                          c6, c7, c8, c9, c10, c11, c12, c13, c14,
-                                                                                                          c15, c16, c17, c18, c19, c20, c21, c22,
-                                                                                                          c23, c24, c25, TRANSPARANT, used1, used2,
-                                                                                                          used3, used4, used5)
 
-    player_hand_sprites.append(card1)
-    player_hand_sprites.append(card2)
-    player_hand_sprites.append(card3)
-    player_hand_sprites.append(card4)
-    player_hand_sprites.append(card5)
-    player_hand_sprites.append(card6)
-    player_hand_sprites.append(card7)
-    player_hand_sprites.append(card8)
-    player_hand_sprites.append(card9)
-    player_hand_sprites.append(card10)
-    player_hand_sprites.append(card11)
-    player_hand_sprites.append(card12)
-    player_hand_sprites.append(card13)
-    player_hand_sprites.append(card14)
-    player_hand_sprites.append(card15)
-    player_hand_sprites.append(card16)
-    player_hand_sprites.append(card17)
-    player_hand_sprites.append(card18)
-    player_hand_sprites.append(card19)
-    player_hand_sprites.append(card20)
-    player_hand_sprites.append(card21)
-    player_hand_sprites.append(card22)
-    player_hand_sprites.append(card23)
-    player_hand_sprites.append(card24)
-    player_hand_sprites.append(card25)
+    player_hand_sprites = Render_Images.BlitPlayer.gen_player_blit_cards(player_hand.hand, game_deck.card_Sprites, game_deck.highlighted_Card_Sprites,
+                                                                         list_of_c, TRANSPARANT)
 
     # X-Coord's of each card
     x_card_1 = list(range(20, 44))
@@ -354,16 +316,10 @@ while running:
         turn += 1  # counter to show the rules
 
     # puts ALL (computer, player and pile) the cards on the screen, and keeps updating them during the while loop
-    BlitPlayerCards.BlitPlayer.blit_Cards(player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card, screen, middle_pile,
-                                          game_deck.card_Sprites, deck.Deck.cards, back_of_card_Rect, turn)
+    Render_Images.BlitPlayer.blit_Cards(player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card, screen, middle_pile,
+                                        game_deck.card_Sprites, deck.Deck.cards, back_of_card_Rect, turn)
 
-
-    #print(middle_pile.playable_cards_list)
     middle_pile.PlayableCards()
-
-    # print("Card on top =", middle_pile.card_on_top)
-    # print("Playable cards =", middle_pile.playable_cards_list)
-    # print("Player Hand =", player_hand.hand)
 
     for event in pygame.event.get():  # get user input
         if event.type == pygame.QUIT:  # if user closes
@@ -381,14 +337,14 @@ while running:
 
             # Closes the game if all cards in the hand are gone
             if all(card is None for card in player_hand.hand):
-                BlitPlayerCards.BlitPlayer.gameOver(playerWinnerIMG, screen)
+                Render_Images.BlitPlayer.gameOver(playerWinnerIMG, screen)
                 pygame.display.flip()
                 if x in x_all and y in y_all:
                     running = False
                     pygame.time.delay(5000)
 
             if len(computer_hand.hand) == 0:
-                BlitPlayerCards.BlitPlayer.gameOver(computerWinnerIMG, screen)
+                Render_Images.BlitPlayer.gameOver(computerWinnerIMG, screen)
                 pygame.display.flip()
                 if x in x_all and y in y_all:
                     print("QUITTING")
@@ -402,386 +358,329 @@ while running:
                 if y in y_mid:
                     this = 1
                     while this == 1:
-                        if c1 == 0:  # ie clicked. This says that if a card is clicked, and therefore able to be played,
+                        # C1
+                        if list_of_c[0] == 0:  # ie clicked. This says that if a card is clicked, and therefore able to be played,
                             #  the card in the middle is now the clicked number. and etc.
-                            ComputerAI.ComputerAI.animate_Play_Card(player_hand.hand[0], screen,
-                                                                    game_deck.card_Sprites, FPSCLOCK,
-                                                                    player_hand_sprites, player_hand.hand,
-                                                                    computer_hand.hand, back_of_card,
-                                                                    middle_pile, game_deck.card_Sprites,
-                                                                    deck.Deck.cards, back_of_card_Rect,
+                            ComputerAI.ComputerAI.animate_Play_Card(player_hand.hand[0], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                                    player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                                    middle_pile, game_deck.card_Sprites, deck.Deck.cards, back_of_card_Rect,
                                                                     background, background_Rect, True)
                             middle_pile.card_on_top = player_hand.hand[0]
                             if middle_pile.card_on_top not in middle_pile.cards_in_middle and middle_pile.card_on_top != 0:
                                 middle_pile.cards_in_middle.append(middle_pile.card_on_top)
                             used1 = 'spent'
-                            c1 = 1
+                            Hand.Hand.unflipAll(list_of_c)
                             this = 0
 
-                        elif c2 == 0:
-                            ComputerAI.ComputerAI.animate_Play_Card(player_hand.hand[1], screen,
-                                                                    game_deck.card_Sprites, FPSCLOCK,
-                                                                    player_hand_sprites, player_hand.hand,
-                                                                    computer_hand.hand, back_of_card,
-                                                                    middle_pile, game_deck.card_Sprites,
-                                                                    deck.Deck.cards, back_of_card_Rect,
+                        # C2
+                        elif list_of_c[1] == 0:
+                            ComputerAI.ComputerAI.animate_Play_Card(player_hand.hand[1], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                                    player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                                    middle_pile, game_deck.card_Sprites, deck.Deck.cards, back_of_card_Rect,
                                                                     background, background_Rect, True)
                             middle_pile.card_on_top = player_hand.hand[1]
                             if middle_pile.card_on_top not in middle_pile.cards_in_middle and middle_pile.card_on_top != 0:
                                 middle_pile.cards_in_middle.append(middle_pile.card_on_top)
                             used2 = 'spent'
-                            c2 = 1
+                            Hand.Hand.unflipAll(list_of_c)
                             this = 0
 
-                        elif c3 == 0:
-                            # print(player_hand.hand)
-                            ComputerAI.ComputerAI.animate_Play_Card(player_hand.hand[2], screen,
-                                                                    game_deck.card_Sprites, FPSCLOCK,
-                                                                    player_hand_sprites, player_hand.hand,
-                                                                    computer_hand.hand, back_of_card,
-                                                                    middle_pile, game_deck.card_Sprites,
-                                                                    deck.Deck.cards, back_of_card_Rect,
+                        elif list_of_c[2] == 0:
+                            ComputerAI.ComputerAI.animate_Play_Card(player_hand.hand[2], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                                    player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                                    middle_pile, game_deck.card_Sprites, deck.Deck.cards, back_of_card_Rect,
                                                                     background, background_Rect, True)
                             middle_pile.card_on_top = player_hand.hand[2]
                             if middle_pile.card_on_top not in middle_pile.cards_in_middle and middle_pile.card_on_top != 0:
                                 middle_pile.cards_in_middle.append(middle_pile.card_on_top)
                             used3 = 'spent'
-                            c3 = 1
+                            Hand.Hand.unflipAll(list_of_c)
                             this = 0
 
-                        elif c4 == 0:
+                        elif list_of_c[3] == 0:
                             # print(player_hand.hand)
-                            ComputerAI.ComputerAI.animate_Play_Card(player_hand.hand[3], screen,
-                                                                    game_deck.card_Sprites, FPSCLOCK,
-                                                                    player_hand_sprites, player_hand.hand,
-                                                                    computer_hand.hand, back_of_card,
-                                                                    middle_pile, game_deck.card_Sprites,
-                                                                    deck.Deck.cards, back_of_card_Rect,
+                            ComputerAI.ComputerAI.animate_Play_Card(player_hand.hand[3], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                                    player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                                    middle_pile, game_deck.card_Sprites, deck.Deck.cards, back_of_card_Rect,
                                                                     background, background_Rect, True)
                             middle_pile.card_on_top = player_hand.hand[3]
                             if middle_pile.card_on_top not in middle_pile.cards_in_middle and middle_pile.card_on_top != 0:
                                 middle_pile.cards_in_middle.append(middle_pile.card_on_top)
                             used4 = 'spent'
-                            c4 = 1
+                            Hand.Hand.unflipAll(list_of_c)
                             this = 0
 
-                        elif c5 == 0:
+                        elif list_of_c[4] == 0:
                             # print(player_hand.hand)
-                            ComputerAI.ComputerAI.animate_Play_Card(player_hand.hand[4], screen,
-                                                                    game_deck.card_Sprites, FPSCLOCK,
-                                                                    player_hand_sprites, player_hand.hand,
-                                                                    computer_hand.hand, back_of_card,
-                                                                    middle_pile, game_deck.card_Sprites,
-                                                                    deck.Deck.cards, back_of_card_Rect,
+                            ComputerAI.ComputerAI.animate_Play_Card(player_hand.hand[4], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                                    player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                                    middle_pile, game_deck.card_Sprites, deck.Deck.cards, back_of_card_Rect,
                                                                     background, background_Rect, True)
                             middle_pile.card_on_top = player_hand.hand[4]
                             if middle_pile.card_on_top not in middle_pile.cards_in_middle and middle_pile.card_on_top != 0:
                                 middle_pile.cards_in_middle.append(middle_pile.card_on_top)
                             used5 = 'spent'
-                            c5 = 1
+                            Hand.Hand.unflipAll(list_of_c)
                             this = 0
 
-                        elif c6 == 0:
+                        elif list_of_c[5] == 0:
                             # print(player_hand.hand)
-                            ComputerAI.ComputerAI.animate_Play_Card(player_hand.hand[5], screen,
-                                                                    game_deck.card_Sprites, FPSCLOCK,
-                                                                    player_hand_sprites, player_hand.hand,
-                                                                    computer_hand.hand, back_of_card,
-                                                                    middle_pile, game_deck.card_Sprites,
-                                                                    deck.Deck.cards, back_of_card_Rect,
+                            ComputerAI.ComputerAI.animate_Play_Card(player_hand.hand[5], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                                    player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                                    middle_pile, game_deck.card_Sprites, deck.Deck.cards, back_of_card_Rect,
                                                                     background, background_Rect, True)
                             middle_pile.card_on_top = player_hand.hand[5]
                             if middle_pile.card_on_top not in middle_pile.cards_in_middle and middle_pile.card_on_top != 0:
                                 middle_pile.cards_in_middle.append(middle_pile.card_on_top)
                             used6 = 'spent'
-                            c6 = 1
+                            Hand.Hand.unflipAll(list_of_c)
                             this = 0
 
-                        elif c7 == 0:
+                        elif list_of_c[6] == 0:
                             # print(player_hand.hand)
-                            ComputerAI.ComputerAI.animate_Play_Card(player_hand.hand[6], screen,
-                                                                    game_deck.card_Sprites, FPSCLOCK,
-                                                                    player_hand_sprites, player_hand.hand,
-                                                                    computer_hand.hand, back_of_card,
-                                                                    middle_pile, game_deck.card_Sprites,
-                                                                    deck.Deck.cards, back_of_card_Rect,
+                            ComputerAI.ComputerAI.animate_Play_Card(player_hand.hand[6], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                                    player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                                    middle_pile, game_deck.card_Sprites, deck.Deck.cards, back_of_card_Rect,
                                                                     background, background_Rect, True)
                             middle_pile.card_on_top = player_hand.hand[6]
                             if middle_pile.card_on_top not in middle_pile.cards_in_middle and middle_pile.card_on_top != 0:
                                 middle_pile.cards_in_middle.append(middle_pile.card_on_top)
                             used7 = 'spent'
-                            c7 = 1
+                            Hand.Hand.unflipAll(list_of_c)
                             this = 0
 
-                        elif c8 == 0:
+                        elif list_of_c[7] == 0:
                             # print(player_hand.hand)
-                            ComputerAI.ComputerAI.animate_Play_Card(player_hand.hand[7], screen,
-                                                                    game_deck.card_Sprites, FPSCLOCK,
-                                                                    player_hand_sprites, player_hand.hand,
-                                                                    computer_hand.hand, back_of_card,
-                                                                    middle_pile, game_deck.card_Sprites,
-                                                                    deck.Deck.cards, back_of_card_Rect,
+                            ComputerAI.ComputerAI.animate_Play_Card(player_hand.hand[7], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                                    player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                                    middle_pile, game_deck.card_Sprites, deck.Deck.cards, back_of_card_Rect,
                                                                     background, background_Rect, True)
                             middle_pile.card_on_top = player_hand.hand[7]
                             if middle_pile.card_on_top not in middle_pile.cards_in_middle and middle_pile.card_on_top != 0:
                                 middle_pile.cards_in_middle.append(middle_pile.card_on_top)
                             used8 = 'spent'
-                            c8 = 1
+                            Hand.Hand.unflipAll(list_of_c)
                             this = 0
-                        elif c9 == 0:
+
+                        elif list_of_c[8] == 0:
                             # print(player_hand.hand)
-                            ComputerAI.ComputerAI.animate_Play_Card(player_hand.hand[8], screen,
-                                                                    game_deck.card_Sprites, FPSCLOCK,
-                                                                    player_hand_sprites, player_hand.hand,
-                                                                    computer_hand.hand, back_of_card,
-                                                                    middle_pile, game_deck.card_Sprites,
-                                                                    deck.Deck.cards, back_of_card_Rect,
+                            ComputerAI.ComputerAI.animate_Play_Card(player_hand.hand[8], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                                    player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                                    middle_pile, game_deck.card_Sprites, deck.Deck.cards, back_of_card_Rect,
                                                                     background, background_Rect, True)
                             middle_pile.card_on_top = player_hand.hand[8]
                             if middle_pile.card_on_top not in middle_pile.cards_in_middle and middle_pile.card_on_top != 0:
                                 middle_pile.cards_in_middle.append(middle_pile.card_on_top)
                             used9 = 'spent'
-                            c9 = 1
+                            Hand.Hand.unflipAll(list_of_c)
                             this = 0
-                        elif c10 == 0:
+
+                        elif list_of_c[9] == 0:
                             # print(player_hand.hand)
-                            ComputerAI.ComputerAI.animate_Play_Card(player_hand.hand[9], screen,
-                                                                    game_deck.card_Sprites, FPSCLOCK,
-                                                                    player_hand_sprites, player_hand.hand,
-                                                                    computer_hand.hand, back_of_card,
-                                                                    middle_pile, game_deck.card_Sprites,
-                                                                    deck.Deck.cards, back_of_card_Rect,
+                            ComputerAI.ComputerAI.animate_Play_Card(player_hand.hand[9], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                                    player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                                    middle_pile, game_deck.card_Sprites, deck.Deck.cards, back_of_card_Rect,
                                                                     background, background_Rect, True)
                             middle_pile.card_on_top = player_hand.hand[9]
                             if middle_pile.card_on_top not in middle_pile.cards_in_middle and middle_pile.card_on_top != 0:
                                 middle_pile.cards_in_middle.append(middle_pile.card_on_top)
                             used10 = 'spent'
-                            c10 = 1
+                            Hand.Hand.unflipAll(list_of_c)
                             this = 0
-                        elif c11 == 0:
+
+                        elif list_of_c[10] == 0:
                             # print(player_hand.hand)
-                            ComputerAI.ComputerAI.animate_Play_Card(player_hand.hand[10], screen,
-                                                                    game_deck.card_Sprites, FPSCLOCK,
-                                                                    player_hand_sprites, player_hand.hand,
-                                                                    computer_hand.hand, back_of_card,
-                                                                    middle_pile, game_deck.card_Sprites,
-                                                                    deck.Deck.cards, back_of_card_Rect,
+                            ComputerAI.ComputerAI.animate_Play_Card(player_hand.hand[10], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                                    player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                                    middle_pile, game_deck.card_Sprites, deck.Deck.cards, back_of_card_Rect,
                                                                     background, background_Rect, True)
                             middle_pile.card_on_top = player_hand.hand[10]
                             if middle_pile.card_on_top not in middle_pile.cards_in_middle and middle_pile.card_on_top != 0:
                                 middle_pile.cards_in_middle.append(middle_pile.card_on_top)
                             used11 = 'spent'
-                            c11 = 1
+                            Hand.Hand.unflipAll(list_of_c)
                             this = 0
-                        elif c12 == 0:
+
+                        elif list_of_c[11] == 0:
                             # print(player_hand.hand)
-                            ComputerAI.ComputerAI.animate_Play_Card(player_hand.hand[11], screen,
-                                                                    game_deck.card_Sprites, FPSCLOCK,
-                                                                    player_hand_sprites, player_hand.hand,
-                                                                    computer_hand.hand, back_of_card,
-                                                                    middle_pile, game_deck.card_Sprites,
-                                                                    deck.Deck.cards, back_of_card_Rect,
+                            ComputerAI.ComputerAI.animate_Play_Card(player_hand.hand[11], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                                    player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                                    middle_pile, game_deck.card_Sprites, deck.Deck.cards, back_of_card_Rect,
                                                                     background, background_Rect, True)
                             middle_pile.card_on_top = player_hand.hand[11]
                             if middle_pile.card_on_top not in middle_pile.cards_in_middle and middle_pile.card_on_top != 0:
                                 middle_pile.cards_in_middle.append(middle_pile.card_on_top)
                             used12 = 'spent'
-                            c12 = 1
+                            Hand.Hand.unflipAll(list_of_c)
                             this = 0
-                        elif c13 == 0:
+
+                        elif list_of_c[12] == 0:
                             # print(player_hand.hand)
-                            ComputerAI.ComputerAI.animate_Play_Card(player_hand.hand[12], screen,
-                                                                    game_deck.card_Sprites, FPSCLOCK,
-                                                                    player_hand_sprites, player_hand.hand,
-                                                                    computer_hand.hand, back_of_card,
-                                                                    middle_pile, game_deck.card_Sprites,
-                                                                    deck.Deck.cards, back_of_card_Rect,
+                            ComputerAI.ComputerAI.animate_Play_Card(player_hand.hand[12], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                                    player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                                    middle_pile, game_deck.card_Sprites, deck.Deck.cards, back_of_card_Rect,
                                                                     background, background_Rect, True)
                             middle_pile.card_on_top = player_hand.hand[12]
                             if middle_pile.card_on_top not in middle_pile.cards_in_middle and middle_pile.card_on_top != 0:
                                 middle_pile.cards_in_middle.append(middle_pile.card_on_top)
                             used13 = 'spent'
-                            c13 = 1
+                            Hand.Hand.unflipAll(list_of_c)
                             this = 0
-                        elif c14 == 0:
+
+                        elif list_of_c[13] == 0:
                             # print(player_hand.hand)
-                            ComputerAI.ComputerAI.animate_Play_Card(player_hand.hand[13], screen,
-                                                                    game_deck.card_Sprites, FPSCLOCK,
-                                                                    player_hand_sprites, player_hand.hand,
-                                                                    computer_hand.hand, back_of_card,
-                                                                    middle_pile, game_deck.card_Sprites,
-                                                                    deck.Deck.cards, back_of_card_Rect,
+                            ComputerAI.ComputerAI.animate_Play_Card(player_hand.hand[13], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                                    player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                                    middle_pile, game_deck.card_Sprites, deck.Deck.cards, back_of_card_Rect,
                                                                     background, background_Rect, True)
                             middle_pile.card_on_top = player_hand.hand[13]
                             if middle_pile.card_on_top not in middle_pile.cards_in_middle and middle_pile.card_on_top != 0:
                                 middle_pile.cards_in_middle.append(middle_pile.card_on_top)
                             used14 = 'spent'
-                            c14 = 1
+                            Hand.Hand.unflipAll(list_of_c)
                             this = 0
-                        elif c15 == 0:
+
+                        elif list_of_c[14] == 0:
                             # print(player_hand.hand)
-                            ComputerAI.ComputerAI.animate_Play_Card(player_hand.hand[14], screen,
-                                                                    game_deck.card_Sprites, FPSCLOCK,
-                                                                    player_hand_sprites, player_hand.hand,
-                                                                    computer_hand.hand, back_of_card,
-                                                                    middle_pile, game_deck.card_Sprites,
-                                                                    deck.Deck.cards, back_of_card_Rect,
+                            ComputerAI.ComputerAI.animate_Play_Card(player_hand.hand[14], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                                    player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                                    middle_pile, game_deck.card_Sprites, deck.Deck.cards, back_of_card_Rect,
                                                                     background, background_Rect, True)
                             middle_pile.card_on_top = player_hand.hand[14]
                             if middle_pile.card_on_top not in middle_pile.cards_in_middle and middle_pile.card_on_top != 0:
                                 middle_pile.cards_in_middle.append(middle_pile.card_on_top)
                             used15 = 'spent'
-                            c15 = 1
+                            Hand.Hand.unflipAll(list_of_c)
                             this = 0
-                        elif c16 == 0:
+
+                        elif list_of_c[15] == 0:
                             # print(player_hand.hand)
-                            ComputerAI.ComputerAI.animate_Play_Card(player_hand.hand[15], screen,
-                                                                    game_deck.card_Sprites, FPSCLOCK,
-                                                                    player_hand_sprites, player_hand.hand,
-                                                                    computer_hand.hand, back_of_card,
-                                                                    middle_pile, game_deck.card_Sprites,
-                                                                    deck.Deck.cards, back_of_card_Rect,
+                            ComputerAI.ComputerAI.animate_Play_Card(player_hand.hand[15], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                                    player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                                    middle_pile, game_deck.card_Sprites, deck.Deck.cards, back_of_card_Rect,
                                                                     background, background_Rect, True)
                             middle_pile.card_on_top = player_hand.hand[15]
                             if middle_pile.card_on_top not in middle_pile.cards_in_middle and middle_pile.card_on_top != 0:
                                 middle_pile.cards_in_middle.append(middle_pile.card_on_top)
                             used16 = 'spent'
-                            c16 = 1
+                            Hand.Hand.unflipAll(list_of_c)
                             this = 0
-                        elif c17 == 0:
+
+                        elif list_of_c[16] == 0:
                             # print(player_hand.hand)
-                            ComputerAI.ComputerAI.animate_Play_Card(player_hand.hand[16], screen,
-                                                                    game_deck.card_Sprites, FPSCLOCK,
-                                                                    player_hand_sprites, player_hand.hand,
-                                                                    computer_hand.hand, back_of_card,
-                                                                    middle_pile, game_deck.card_Sprites,
-                                                                    deck.Deck.cards, back_of_card_Rect,
+                            ComputerAI.ComputerAI.animate_Play_Card(player_hand.hand[16], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                                    player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                                    middle_pile, game_deck.card_Sprites, deck.Deck.cards, back_of_card_Rect,
                                                                     background, background_Rect, True)
                             middle_pile.card_on_top = player_hand.hand[16]
                             if middle_pile.card_on_top not in middle_pile.cards_in_middle and middle_pile.card_on_top != 0:
                                 middle_pile.cards_in_middle.append(middle_pile.card_on_top)
                             used17 = 'spent'
-                            c17 = 1
+                            Hand.Hand.unflipAll(list_of_c)
                             this = 0
-                        elif c18 == 0:
+
+                        elif list_of_c[17] == 0:
                             # print(player_hand.hand)
-                            ComputerAI.ComputerAI.animate_Play_Card(player_hand.hand[17], screen,
-                                                                    game_deck.card_Sprites, FPSCLOCK,
-                                                                    player_hand_sprites, player_hand.hand,
-                                                                    computer_hand.hand, back_of_card,
-                                                                    middle_pile, game_deck.card_Sprites,
-                                                                    deck.Deck.cards, back_of_card_Rect,
+                            ComputerAI.ComputerAI.animate_Play_Card(player_hand.hand[17], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                                    player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                                    middle_pile, game_deck.card_Sprites, deck.Deck.cards, back_of_card_Rect,
                                                                     background, background_Rect, True)
                             middle_pile.card_on_top = player_hand.hand[17]
                             if middle_pile.card_on_top not in middle_pile.cards_in_middle and middle_pile.card_on_top != 0:
                                 middle_pile.cards_in_middle.append(middle_pile.card_on_top)
                             used18 = 'spent'
-                            c18 = 1
+                            Hand.Hand.unflipAll(list_of_c)
                             this = 0
-                        elif c19 == 0:
+
+                        elif list_of_c[18] == 0:
                             # print(player_hand.hand)
-                            ComputerAI.ComputerAI.animate_Play_Card(player_hand.hand[18], screen,
-                                                                    game_deck.card_Sprites, FPSCLOCK,
-                                                                    player_hand_sprites, player_hand.hand,
-                                                                    computer_hand.hand, back_of_card,
-                                                                    middle_pile, game_deck.card_Sprites,
-                                                                    deck.Deck.cards, back_of_card_Rect,
+                            ComputerAI.ComputerAI.animate_Play_Card(player_hand.hand[18], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                                    player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                                    middle_pile, game_deck.card_Sprites, deck.Deck.cards, back_of_card_Rect,
                                                                     background, background_Rect, True)
                             middle_pile.card_on_top = player_hand.hand[18]
                             if middle_pile.card_on_top not in middle_pile.cards_in_middle and middle_pile.card_on_top != 0:
                                 middle_pile.cards_in_middle.append(middle_pile.card_on_top)
                             used19 = 'spent'
-                            c19 = 1
+                            Hand.Hand.unflipAll(list_of_c)
                             this = 0
-                        elif c20 == 0:
+
+                        elif list_of_c[19] == 0:
                             # print(player_hand.hand)
-                            ComputerAI.ComputerAI.animate_Play_Card(player_hand.hand[19], screen,
-                                                                    game_deck.card_Sprites, FPSCLOCK,
-                                                                    player_hand_sprites, player_hand.hand,
-                                                                    computer_hand.hand, back_of_card,
-                                                                    middle_pile, game_deck.card_Sprites,
-                                                                    deck.Deck.cards, back_of_card_Rect,
+                            ComputerAI.ComputerAI.animate_Play_Card(player_hand.hand[19], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                                    player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                                    middle_pile, game_deck.card_Sprites, deck.Deck.cards, back_of_card_Rect,
                                                                     background, background_Rect, True)
                             middle_pile.card_on_top = player_hand.hand[19]
                             if middle_pile.card_on_top not in middle_pile.cards_in_middle and middle_pile.card_on_top != 0:
                                 middle_pile.cards_in_middle.append(middle_pile.card_on_top)
                             used20 = 'spent'
-                            c20 = 1
+                            Hand.Hand.unflipAll(list_of_c)
                             this = 0
-                        elif c21 == 0:
+
+                        elif list_of_c[20] == 0:
                             # print(player_hand.hand)
-                            ComputerAI.ComputerAI.animate_Play_Card(player_hand.hand[20], screen,
-                                                                    game_deck.card_Sprites, FPSCLOCK,
-                                                                    player_hand_sprites, player_hand.hand,
-                                                                    computer_hand.hand, back_of_card,
-                                                                    middle_pile, game_deck.card_Sprites,
-                                                                    deck.Deck.cards, back_of_card_Rect,
+                            ComputerAI.ComputerAI.animate_Play_Card(player_hand.hand[20], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                                    player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                                    middle_pile, game_deck.card_Sprites, deck.Deck.cards, back_of_card_Rect,
                                                                     background, background_Rect, True)
                             middle_pile.card_on_top = player_hand.hand[20]
                             if middle_pile.card_on_top not in middle_pile.cards_in_middle and middle_pile.card_on_top != 0:
                                 middle_pile.cards_in_middle.append(middle_pile.card_on_top)
                             used21 = 'spent'
-                            c21 = 1
+                            Hand.Hand.unflipAll(list_of_c)
                             this = 0
-                        elif c22 == 0:
+
+                        elif list_of_c[21] == 0:
                             # print(player_hand.hand)
-                            ComputerAI.ComputerAI.animate_Play_Card(player_hand.hand[21], screen,
-                                                                    game_deck.card_Sprites, FPSCLOCK,
-                                                                    player_hand_sprites, player_hand.hand,
-                                                                    computer_hand.hand, back_of_card,
-                                                                    middle_pile, game_deck.card_Sprites,
-                                                                    deck.Deck.cards, back_of_card_Rect,
+                            ComputerAI.ComputerAI.animate_Play_Card(player_hand.hand[21], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                                    player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                                    middle_pile, game_deck.card_Sprites, deck.Deck.cards, back_of_card_Rect,
                                                                     background, background_Rect, True)
                             middle_pile.card_on_top = player_hand.hand[21]
                             if middle_pile.card_on_top not in middle_pile.cards_in_middle and middle_pile.card_on_top != 0:
                                 middle_pile.cards_in_middle.append(middle_pile.card_on_top)
                             used22 = 'spent'
-                            c22 = 1
+                            Hand.Hand.unflipAll(list_of_c)
                             this = 0
-                        elif c23 == 0:
+
+                        elif list_of_c[22] == 0:
                             # print(player_hand.hand)
-                            ComputerAI.ComputerAI.animate_Play_Card(player_hand.hand[22], screen,
-                                                                    game_deck.card_Sprites, FPSCLOCK,
-                                                                    player_hand_sprites, player_hand.hand,
-                                                                    computer_hand.hand, back_of_card,
-                                                                    middle_pile, game_deck.card_Sprites,
-                                                                    deck.Deck.cards, back_of_card_Rect,
+                            ComputerAI.ComputerAI.animate_Play_Card(player_hand.hand[22], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                                    player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                                    middle_pile, game_deck.card_Sprites, deck.Deck.cards, back_of_card_Rect,
                                                                     background, background_Rect, True)
                             middle_pile.card_on_top = player_hand.hand[22]
                             if middle_pile.card_on_top not in middle_pile.cards_in_middle and middle_pile.card_on_top != 0:
                                 middle_pile.cards_in_middle.append(middle_pile.card_on_top)
                             used23 = 'spent'
-                            c23 = 1
+                            Hand.Hand.unflipAll(list_of_c)
                             this = 0
-                        elif c24 == 0:
+
+                        elif list_of_c[23] == 0:
                             # print(player_hand.hand)
-                            ComputerAI.ComputerAI.animate_Play_Card(player_hand.hand[23], screen,
-                                                                    game_deck.card_Sprites, FPSCLOCK,
-                                                                    player_hand_sprites, player_hand.hand,
-                                                                    computer_hand.hand, back_of_card,
-                                                                    middle_pile, game_deck.card_Sprites,
-                                                                    deck.Deck.cards, back_of_card_Rect,
+                            ComputerAI.ComputerAI.animate_Play_Card(player_hand.hand[23], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                                    player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                                    middle_pile, game_deck.card_Sprites, deck.Deck.cards, back_of_card_Rect,
                                                                     background, background_Rect, True)
                             middle_pile.card_on_top = player_hand.hand[23]
                             if middle_pile.card_on_top not in middle_pile.cards_in_middle and middle_pile.card_on_top != 0:
                                 middle_pile.cards_in_middle.append(middle_pile.card_on_top)
                             used24 = 'spent'
-                            c24 = 1
+                            Hand.Hand.unflipAll(list_of_c)
                             this = 0
-                        elif c25 == 0:
+
+                        elif list_of_c[24] == 0:
                             # print(player_hand.hand)
-                            ComputerAI.ComputerAI.animate_Play_Card(player_hand.hand[24], screen,
-                                                                    game_deck.card_Sprites, FPSCLOCK,
-                                                                    player_hand_sprites, player_hand.hand,
-                                                                    computer_hand.hand, back_of_card,
-                                                                    middle_pile, game_deck.card_Sprites,
-                                                                    deck.Deck.cards, back_of_card_Rect,
+                            ComputerAI.ComputerAI.animate_Play_Card(player_hand.hand[24], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                                    player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                                    middle_pile, game_deck.card_Sprites, deck.Deck.cards, back_of_card_Rect,
                                                                     background, background_Rect, True)
                             middle_pile.card_on_top = player_hand.hand[24]
                             if middle_pile.card_on_top not in middle_pile.cards_in_middle and middle_pile.card_on_top != 0:
                                 middle_pile.cards_in_middle.append(middle_pile.card_on_top)
                             used25 = 'spent'
-                            c25 = 1
+                            Hand.Hand.unflipAll(list_of_c)
                             this = 0
                         else:  # when the middle pile is clicked when no card is highlighted, pick up the middle pile
                             if len(computer_hand.hand) != 0:
@@ -797,11 +696,6 @@ while running:
                                 move = False
 
             # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            """
-            # Extend this to 25 cards
-            # Also put in the code to render the extra 15 cards
-            """
-
             # Code to change a card from to and from highlighted
             # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             if x in x_card_1:  # sets up to see if a card in the players hand can be highlighted and used.
@@ -811,59 +705,13 @@ while running:
                     if player_hand.hand[0] in middle_pile.playable_cards_list:
 
                         if used1 != 'spent':
-                            if c1 == 0:
-                                c1 = 1
-                                c2 = 1
-                                c3 = 1
-                                c4 = 1
-                                c5 = 1
-                                c6 = 1
-                                c7 = 1
-                                c8 = 1
-                                c9 = 1
-                                c10 = 1
-                                c11 = 1
-                                c12 = 1
-                                c13 = 1
-                                c14 = 1
-                                c15 = 1
-                                c16 = 1
-                                c17 = 1
-                                c18 = 1
-                                c19 = 1
-                                c20 = 1
-                                c21 = 1
-                                c22 = 1
-                                c23 = 1
-                                c24 = 1
-                                c25 = 1
+                            # C1
+                            if list_of_c[0] == 0:
+                                Hand.Hand.unflipAll(list_of_c)
 
-                            elif c1 == 1:
-                                c1 = 0
-                                c2 = 1
-                                c3 = 1
-                                c4 = 1
-                                c5 = 1
-                                c6 = 1
-                                c7 = 1
-                                c8 = 1
-                                c9 = 1
-                                c10 = 1
-                                c11 = 1
-                                c12 = 1
-                                c13 = 1
-                                c14 = 1
-                                c15 = 1
-                                c16 = 1
-                                c17 = 1
-                                c18 = 1
-                                c19 = 1
-                                c20 = 1
-                                c21 = 1
-                                c22 = 1
-                                c23 = 1
-                                c24 = 1
-                                c25 = 1
+                            elif list_of_c[0] == 1:
+                                Hand.Hand.unflipAll(list_of_c)
+                                list_of_c[0] = Hand.Hand.flipC(list_of_c[0])
 
             if x in x_card_2:
                 if y in y_card_all:
@@ -871,59 +719,13 @@ while running:
                     if player_hand.hand[1] in middle_pile.playable_cards_list:
 
                         if used2 != 'spent':
-                            if c2 == 0:
-                                c1 = 1
-                                c2 = 1
-                                c3 = 1
-                                c4 = 1
-                                c5 = 1
-                                c6 = 1
-                                c7 = 1
-                                c8 = 1
-                                c9 = 1
-                                c10 = 1
-                                c11 = 1
-                                c12 = 1
-                                c13 = 1
-                                c14 = 1
-                                c15 = 1
-                                c16 = 1
-                                c17 = 1
-                                c18 = 1
-                                c19 = 1
-                                c20 = 1
-                                c21 = 1
-                                c22 = 1
-                                c23 = 1
-                                c24 = 1
-                                c25 = 1
+                            # C2
+                            if list_of_c[1] == 0:
+                                Hand.Hand.unflipAll(list_of_c)
 
-                            elif c2 == 1:
-                                c1 = 1
-                                c2 = 0
-                                c3 = 1
-                                c4 = 1
-                                c5 = 1
-                                c6 = 1
-                                c7 = 1
-                                c8 = 1
-                                c9 = 1
-                                c10 = 1
-                                c11 = 1
-                                c12 = 1
-                                c13 = 1
-                                c14 = 1
-                                c15 = 1
-                                c16 = 1
-                                c17 = 1
-                                c18 = 1
-                                c19 = 1
-                                c20 = 1
-                                c21 = 1
-                                c22 = 1
-                                c23 = 1
-                                c24 = 1
-                                c25 = 1
+                            elif list_of_c[1] == 1:
+                                Hand.Hand.unflipAll(list_of_c)
+                                list_of_c[1] = Hand.Hand.flipC(list_of_c[1])
 
             if x in x_card_3:
                 if y in y_card_all:
@@ -931,59 +733,13 @@ while running:
                     if player_hand.hand[2] in middle_pile.playable_cards_list:
 
                         if used3 != 'spent':
-                            if c3 == 0:
-                                c1 = 1
-                                c2 = 1
-                                c3 = 1
-                                c4 = 1
-                                c5 = 1
-                                c6 = 1
-                                c7 = 1
-                                c8 = 1
-                                c9 = 1
-                                c10 = 1
-                                c11 = 1
-                                c12 = 1
-                                c13 = 1
-                                c14 = 1
-                                c15 = 1
-                                c16 = 1
-                                c17 = 1
-                                c18 = 1
-                                c19 = 1
-                                c20 = 1
-                                c21 = 1
-                                c22 = 1
-                                c23 = 1
-                                c24 = 1
-                                c25 = 1
+                            # C3
+                            if list_of_c[2] == 0:
+                                Hand.Hand.unflipAll(list_of_c)
 
-                            elif c3 == 1:
-                                c1 = 1
-                                c2 = 1
-                                c3 = 0
-                                c4 = 1
-                                c5 = 1
-                                c6 = 1
-                                c7 = 1
-                                c8 = 1
-                                c9 = 1
-                                c10 = 1
-                                c11 = 1
-                                c12 = 1
-                                c13 = 1
-                                c14 = 1
-                                c15 = 1
-                                c16 = 1
-                                c17 = 1
-                                c18 = 1
-                                c19 = 1
-                                c20 = 1
-                                c21 = 1
-                                c22 = 1
-                                c23 = 1
-                                c24 = 1
-                                c25 = 1
+                            elif list_of_c[2] == 1:
+                                Hand.Hand.unflipAll(list_of_c)
+                                list_of_c[2] = Hand.Hand.flipC(list_of_c[2])
 
             if x in x_card_4:
                 if y in y_card_all:
@@ -991,119 +747,27 @@ while running:
                     if player_hand.hand[3] in middle_pile.playable_cards_list:
 
                         if used4 != 'spent':
-                            if c4 == 0:
-                                c1 = 1
-                                c2 = 1
-                                c3 = 1
-                                c4 = 1
-                                c5 = 1
-                                c6 = 1
-                                c7 = 1
-                                c8 = 1
-                                c9 = 1
-                                c10 = 1
-                                c11 = 1
-                                c12 = 1
-                                c13 = 1
-                                c14 = 1
-                                c15 = 1
-                                c16 = 1
-                                c17 = 1
-                                c18 = 1
-                                c19 = 1
-                                c20 = 1
-                                c21 = 1
-                                c22 = 1
-                                c23 = 1
-                                c24 = 1
-                                c25 = 1
+                            # C4
+                            if list_of_c[3] == 0:
+                                Hand.Hand.unflipAll(list_of_c)
 
-                            elif c4 == 1:
-                                c1 = 1
-                                c2 = 1
-                                c3 = 1
-                                c4 = 0
-                                c5 = 1
-                                c6 = 1
-                                c7 = 1
-                                c8 = 1
-                                c9 = 1
-                                c10 = 1
-                                c11 = 1
-                                c12 = 1
-                                c13 = 1
-                                c14 = 1
-                                c15 = 1
-                                c16 = 1
-                                c17 = 1
-                                c18 = 1
-                                c19 = 1
-                                c20 = 1
-                                c21 = 1
-                                c22 = 1
-                                c23 = 1
-                                c24 = 1
-                                c25 = 1
+                            elif list_of_c[3] == 1:
+                                Hand.Hand.unflipAll(list_of_c)
+                                list_of_c[3] = Hand.Hand.flipC(list_of_c[3])
 
             if x in x_card_5:
                 if y in y_card_all:
                     print("Card 5 selected")
                     if player_hand.hand[4] in middle_pile.playable_cards_list:
-
                         if used5 != 'spent':
-                            if c5 == 0:
-                                c1 = 1
-                                c2 = 1
-                                c3 = 1
-                                c4 = 1
-                                c5 = 1
-                                c6 = 1
-                                c7 = 1
-                                c8 = 1
-                                c9 = 1
-                                c10 = 1
-                                c11 = 1
-                                c12 = 1
-                                c13 = 1
-                                c14 = 1
-                                c15 = 1
-                                c16 = 1
-                                c17 = 1
-                                c18 = 1
-                                c19 = 1
-                                c20 = 1
-                                c21 = 1
-                                c22 = 1
-                                c23 = 1
-                                c24 = 1
-                                c25 = 1
+                            # C5
+                            if list_of_c[4] == 0:
+                                Hand.Hand.unflipAll(list_of_c)
 
-                            elif c5 == 1:
-                                c1 = 1
-                                c2 = 1
-                                c3 = 1
-                                c4 = 1
-                                c5 = 0
-                                c6 = 1
-                                c7 = 1
-                                c8 = 1
-                                c9 = 1
-                                c10 = 1
-                                c11 = 1
-                                c12 = 1
-                                c13 = 1
-                                c14 = 1
-                                c15 = 1
-                                c16 = 1
-                                c17 = 1
-                                c18 = 1
-                                c19 = 1
-                                c20 = 1
-                                c21 = 1
-                                c22 = 1
-                                c23 = 1
-                                c24 = 1
-                                c25 = 1
+                            elif list_of_c[4] == 1:
+                                Hand.Hand.unflipAll(list_of_c)
+                                list_of_c[4] = Hand.Hand.flipC(list_of_c[4])
+
 
             if x in x_card_6:
                 if y in y_card_all:
@@ -1111,59 +775,14 @@ while running:
                     if player_hand.hand[5] in middle_pile.playable_cards_list:
 
                         if used6 != 'spent':
-                            if c6 == 0:
-                                c1 = 1
-                                c2 = 1
-                                c3 = 1
-                                c4 = 1
-                                c5 = 1
-                                c6 = 1
-                                c7 = 1
-                                c8 = 1
-                                c9 = 1
-                                c10 = 1
-                                c11 = 1
-                                c12 = 1
-                                c13 = 1
-                                c14 = 1
-                                c15 = 1
-                                c16 = 1
-                                c17 = 1
-                                c18 = 1
-                                c19 = 1
-                                c20 = 1
-                                c21 = 1
-                                c22 = 1
-                                c23 = 1
-                                c24 = 1
-                                c25 = 1
+                            # C6
+                            if list_of_c[5] == 0:
+                                Hand.Hand.unflipAll(list_of_c)
 
-                            elif c6 == 1:
-                                c1 = 1
-                                c2 = 1
-                                c3 = 1
-                                c4 = 1
-                                c5 = 1
-                                c6 = 0
-                                c7 = 1
-                                c8 = 1
-                                c9 = 1
-                                c10 = 1
-                                c11 = 1
-                                c12 = 1
-                                c13 = 1
-                                c14 = 1
-                                c15 = 1
-                                c16 = 1
-                                c17 = 1
-                                c18 = 1
-                                c19 = 1
-                                c20 = 1
-                                c21 = 1
-                                c22 = 1
-                                c23 = 1
-                                c24 = 1
-                                c25 = 1
+                            elif list_of_c[5] == 1:
+                                Hand.Hand.unflipAll(list_of_c)
+                                list_of_c[5] = Hand.Hand.flipC(list_of_c[5])
+
 
             if x in x_card_7:
                 if y in y_card_all:
@@ -1171,59 +790,14 @@ while running:
                     if player_hand.hand[6] in middle_pile.playable_cards_list:
 
                         if used7 != 'spent':
-                            if c7 == 0:
-                                c1 = 1
-                                c2 = 1
-                                c3 = 1
-                                c4 = 1
-                                c5 = 1
-                                c6 = 1
-                                c7 = 1
-                                c8 = 1
-                                c9 = 1
-                                c10 = 1
-                                c11 = 1
-                                c12 = 1
-                                c13 = 1
-                                c14 = 1
-                                c15 = 1
-                                c16 = 1
-                                c17 = 1
-                                c18 = 1
-                                c19 = 1
-                                c20 = 1
-                                c21 = 1
-                                c22 = 1
-                                c23 = 1
-                                c24 = 1
-                                c25 = 1
+                            # C7
+                            if list_of_c[6] == 0:
+                                Hand.Hand.unflipAll(list_of_c)
 
-                            elif c7 == 1:
-                                c1 = 1
-                                c2 = 1
-                                c3 = 1
-                                c4 = 1
-                                c5 = 1
-                                c6 = 1
-                                c7 = 0
-                                c8 = 1
-                                c9 = 1
-                                c10 = 1
-                                c11 = 1
-                                c12 = 1
-                                c13 = 1
-                                c14 = 1
-                                c15 = 1
-                                c16 = 1
-                                c17 = 1
-                                c18 = 1
-                                c19 = 1
-                                c20 = 1
-                                c21 = 1
-                                c22 = 1
-                                c23 = 1
-                                c24 = 1
-                                c25 = 1
+                            elif list_of_c[6] == 1:
+                                Hand.Hand.unflipAll(list_of_c)
+                                list_of_c[6] = Hand.Hand.flipC(list_of_c[6])
+
 
             if x in x_card_8:
                 if y in y_card_all:
@@ -1231,120 +805,28 @@ while running:
                     if player_hand.hand[7] in middle_pile.playable_cards_list:
 
                         if used8 != 'spent':
-                            if c8 == 0:
-                                c1 = 1
-                                c2 = 1
-                                c3 = 1
-                                c4 = 1
-                                c5 = 1
-                                c6 = 1
-                                c7 = 1
-                                c8 = 1
-                                c9 = 1
-                                c10 = 1
-                                c11 = 1
-                                c12 = 1
-                                c13 = 1
-                                c14 = 1
-                                c15 = 1
-                                c16 = 1
-                                c17 = 1
-                                c18 = 1
-                                c19 = 1
-                                c20 = 1
-                                c21 = 1
-                                c22 = 1
-                                c23 = 1
-                                c24 = 1
-                                c25 = 1
-
-                            elif c8 == 1:
-                                c1 = 1
-                                c2 = 1
-                                c3 = 1
-                                c4 = 1
-                                c5 = 1
-                                c6 = 1
-                                c7 = 1
-                                c8 = 0
-                                c9 = 1
-                                c10 = 1
-                                c11 = 1
-                                c12 = 1
-                                c13 = 1
-                                c14 = 1
-                                c15 = 1
-                                c16 = 1
-                                c17 = 1
-                                c18 = 1
-                                c19 = 1
-                                c20 = 1
-                                c21 = 1
-                                c22 = 1
-                                c23 = 1
-                                c24 = 1
-                                c25 = 1
+                            # C8
+                            if list_of_c[7] == 0:
+                                Hand.Hand.unflipAll(list_of_c)
+                            elif list_of_c[7] == 1:
+                                Hand.Hand.unflipAll(list_of_c)
+                                list_of_c[7] = Hand.Hand.flipC(list_of_c[7])
 
             if x in x_card_9:
                 if y in y_card_all:
+                    # Not needed to move turn on, just needed to remove rules from the screen
                     turn += 1
                     print("Card 9 selected")
                     if player_hand.hand[8] in middle_pile.playable_cards_list:
 
                         if used9 != 'spent':
-                            if c9 == 0:
-                                c1 = 1
-                                c2 = 1
-                                c3 = 1
-                                c4 = 1
-                                c5 = 1
-                                c6 = 1
-                                c7 = 1
-                                c8 = 1
-                                c9 = 1
-                                c10 = 1
-                                c11 = 1
-                                c12 = 1
-                                c13 = 1
-                                c14 = 1
-                                c15 = 1
-                                c16 = 1
-                                c17 = 1
-                                c18 = 1
-                                c19 = 1
-                                c20 = 1
-                                c21 = 1
-                                c22 = 1
-                                c23 = 1
-                                c24 = 1
-                                c25 = 1
+                            # C9
+                            if list_of_c[8] == 0:
+                                Hand.Hand.unflipAll(list_of_c)
 
-                            elif c9 == 1:
-                                c1 = 1
-                                c2 = 1
-                                c3 = 1
-                                c4 = 1
-                                c5 = 1
-                                c6 = 1
-                                c7 = 1
-                                c8 = 1
-                                c9 = 0
-                                c10 = 1
-                                c11 = 1
-                                c12 = 1
-                                c13 = 1
-                                c14 = 1
-                                c15 = 1
-                                c16 = 1
-                                c17 = 1
-                                c18 = 1
-                                c19 = 1
-                                c20 = 1
-                                c21 = 1
-                                c22 = 1
-                                c23 = 1
-                                c24 = 1
-                                c25 = 1
+                            elif list_of_c[8] == 1:
+                                Hand.Hand.unflipAll(list_of_c)
+                                list_of_c[8] = Hand.Hand.flipC(list_of_c[8])
 
             if x in x_card_10:
                 if y in y_card_all:
@@ -1353,59 +835,13 @@ while running:
                     if player_hand.hand[9] in middle_pile.playable_cards_list:
 
                         if used10 != 'spent':
-                            if c10 == 0:
-                                c1 = 1
-                                c2 = 1
-                                c3 = 1
-                                c4 = 1
-                                c5 = 1
-                                c6 = 1
-                                c7 = 1
-                                c8 = 1
-                                c9 = 1
-                                c10 = 1
-                                c11 = 1
-                                c12 = 1
-                                c13 = 1
-                                c14 = 1
-                                c15 = 1
-                                c16 = 1
-                                c17 = 1
-                                c18 = 1
-                                c19 = 1
-                                c20 = 1
-                                c21 = 1
-                                c22 = 1
-                                c23 = 1
-                                c24 = 1
-                                c25 = 1
+                            # C10
+                            if list_of_c[9] == 0:
+                                Hand.Hand.unflipAll(list_of_c)
 
-                            elif c10 == 1:
-                                c1 = 1
-                                c2 = 1
-                                c3 = 1
-                                c4 = 1
-                                c5 = 1
-                                c6 = 1
-                                c7 = 1
-                                c8 = 1
-                                c9 = 1
-                                c10 = 0
-                                c11 = 1
-                                c12 = 1
-                                c13 = 1
-                                c14 = 1
-                                c15 = 1
-                                c16 = 1
-                                c17 = 1
-                                c18 = 1
-                                c19 = 1
-                                c20 = 1
-                                c21 = 1
-                                c22 = 1
-                                c23 = 1
-                                c24 = 1
-                                c25 = 1
+                            elif list_of_c[9] == 1:
+                                Hand.Hand.unflipAll(list_of_c)
+                                list_of_c[9] = Hand.Hand.flipC(list_of_c[9])
 
             if x in x_card_11:
                 if y in y_card_all:
@@ -1414,59 +850,13 @@ while running:
                     if player_hand.hand[10] in middle_pile.playable_cards_list:
 
                         if used11 != 'spent':
-                            if c11 == 0:
-                                c1 = 1
-                                c2 = 1
-                                c3 = 1
-                                c4 = 1
-                                c5 = 1
-                                c6 = 1
-                                c7 = 1
-                                c8 = 1
-                                c9 = 1
-                                c10 = 1
-                                c11 = 1
-                                c12 = 1
-                                c13 = 1
-                                c14 = 1
-                                c15 = 1
-                                c16 = 1
-                                c17 = 1
-                                c18 = 1
-                                c19 = 1
-                                c20 = 1
-                                c21 = 1
-                                c22 = 1
-                                c23 = 1
-                                c24 = 1
-                                c25 = 1
+                            # C11
+                            if list_of_c[10] == 0:
+                                Hand.Hand.unflipAll(list_of_c)
 
-                            elif c11 == 1:
-                                c1 = 1
-                                c2 = 1
-                                c3 = 1
-                                c4 = 1
-                                c5 = 1
-                                c6 = 1
-                                c7 = 1
-                                c8 = 1
-                                c9 = 1
-                                c10 = 1
-                                c11 = 0
-                                c12 = 1
-                                c13 = 1
-                                c14 = 1
-                                c15 = 1
-                                c16 = 1
-                                c17 = 1
-                                c18 = 1
-                                c19 = 1
-                                c20 = 1
-                                c21 = 1
-                                c22 = 1
-                                c23 = 1
-                                c24 = 1
-                                c25 = 1
+                            elif list_of_c[10] == 1:
+                                Hand.Hand.unflipAll(list_of_c)
+                                list_of_c[10] = Hand.Hand.flipC(list_of_c[10])
 
             if x in x_card_12:
                 if y in y_card_all:
@@ -1475,59 +865,13 @@ while running:
                     if player_hand.hand[11] in middle_pile.playable_cards_list:
 
                         if used12 != 'spent':
-                            if c12 == 0:
-                                c1 = 1
-                                c2 = 1
-                                c3 = 1
-                                c4 = 1
-                                c5 = 1
-                                c6 = 1
-                                c7 = 1
-                                c8 = 1
-                                c9 = 1
-                                c10 = 1
-                                c11 = 1
-                                c12 = 1
-                                c13 = 1
-                                c14 = 1
-                                c15 = 1
-                                c16 = 1
-                                c17 = 1
-                                c18 = 1
-                                c19 = 1
-                                c20 = 1
-                                c21 = 1
-                                c22 = 1
-                                c23 = 1
-                                c24 = 1
-                                c25 = 1
+                            # C12
+                            if list_of_c[11] == 0:
+                                Hand.Hand.unflipAll(list_of_c)
 
-                            elif c12 == 1:
-                                c1 = 1
-                                c2 = 1
-                                c3 = 1
-                                c4 = 1
-                                c5 = 1
-                                c6 = 1
-                                c7 = 1
-                                c8 = 1
-                                c9 = 1
-                                c10 = 1
-                                c11 = 1
-                                c12 = 0
-                                c13 = 1
-                                c14 = 1
-                                c15 = 1
-                                c16 = 1
-                                c17 = 1
-                                c18 = 1
-                                c19 = 1
-                                c20 = 1
-                                c21 = 1
-                                c22 = 1
-                                c23 = 1
-                                c24 = 1
-                                c25 = 1
+                            elif list_of_c[11] == 1:
+                                Hand.Hand.unflipAll(list_of_c)
+                                list_of_c[11] = Hand.Hand.flipC(list_of_c[11])
 
             if x in x_card_13:
                 if y in y_card_all:
@@ -1536,59 +880,13 @@ while running:
                     if player_hand.hand[12] in middle_pile.playable_cards_list:
 
                         if used13 != 'spent':
-                            if c13 == 0:
-                                c1 = 1
-                                c2 = 1
-                                c3 = 1
-                                c4 = 1
-                                c5 = 1
-                                c6 = 1
-                                c7 = 1
-                                c8 = 1
-                                c9 = 1
-                                c10 = 1
-                                c11 = 1
-                                c12 = 1
-                                c13 = 1
-                                c14 = 1
-                                c15 = 1
-                                c16 = 1
-                                c17 = 1
-                                c18 = 1
-                                c19 = 1
-                                c20 = 1
-                                c21 = 1
-                                c22 = 1
-                                c23 = 1
-                                c24 = 1
-                                c25 = 1
+                            # C13
+                            if list_of_c[12] == 0:
+                                Hand.Hand.unflipAll(list_of_c)
 
-                            elif c13 == 1:
-                                c1 = 1
-                                c2 = 1
-                                c3 = 1
-                                c4 = 1
-                                c5 = 1
-                                c6 = 1
-                                c7 = 1
-                                c8 = 1
-                                c9 = 1
-                                c10 = 1
-                                c11 = 1
-                                c12 = 1
-                                c13 = 0
-                                c14 = 1
-                                c15 = 1
-                                c16 = 1
-                                c17 = 1
-                                c18 = 1
-                                c19 = 1
-                                c20 = 1
-                                c21 = 1
-                                c22 = 1
-                                c23 = 1
-                                c24 = 1
-                                c25 = 1
+                            elif list_of_c[12] == 1:
+                                Hand.Hand.unflipAll(list_of_c)
+                                list_of_c[12] = Hand.Hand.flipC(list_of_c[12])
 
             if x in x_card_14:
                 if y in y_card_all:
@@ -1597,177 +895,39 @@ while running:
                     if player_hand.hand[13] in middle_pile.playable_cards_list:
 
                         if used14 != 'spent':
-                            if c14 == 0:
-                                c1 = 1
-                                c2 = 1
-                                c3 = 1
-                                c4 = 1
-                                c5 = 1
-                                c6 = 1
-                                c7 = 1
-                                c8 = 1
-                                c9 = 1
-                                c10 = 1
-                                c11 = 1
-                                c12 = 1
-                                c13 = 1
-                                c14 = 1
-                                c15 = 1
-                                c16 = 1
-                                c17 = 1
-                                c18 = 1
-                                c19 = 1
-                                c20 = 1
-                                c21 = 1
-                                c22 = 1
-                                c23 = 1
-                                c24 = 1
-                                c25 = 1
+                            # C14
+                            if list_of_c[13] == 0:
+                                Hand.Hand.unflipAll(list_of_c)
 
-                            elif c14 == 1:
-                                c1 = 1
-                                c2 = 1
-                                c3 = 1
-                                c4 = 1
-                                c5 = 1
-                                c6 = 1
-                                c7 = 1
-                                c8 = 1
-                                c9 = 1
-                                c10 = 1
-                                c11 = 1
-                                c12 = 1
-                                c13 = 1
-                                c14 = 0
-                                c15 = 1
-                                c16 = 1
-                                c17 = 1
-                                c18 = 1
-                                c19 = 1
-                                c20 = 1
-                                c21 = 1
-                                c22 = 1
-                                c23 = 1
-                                c24 = 1
-                                c25 = 1
+                            elif list_of_c[13] == 1:
+                                Hand.Hand.unflipAll(list_of_c)
+                                list_of_c[13] = Hand.Hand.flipC(list_of_c[13])
             if x in x_card_15:
                 if y in y_card_all:
                     print("Card 15 selected")
                     if player_hand.hand[15] in middle_pile.playable_cards_list:
 
                         if used15 != 'spent':
-                            if c15 == 0:
-                                c1 = 1
-                                c2 = 1
-                                c3 = 1
-                                c4 = 1
-                                c5 = 1
-                                c6 = 1
-                                c7 = 1
-                                c8 = 1
-                                c9 = 1
-                                c10 = 1
-                                c11 = 1
-                                c12 = 1
-                                c13 = 1
-                                c14 = 1
-                                c15 = 1
-                                c16 = 1
-                                c17 = 1
-                                c18 = 1
-                                c19 = 1
-                                c20 = 1
-                                c21 = 1
-                                c22 = 1
-                                c23 = 1
-                                c24 = 1
-                                c25 = 1
+                            # C15
+                            if list_of_c[14] == 0:
+                                Hand.Hand.unflipAll(list_of_c)
 
-                            elif c15 == 1:
-                                c1 = 1
-                                c2 = 1
-                                c3 = 1
-                                c4 = 1
-                                c5 = 1
-                                c6 = 1
-                                c7 = 1
-                                c8 = 1
-                                c9 = 1
-                                c10 = 1
-                                c11 = 1
-                                c12 = 1
-                                c13 = 1
-                                c14 = 1
-                                c15 = 0
-                                c16 = 1
-                                c17 = 1
-                                c18 = 1
-                                c19 = 1
-                                c20 = 1
-                                c21 = 1
-                                c22 = 1
-                                c23 = 1
-                                c24 = 1
-                                c25 = 1
+                            elif list_of_c[14] == 1:
+                                Hand.Hand.unflipAll(list_of_c)
+                                list_of_c[14] = Hand.Hand.flipC(list_of_c[14])
             if x in x_card_16:
                 if y in y_card_all:
                     print("Card 16 selected")
                     if player_hand.hand[15] in middle_pile.playable_cards_list:
 
                         if used16 != 'spent':
-                            if c16 == 0:
-                                c1 = 1
-                                c2 = 1
-                                c3 = 1
-                                c4 = 1
-                                c5 = 1
-                                c6 = 1
-                                c7 = 1
-                                c8 = 1
-                                c9 = 1
-                                c10 = 1
-                                c11 = 1
-                                c12 = 1
-                                c13 = 1
-                                c14 = 1
-                                c15 = 1
-                                c16 = 1
-                                c17 = 1
-                                c18 = 1
-                                c19 = 1
-                                c20 = 1
-                                c21 = 1
-                                c22 = 1
-                                c23 = 1
-                                c24 = 1
-                                c25 = 1
+                            # C16
+                            if list_of_c[15] == 0:
+                                Hand.Hand.unflipAll(list_of_c)
 
-                            elif c16 == 1:
-                                c1 = 1
-                                c2 = 1
-                                c3 = 1
-                                c4 = 1
-                                c5 = 1
-                                c6 = 1
-                                c7 = 1
-                                c8 = 1
-                                c9 = 1
-                                c10 = 1
-                                c11 = 1
-                                c12 = 1
-                                c13 = 1
-                                c14 = 1
-                                c15 = 1
-                                c16 = 0
-                                c17 = 1
-                                c18 = 1
-                                c19 = 1
-                                c20 = 1
-                                c21 = 1
-                                c22 = 1
-                                c23 = 1
-                                c24 = 1
-                                c25 = 1
+                            elif list_of_c[15] == 1:
+                                Hand.Hand.unflipAll(list_of_c)
+                                list_of_c[15] = Hand.Hand.flipC(list_of_c[15])
 
             if x in x_card_17:
                 if y in y_card_all:
@@ -1775,118 +935,26 @@ while running:
                     if player_hand.hand[16] in middle_pile.playable_cards_list:
 
                         if used17 != 'spent':
-                            if c17 == 0:
-                                c1 = 1
-                                c2 = 1
-                                c3 = 1
-                                c4 = 1
-                                c5 = 1
-                                c6 = 1
-                                c7 = 1
-                                c8 = 1
-                                c9 = 1
-                                c10 = 1
-                                c11 = 1
-                                c12 = 1
-                                c13 = 1
-                                c14 = 1
-                                c15 = 1
-                                c16 = 1
-                                c17 = 1
-                                c18 = 1
-                                c19 = 1
-                                c20 = 1
-                                c21 = 1
-                                c22 = 1
-                                c23 = 1
-                                c24 = 1
-                                c25 = 1
+                            # C17
+                            if list_of_c[16] == 0:
+                                Hand.Hand.unflipAll(list_of_c)
 
-                            elif c17 == 1:
-                                c1 = 1
-                                c2 = 1
-                                c3 = 1
-                                c4 = 1
-                                c5 = 1
-                                c6 = 1
-                                c7 = 1
-                                c8 = 1
-                                c9 = 1
-                                c10 = 1
-                                c11 = 1
-                                c12 = 1
-                                c13 = 1
-                                c14 = 1
-                                c15 = 1
-                                c16 = 1
-                                c17 = 0
-                                c18 = 1
-                                c19 = 1
-                                c20 = 1
-                                c21 = 1
-                                c22 = 1
-                                c23 = 1
-                                c24 = 1
-                                c25 = 1
+                            elif list_of_c[16] == 1:
+                                Hand.Hand.unflipAll(list_of_c)
+                                list_of_c[16] = Hand.Hand.flipC(list_of_c[16])
             if x in x_card_18:
                 if y in y_card_all:
                     print("Card 18 selected")
                     if player_hand.hand[17] in middle_pile.playable_cards_list:
 
                         if used18 != 'spent':
-                            if c18 == 0:
-                                c1 = 1
-                                c2 = 1
-                                c3 = 1
-                                c4 = 1
-                                c5 = 1
-                                c6 = 1
-                                c7 = 1
-                                c8 = 1
-                                c9 = 1
-                                c10 = 1
-                                c11 = 1
-                                c12 = 1
-                                c13 = 1
-                                c14 = 1
-                                c15 = 1
-                                c16 = 1
-                                c17 = 1
-                                c18 = 1
-                                c19 = 1
-                                c20 = 1
-                                c21 = 1
-                                c22 = 1
-                                c23 = 1
-                                c24 = 1
-                                c25 = 1
+                            # C18
+                            if list_of_c[17] == 0:
+                                Hand.Hand.unflipAll(list_of_c)
 
-                            elif c18 == 1:
-                                c1 = 1
-                                c2 = 1
-                                c3 = 1
-                                c4 = 1
-                                c5 = 1
-                                c6 = 1
-                                c7 = 1
-                                c8 = 1
-                                c9 = 1
-                                c10 = 1
-                                c11 = 1
-                                c12 = 1
-                                c13 = 1
-                                c14 = 1
-                                c15 = 1
-                                c16 = 1
-                                c17 = 1
-                                c18 = 0
-                                c19 = 1
-                                c20 = 1
-                                c21 = 1
-                                c22 = 1
-                                c23 = 1
-                                c24 = 1
-                                c25 = 1
+                            elif list_of_c[17] == 1:
+                                Hand.Hand.unflipAll(list_of_c)
+                                list_of_c[17] = Hand.Hand.flipC(list_of_c[17])
 
             if x in x_card_19:
                 if y in y_card_all:
@@ -1894,59 +962,13 @@ while running:
                     if player_hand.hand[18] in middle_pile.playable_cards_list:
 
                         if used19 != 'spent':
-                            if c19 == 0:
-                                c1 = 1
-                                c2 = 1
-                                c3 = 1
-                                c4 = 1
-                                c5 = 1
-                                c6 = 1
-                                c7 = 1
-                                c8 = 1
-                                c9 = 1
-                                c10 = 1
-                                c11 = 1
-                                c12 = 1
-                                c13 = 1
-                                c14 = 1
-                                c15 = 1
-                                c16 = 1
-                                c17 = 1
-                                c18 = 1
-                                c19 = 1
-                                c20 = 1
-                                c21 = 1
-                                c22 = 1
-                                c23 = 1
-                                c24 = 1
-                                c25 = 1
+                            # C19
+                            if list_of_c[18] == 0:
+                                Hand.Hand.unflipAll(list_of_c)
 
-                            elif c19 == 1:
-                                c1 = 1
-                                c2 = 1
-                                c3 = 1
-                                c4 = 1
-                                c5 = 1
-                                c6 = 1
-                                c7 = 1
-                                c8 = 1
-                                c9 = 1
-                                c10 = 1
-                                c11 = 1
-                                c12 = 1
-                                c13 = 1
-                                c14 = 1
-                                c15 = 1
-                                c16 = 1
-                                c17 = 1
-                                c18 = 1
-                                c19 = 0
-                                c20 = 1
-                                c21 = 1
-                                c22 = 1
-                                c23 = 1
-                                c24 = 1
-                                c25 = 1
+                            elif list_of_c[18] == 1:
+                                Hand.Hand.unflipAll(list_of_c)
+                                list_of_c[18] = Hand.Hand.flipC(list_of_c[18])
 
             if x in x_card_20:
                 if y in y_card_all:
@@ -1954,59 +976,13 @@ while running:
                     if player_hand.hand[19] in middle_pile.playable_cards_list:
 
                         if used20 != 'spent':
-                            if c20 == 0:
-                                c1 = 1
-                                c2 = 1
-                                c3 = 1
-                                c4 = 1
-                                c5 = 1
-                                c6 = 1
-                                c7 = 1
-                                c8 = 1
-                                c9 = 1
-                                c10 = 1
-                                c11 = 1
-                                c12 = 1
-                                c13 = 1
-                                c14 = 1
-                                c15 = 1
-                                c16 = 1
-                                c17 = 1
-                                c18 = 1
-                                c19 = 1
-                                c20 = 1
-                                c21 = 1
-                                c22 = 1
-                                c23 = 1
-                                c24 = 1
-                                c25 = 1
+                            # C20
+                            if list_of_c[19] == 0:
+                                Hand.Hand.unflipAll(list_of_c)
 
-                            elif c20 == 1:
-                                c1 = 1
-                                c2 = 1
-                                c3 = 1
-                                c4 = 1
-                                c5 = 1
-                                c6 = 1
-                                c7 = 1
-                                c8 = 1
-                                c9 = 1
-                                c10 = 1
-                                c11 = 1
-                                c12 = 1
-                                c13 = 1
-                                c14 = 1
-                                c15 = 1
-                                c16 = 1
-                                c17 = 1
-                                c18 = 1
-                                c19 = 1
-                                c20 = 0
-                                c21 = 1
-                                c22 = 1
-                                c23 = 1
-                                c24 = 1
-                                c25 = 1
+                            elif list_of_c[19] == 1:
+                                Hand.Hand.unflipAll(list_of_c)
+                                list_of_c[19] = Hand.Hand.flipC(list_of_c[19])
 
             if x in x_card_21:
                 if y in y_card_all:
@@ -2014,118 +990,26 @@ while running:
                     if player_hand.hand[20] in middle_pile.playable_cards_list:
 
                         if used21 != 'spent':
-                            if c21 == 0:
-                                c1 = 1
-                                c2 = 1
-                                c3 = 1
-                                c4 = 1
-                                c5 = 1
-                                c6 = 1
-                                c7 = 1
-                                c8 = 1
-                                c9 = 1
-                                c10 = 1
-                                c11 = 1
-                                c12 = 1
-                                c13 = 1
-                                c14 = 1
-                                c15 = 1
-                                c16 = 1
-                                c17 = 1
-                                c18 = 1
-                                c19 = 1
-                                c20 = 1
-                                c21 = 1
-                                c22 = 1
-                                c23 = 1
-                                c24 = 1
-                                c25 = 1
+                            # C21
+                            if list_of_c[20] == 0:
+                                Hand.Hand.unflipAll(list_of_c)
 
-                            elif c21 == 1:
-                                c1 = 1
-                                c2 = 1
-                                c3 = 1
-                                c4 = 1
-                                c5 = 1
-                                c6 = 1
-                                c7 = 1
-                                c8 = 1
-                                c9 = 1
-                                c10 = 1
-                                c11 = 1
-                                c12 = 1
-                                c13 = 1
-                                c14 = 1
-                                c15 = 1
-                                c16 = 1
-                                c17 = 1
-                                c18 = 1
-                                c19 = 1
-                                c20 = 1
-                                c21 = 0
-                                c22 = 1
-                                c23 = 1
-                                c24 = 1
-                                c25 = 1
+                            elif list_of_c[20] == 1:
+                                Hand.Hand.unflipAll(list_of_c)
+                                list_of_c[20] = Hand.Hand.flipC(list_of_c[20])
             if x in x_card_22:
                 if y in y_card_all:
                     print("Card 22 selected")
                     if player_hand.hand[21] in middle_pile.playable_cards_list:
 
                         if used22 != 'spent':
-                            if c22 == 0:
-                                c1 = 1
-                                c2 = 1
-                                c3 = 1
-                                c4 = 1
-                                c5 = 1
-                                c6 = 1
-                                c7 = 1
-                                c8 = 1
-                                c9 = 1
-                                c10 = 1
-                                c11 = 1
-                                c12 = 1
-                                c13 = 1
-                                c14 = 1
-                                c15 = 1
-                                c16 = 1
-                                c17 = 1
-                                c18 = 1
-                                c19 = 1
-                                c20 = 1
-                                c21 = 1
-                                c22 = 1
-                                c23 = 1
-                                c24 = 1
-                                c25 = 1
+                            # C22
+                            if list_of_c[21] == 0:
+                                Hand.Hand.unflipAll(list_of_c)
 
-                            elif c22 == 1:
-                                c1 = 1
-                                c2 = 1
-                                c3 = 1
-                                c4 = 1
-                                c5 = 1
-                                c6 = 1
-                                c7 = 1
-                                c8 = 1
-                                c9 = 1
-                                c10 = 1
-                                c11 = 1
-                                c12 = 1
-                                c13 = 1
-                                c14 = 1
-                                c15 = 1
-                                c16 = 1
-                                c17 = 1
-                                c18 = 1
-                                c19 = 1
-                                c20 = 1
-                                c21 = 1
-                                c22 = 0
-                                c23 = 1
-                                c24 = 1
-                                c25 = 1
+                            elif list_of_c[21] == 1:
+                                Hand.Hand.unflipAll(list_of_c)
+                                list_of_c[21] = Hand.Hand.flipC(list_of_c[21])
 
             if x in x_card_23:
                 if y in y_card_all:
@@ -2133,177 +1017,39 @@ while running:
                     if player_hand.hand[22] in middle_pile.playable_cards_list:
 
                         if used23 != 'spent':
-                            if c23 == 0:
-                                c1 = 1
-                                c2 = 1
-                                c3 = 1
-                                c4 = 1
-                                c5 = 1
-                                c6 = 1
-                                c7 = 1
-                                c8 = 1
-                                c9 = 1
-                                c10 = 1
-                                c11 = 1
-                                c12 = 1
-                                c13 = 1
-                                c14 = 1
-                                c15 = 1
-                                c16 = 1
-                                c17 = 1
-                                c18 = 1
-                                c19 = 1
-                                c20 = 1
-                                c21 = 1
-                                c22 = 1
-                                c23 = 1
-                                c24 = 1
-                                c25 = 1
+                            # C23
+                            if list_of_c[22] == 0:
+                                Hand.Hand.unflipAll(list_of_c)
 
-                            elif c23 == 1:
-                                c1 = 1
-                                c2 = 1
-                                c3 = 1
-                                c4 = 1
-                                c5 = 1
-                                c6 = 1
-                                c7 = 1
-                                c8 = 1
-                                c9 = 1
-                                c10 = 1
-                                c11 = 1
-                                c12 = 1
-                                c13 = 1
-                                c14 = 1
-                                c15 = 1
-                                c16 = 1
-                                c17 = 1
-                                c18 = 1
-                                c19 = 1
-                                c20 = 1
-                                c21 = 1
-                                c22 = 1
-                                c23 = 0
-                                c24 = 1
-                                c25 = 1
+                            elif list_of_c[22] == 1:
+                                Hand.Hand.unflipAll(list_of_c)
+                                list_of_c[22] = Hand.Hand.flipC(list_of_c[22])
             if x in x_card_24:
                 if y in y_card_all:
                     print("Card 24 selected")
                     if player_hand.hand[23] in middle_pile.playable_cards_list:
 
                         if used24 != 'spent':
-                            if c24 == 0:
-                                c1 = 1
-                                c2 = 1
-                                c3 = 1
-                                c4 = 1
-                                c5 = 1
-                                c6 = 1
-                                c7 = 1
-                                c8 = 1
-                                c9 = 1
-                                c10 = 1
-                                c11 = 1
-                                c12 = 1
-                                c13 = 1
-                                c14 = 1
-                                c15 = 1
-                                c16 = 1
-                                c17 = 1
-                                c18 = 1
-                                c19 = 1
-                                c20 = 1
-                                c21 = 1
-                                c22 = 1
-                                c23 = 1
-                                c24 = 1
-                                c25 = 1
+                            # C21
+                            if list_of_c[23] == 0:
+                                Hand.Hand.unflipAll(list_of_c)
 
-                            elif c24 == 1:
-                                c1 = 1
-                                c2 = 1
-                                c3 = 1
-                                c4 = 1
-                                c5 = 1
-                                c6 = 1
-                                c7 = 1
-                                c8 = 1
-                                c9 = 1
-                                c10 = 1
-                                c11 = 1
-                                c12 = 1
-                                c13 = 1
-                                c14 = 1
-                                c15 = 1
-                                c16 = 1
-                                c17 = 1
-                                c18 = 1
-                                c19 = 1
-                                c20 = 1
-                                c21 = 1
-                                c22 = 1
-                                c23 = 1
-                                c24 = 0
-                                c25 = 1
+                            elif list_of_c[23] == 1:
+                                Hand.Hand.unflipAll(list_of_c)
+                                list_of_c[23] = Hand.Hand.flipC(list_of_c[23])
             if x in x_card_25:
                 if y in y_card_all:
                     print("Card 25 selected")
                     if player_hand.hand[24] in middle_pile.playable_cards_list:
 
                         if used25 != 'spent':
-                            if c25 == 0:
-                                c1 = 1
-                                c2 = 1
-                                c3 = 1
-                                c4 = 1
-                                c5 = 1
-                                c6 = 1
-                                c7 = 1
-                                c8 = 1
-                                c9 = 1
-                                c10 = 1
-                                c11 = 1
-                                c12 = 1
-                                c13 = 1
-                                c14 = 1
-                                c15 = 1
-                                c16 = 1
-                                c17 = 1
-                                c18 = 1
-                                c19 = 1
-                                c20 = 1
-                                c21 = 1
-                                c22 = 1
-                                c23 = 1
-                                c24 = 1
-                                c25 = 1
+                            # C25
+                            if list_of_c[24] == 0:
+                                Hand.Hand.unflipAll(list_of_c)
 
-                            elif c25 == 1:
-                                c1 = 1
-                                c2 = 1
-                                c3 = 1
-                                c4 = 1
-                                c5 = 1
-                                c6 = 1
-                                c7 = 1
-                                c8 = 1
-                                c9 = 1
-                                c10 = 1
-                                c11 = 1
-                                c12 = 1
-                                c13 = 1
-                                c14 = 1
-                                c15 = 1
-                                c16 = 1
-                                c17 = 1
-                                c18 = 1
-                                c19 = 1
-                                c20 = 1
-                                c21 = 1
-                                c22 = 1
-                                c23 = 1
-                                c24 = 1
-                                c25 = 0
+                            elif list_of_c[24] == 1:
+                                Hand.Hand.unflipAll(list_of_c)
+                                list_of_c[24] = Hand.Hand.flipC(list_of_c[24])
             # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
             # Code to draw a card and end move
@@ -2534,10 +1280,6 @@ while running:
         move = True
         turn += 1
 
-
-
     pygame.display.flip()
-
-
 
 # END

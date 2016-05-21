@@ -1,5 +1,5 @@
 import random, pygame
-import BlitPlayerCards
+import Render_Images
 
 
 class ComputerAI:
@@ -45,6 +45,7 @@ class ComputerAI:
             print("The computer has no play..")
             return None
 
+    # todo make an animation class
     @staticmethod
     def animate_Play_Card(card, screen, card_sprites, FPSCLOCK, player_hand_sprites, phand, chand, back_of_card,
                           middle_pile, card_Sprites, cards, back_of_card_Rect, background, background_Rect, player):
@@ -72,9 +73,9 @@ class ComputerAI:
             turn = None
             # the following two functions let the other images render so the moving images do not leave black lines
             screen.blit(background, background_Rect)
-            BlitPlayerCards.BlitPlayer.blit_Cards(player_hand_sprites, phand, chand, back_of_card, screen, middle_pile,
-                                                  card_Sprites, cards, back_of_card_Rect, turn)
-            BlitPlayerCards.BlitPlayer.computer_card_move(card_sprites, card, x, y, screen)
+            Render_Images.BlitPlayer.blit_Cards(player_hand_sprites, phand, chand, back_of_card, screen, middle_pile,
+                                                card_Sprites, cards, back_of_card_Rect, turn)
+            Render_Images.BlitPlayer.computer_card_move(card_sprites, card, x, y, screen)
 
             pygame.display.update()
             FPSCLOCK.tick()
