@@ -277,6 +277,7 @@ class Pile:
                 self.add_Sixes()
                 self.add_Sevens()
                 self.add_Eights()
+                self.add_Tens()
 
             # two eights on top of each other, let them play anything
             elif card_under_8 in [7, 20, 33, 46]:
@@ -463,14 +464,15 @@ class Pile:
         # print("Card on top =", self.card_on_top)
         self.playable_cards_list.sort()
 
-
-
-
-
     def Start_game(self, deck):
         card = random.choice(deck)
         deck.remove(card)
         self.card_on_top = card
         self.cards_in_middle.append(card)
         return deck
+
+    def moveCard(self, card):
+        self.card_on_top = card
+        if self.card_on_top not in self.cards_in_middle and self.card_on_top != 0:
+            self.cards_in_middle.append(self.card_on_top)
 

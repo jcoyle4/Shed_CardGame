@@ -2,7 +2,7 @@ import random
 import Load_Image
 
 
-class Deck:
+class DeckClass:
 
     # change to Dictionary??
     # List of Cards
@@ -20,20 +20,25 @@ class Deck:
         self.loadSprites()
         self.loadHighlightedSprites()
 
-
     def loadSprites(self):
-        for card in self.cards:
-            imageName = str(card) + '.png'
-            cardImage, cardImageRect = Load_Image.ImageLoad.imageLoadfnc(imageName, True)
-            self.card_Sprites.append(cardImage)
-            self.card_Sprites_rect.append(cardImageRect)
+        try:
+            for card in self.cards:
+                imageName = str(card) + '.png'
+                cardImage, cardImageRect = Load_Image.ImageLoad.imageLoadfnc(imageName, True)
+                self.card_Sprites.append(cardImage)
+                self.card_Sprites_rect.append(cardImageRect)
+        except TypeError:  # Catching a type error as if running a unit test there won't be any, or be a need for images
+            pass
 
     def loadHighlightedSprites(self):
-        for card in self.cards:
-            imageName = str(card) + 'hl.png'
-            highlightedcardImage, highlightedcardImageRect = Load_Image.ImageLoad.imageLoadfnc(imageName, True)
-            self.highlighted_Card_Sprites.append(highlightedcardImage)
-            self.highlighted_Card_Sprites_rect.append(highlightedcardImageRect)
+        try:
+            for card in self.cards:
+                imageName = str(card) + 'hl.png'
+                highlightedcardImage, highlightedcardImageRect = Load_Image.ImageLoad.imageLoadfnc(imageName, True)
+                self.highlighted_Card_Sprites.append(highlightedcardImage)
+                self.highlighted_Card_Sprites_rect.append(highlightedcardImageRect)
+        except TypeError:  # Catching a type error as if running a unit test there won't be any, or be a need for images
+            pass
 
     def draw(self, hand, cardPosition):
         #print(type(self.cards))

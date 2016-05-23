@@ -1,5 +1,4 @@
 import pygame
-
 #TRANSPARANT = (0, 0, 0)
 import Load_Image
 
@@ -797,6 +796,9 @@ class BlitPlayer:
             RULES, RULES_rect = Load_Image.ImageLoad.imageLoadfnc("rules.jpg", False)
             screen.blit(RULES, (50, 50))
 
+
+class Animation:
+
     @staticmethod
     def computer_card_move(card_sprites, card, x, y, screen):
         for cardInDeck in range(1, 53):
@@ -811,10 +813,50 @@ class BlitPlayer:
     #     screen.blit(RULES, (100, 100))
     #     # pygame.display.update()
 
+    @staticmethod  # used for both player and computer animations
+    def animate_Play_Card(card, screen, card_sprites, FPSCLOCK, player_hand_sprites, phand, chand, back_of_card,
+                          middle_pile, card_Sprites, cards, back_of_card_Rect, background, background_Rect, player):
+        moveSpeed = 1
+
+        # Middle pile has position = 300, 255
+        # Middle of Computer hand = 310, 5
+
+        if not player:
+            y = 5
+        else:
+            y = 550
+
+        x = 300     # not exactly middle of pile but makes moving easier
+
+        ENDY = 255
+
+        while True:
+            if not player:
+                y += moveSpeed
+            else:
+                y -= moveSpeed
+            if y == ENDY:
+                return
+            turn = 0
+            # the following two functions let the other images render so the moving images do not leave black lines
+            screen.blit(background, background_Rect)
+            BlitPlayer.blit_Cards(player_hand_sprites, phand, chand, back_of_card, screen, middle_pile,
+                                  card_Sprites, cards, back_of_card_Rect, turn)
+            Animation.computer_card_move(card_sprites, card, x, y, screen)
+
+            pygame.display.update()
+            FPSCLOCK.tick()
+
+
+class Misc:
     @staticmethod
     def gameOver(img, screen):
         screen.blit(img, (100, 100))
 
-        pygame.display.update()
+    @staticmethod
+    def pickUpDeck(img, screen):
+        screen.blit(img, (100, 255))
 
-
+    @staticmethod
+    def bgImg(bg, bgRect, screen):
+        screen.blit(bg, bgRect)

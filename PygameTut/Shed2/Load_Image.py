@@ -23,3 +23,5 @@ class ImageLoad:
             return image, image.get_rect()
         except FileNotFoundError:
             print('Cannot load image:', name)
+        except pygame.error:
+            pass

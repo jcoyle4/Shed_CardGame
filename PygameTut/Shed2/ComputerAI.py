@@ -45,40 +45,7 @@ class ComputerAI:
             print("The computer has no play..")
             return None
 
-    # todo make an animation class
-    @staticmethod
-    def animate_Play_Card(card, screen, card_sprites, FPSCLOCK, player_hand_sprites, phand, chand, back_of_card,
-                          middle_pile, card_Sprites, cards, back_of_card_Rect, background, background_Rect, player):
-        moveSpeed = 1
 
-        # Middle pile has position = 300, 255
-        # Middle of Computer hand = 310, 5
-
-        if not player:
-            y = 5
-        else:
-            y = 550
-
-        x = 300     # not exactly middle of pile but makes moving easier
-
-        ENDY = 255
-
-        while True:
-            if not player:
-                y += moveSpeed
-            else:
-                y -= moveSpeed
-            if y == ENDY:
-                return
-            turn = None
-            # the following two functions let the other images render so the moving images do not leave black lines
-            screen.blit(background, background_Rect)
-            Render_Images.BlitPlayer.blit_Cards(player_hand_sprites, phand, chand, back_of_card, screen, middle_pile,
-                                                card_Sprites, cards, back_of_card_Rect, turn)
-            Render_Images.BlitPlayer.computer_card_move(card_sprites, card, x, y, screen)
-
-            pygame.display.update()
-            FPSCLOCK.tick()
 
 
 
