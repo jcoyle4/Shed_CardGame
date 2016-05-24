@@ -9,31 +9,6 @@ class BlitPlayer:
 
     @staticmethod
     def gen_player_blit_cards(player_hand, deck_card_sprites, deck_card_hl_sprites, list_of_c, transcard):
-        global card1
-        global card2
-        global card3
-        global card4
-        global card5
-        global card6
-        global card7
-        global card8
-        global card9
-        global card10
-        global card11
-        global card12
-        global card13
-        global card14
-        global card15
-        global card16
-        global card17
-        global card18
-        global card19
-        global card20
-        global card21
-        global card22
-        global card23
-        global card24
-        global card25
 
         c1 = list_of_c[0]
         c2 = list_of_c[1]
@@ -61,269 +36,238 @@ class BlitPlayer:
         c24 = list_of_c[23]
         c25 = list_of_c[24]
 
-        # todo no need for if statement as player hand is always len 25
-        if len(player_hand) >= 1:
+        for x in range(1, 53):
 
-            for x in range(1, 53):
+            if player_hand[0] == x:  # sees if a card has been clicked with the mouse. If so,
+                #  and if that card is "playable", the card in highlighted
+                if c1 == 1:
+                    card1 = deck_card_sprites[x-1]
 
-                if player_hand[0] == x:  # sees if a card has been clicked with the mouse. If so,
-                    #  and if that card is "playable", the card in highlighted
-                    if c1 == 1:
-                        card1 = deck_card_sprites[x-1]
+                else:
+                    card1 = deck_card_hl_sprites[x-1]
 
-                    else:
-                        card1 = deck_card_hl_sprites[x-1]
+            elif player_hand[0] is None:
+                card1 = transcard
 
-                if player_hand[0] is None:
-                            card1 = transcard
+            if player_hand[1] == x:
+                if c2 == 1:
+                    card2 = deck_card_sprites[x-1]
 
-                if len(player_hand) >= 2:
-                    if player_hand[1] == x:
-                        if c2 == 1:
-                            card2 = deck_card_sprites[x-1]
+                else:
+                    card2 = deck_card_hl_sprites[x-1]
 
-                        else:
-                            card2 = deck_card_hl_sprites[x-1]
+            elif player_hand[1] is None:
+                card2 = transcard
 
-                    if player_hand[1] is None:
-                            card2 = transcard
+            if player_hand[2] == x:
+                if c3 == 1:
+                    card3 = deck_card_sprites[x-1]
+                else:
+                    card3 = deck_card_hl_sprites[x-1]
 
-                    if len(player_hand) >= 3:
-                        if player_hand[2] == x:
-                            if c3 == 1:
-                                card3 = deck_card_sprites[x-1]
-                            else:
-                                card3 = deck_card_hl_sprites[x-1]
+            elif player_hand[2] is None:
+                card3 = transcard
 
-                        if player_hand[2] is None:
-                            card3 = transcard
+            if player_hand[3] == x:
+                if c4 == 1:
+                    card4 = deck_card_sprites[x-1]
+                else:
+                    card4 = deck_card_hl_sprites[x-1]
 
-                        if len(player_hand) >= 4:
-                            if player_hand[3] == x:
-                                if c4 == 1:
-                                    card4 = deck_card_sprites[x-1]
-                                else:
-                                    card4 = deck_card_hl_sprites[x-1]
+            elif player_hand[3] is None:
+                card4 = transcard
 
-                            if player_hand[3] is None:
-                                card4 = transcard
+            if player_hand[4] == x:
+                if c5 == 1:
+                    card5 = deck_card_sprites[x-1]
+                else:
+                    card5 = deck_card_hl_sprites[x-1]
 
-                            if len(player_hand) >= 5:
-                                if player_hand[4] == x:
-                                    if c5 == 1:
-                                        card5 = deck_card_sprites[x-1]
-                                    else:
-                                        card5 = deck_card_hl_sprites[x-1]
+            elif player_hand[4] is None:
+                card5 = transcard
 
-                                if player_hand[4] is None:
-                                    card5 = transcard
+            if player_hand[5] == x:
+                if c6 == 1:
+                    card6 = deck_card_sprites[x-1]
+                else:
+                    card6 = deck_card_hl_sprites[x-1]
 
-                                if len(player_hand) >= 6:
-                                    if player_hand[5] == x:
-                                        if c6 == 1:
-                                            card6 = deck_card_sprites[x-1]
-                                        else:
-                                            card6 = deck_card_hl_sprites[x-1]
+            elif player_hand[5] is None:
+                card6 = transcard
 
-                                    if player_hand[5] is None:
-                                        card6 = transcard
+            if player_hand[6] == x:
+                if c7 == 1:
+                    card7 = deck_card_sprites[x-1]
+                else:
+                    card7 = deck_card_hl_sprites[x-1]
 
-                                    if len(player_hand) >= 7:
-                                        if player_hand[6] == x:
-                                            if c7 == 1:
-                                                card7 = deck_card_sprites[x-1]
-                                            else:
-                                                card7 = deck_card_hl_sprites[x-1]
+            elif player_hand[6] is None:
+                card7 = transcard
 
-                                        if player_hand[6] is None:
-                                            card7 = transcard
+            if player_hand[7] == x:
+                if c8 == 1:
+                    card8 = deck_card_sprites[x-1]
+                else:
+                    card8 = deck_card_hl_sprites[x-1]
 
-                                        if len(player_hand) >= 8:
-                                            if player_hand[7] == x:
-                                                if c8 == 1:
-                                                    card8 = deck_card_sprites[x-1]
-                                                else:
-                                                    card8 = deck_card_hl_sprites[x-1]
+            elif player_hand[7] is None:
+                card8 = transcard
 
-                                            if player_hand[7] is None:
-                                                card8 = transcard
+            if player_hand[8] == x:
+                if c9 == 1:
+                    card9 = deck_card_sprites[x-1]
+                else:
+                    card9 = deck_card_hl_sprites[x-1]
 
-                                            if len(player_hand) >= 9:
-                                                if player_hand[8] == x:
-                                                    if c9 == 1:
-                                                        card9 = deck_card_sprites[x-1]
-                                                    else:
-                                                        card9 = deck_card_hl_sprites[x-1]
+            elif player_hand[8] is None:
+                card9 = transcard
 
-                                                if player_hand[8] is None:
-                                                    card9 = transcard
+            if player_hand[9] == x:
+                if c10 == 1:
+                    card10 = deck_card_sprites[x-1]
+                else:
+                    card10 = deck_card_hl_sprites[x-1]
 
-                                                if len(player_hand) >= 10:
-                                                    if player_hand[9] == x:
-                                                        if c10 == 1:
-                                                            card10 = deck_card_sprites[x-1]
-                                                        else:
-                                                            card10 = deck_card_hl_sprites[x-1]
+            elif player_hand[9] is None:
+                card10 = transcard
 
-                                                    if player_hand[9] is None:
-                                                        card10 = transcard
+            if player_hand[10] == x:
+                if c11 == 1:
+                    card11 = deck_card_sprites[x-1]
+                else:
+                    card11 = deck_card_hl_sprites[x-1]
 
-                                                    if len(player_hand) >= 11:
-                                                        if player_hand[10] == x:
-                                                            if c11 == 1:
-                                                                card11 = deck_card_sprites[x-1]
-                                                            else:
-                                                                card11 = deck_card_hl_sprites[x-1]
+            elif player_hand[10] is None:
+                card11 = transcard
 
-                                                        if player_hand[10] is None:
-                                                            card11 = transcard
+            if player_hand[11] == x:
+                if c12 == 1:
+                    card12 = deck_card_sprites[x-1]
+                else:
+                    card12 = deck_card_hl_sprites[x-1]
 
-                                                        if len(player_hand) >= 12:
-                                                            if player_hand[11] == x:
-                                                                if c12 == 1:
-                                                                    card12 = deck_card_sprites[x-1]
-                                                                else:
-                                                                    card12 = deck_card_hl_sprites[x-1]
+            elif player_hand[11] is None:
+                card12 = transcard
 
-                                                            if player_hand[11] is None:
-                                                                card12 = transcard
+            if player_hand[12] == x:
+                if c13 == 1:
+                    card13 = deck_card_sprites[x-1]
+                else:
+                    card13 = deck_card_hl_sprites[x-1]
 
-                                                            if len(player_hand) >= 13:
-                                                                if player_hand[12] == x:
-                                                                    if c13 == 1:
-                                                                        card13 = deck_card_sprites[x-1]
-                                                                    else:
-                                                                        card13 = deck_card_hl_sprites[x-1]
+            elif player_hand[12] is None:
+                card13 = transcard
 
-                                                                if player_hand[12] is None:
-                                                                    card13 = transcard
+            if player_hand[13] == x:
+                if c14 == 1:
+                    card14 = deck_card_sprites[x-1]
+                else:
+                    card14 = deck_card_hl_sprites[x-1]
 
-                                                                if len(player_hand) >= 14:
-                                                                    if player_hand[13] == x:
-                                                                        if c14 == 1:
-                                                                            card14 = deck_card_sprites[x-1]
-                                                                        else:
-                                                                            card14 = deck_card_hl_sprites[x-1]
+            elif player_hand[13] is None:
+                card14 = transcard
 
-                                                                    if player_hand[13] is None:
-                                                                        card14 = transcard
+            if player_hand[14] == x:
+                if c15 == 1:
+                    card15 = deck_card_sprites[x-1]
+                else:
+                    card15 = deck_card_hl_sprites[x-1]
 
-                                                                    if len(player_hand) >= 15:
-                                                                        if player_hand[14] == x:
-                                                                            if c15 == 1:
-                                                                                card15 = deck_card_sprites[x-1]
-                                                                            else:
-                                                                                card15 = deck_card_hl_sprites[x-1]
+            elif player_hand[14] is None:
+                card15 = transcard
 
-                                                                        if player_hand[14] is None:
-                                                                            card15 = transcard
+            if player_hand[15] == x:
+                if c16 == 1:
+                    card16 = deck_card_sprites[x-1]
+                else:
+                    card16 = deck_card_hl_sprites[x-1]
 
-                                                                        if len(player_hand) >= 16:
-                                                                            if player_hand[15] == x:
-                                                                                if c16 == 1:
-                                                                                    card16 = deck_card_sprites[x-1]
-                                                                                else:
-                                                                                    card16 = deck_card_hl_sprites[x-1]
+            elif player_hand[15] is None:
+                card16 = transcard
 
-                                                                            if player_hand[15] is None:
-                                                                                card16 = transcard
+            if player_hand[16] == x:
+                if c17 == 1:
+                    card17 = deck_card_sprites[x-1]
+                else:
+                    card17 = deck_card_hl_sprites[x-1]
 
-                                                                            if len(player_hand) >= 17:
-                                                                                if player_hand[16] == x:
-                                                                                    if c17 == 1:
-                                                                                        card17 = deck_card_sprites[x-1]
-                                                                                    else:
-                                                                                        card17 = deck_card_hl_sprites[x-1]
+            elif player_hand[16] is None:
+                card17 = transcard
 
-                                                                                if player_hand[16] is None:
-                                                                                    card17 = transcard
+            if player_hand[17] == x:
+                if c18 == 1:
+                    card18 = deck_card_sprites[x-1]
+                else:
+                    card18 = deck_card_hl_sprites[x-1]
 
-                                                                                if len(player_hand) >= 18:
-                                                                                    if player_hand[17] == x:
-                                                                                        if c18 == 1:
-                                                                                            card18 = deck_card_sprites[x-1]
-                                                                                        else:
-                                                                                            card18 = deck_card_hl_sprites[x-1]
+            elif player_hand[17] is None:
+                card18 = transcard
 
-                                                                                    if player_hand[17] is None:
-                                                                                        card18 = transcard
+            if player_hand[18] == x:
+                if c19 == 1:
+                    card19 = deck_card_sprites[x-1]
+                else:
+                    card19 = deck_card_hl_sprites[x-1]
 
-                                                                                    if len(player_hand) >= 19:
-                                                                                        if player_hand[18] == x:
-                                                                                            if c19 == 1:
-                                                                                                card19 = deck_card_sprites[x-1]
-                                                                                            else:
-                                                                                                card19 = deck_card_hl_sprites[x-1]
+            elif player_hand[18] is None:
+                card19 = transcard
 
-                                                                                        if player_hand[18] is None:
-                                                                                            card19 = transcard
+            if player_hand[19] == x:
+                if c20 == 1:
+                    card20 = deck_card_sprites[x-1]
+                else:
+                    card20 = deck_card_hl_sprites[x-1]
 
-                                                                                        if len(player_hand) >= 20:
-                                                                                            if player_hand[19] == x:
-                                                                                                if c20 == 1:
-                                                                                                    card20 = deck_card_sprites[x-1]
-                                                                                                else:
-                                                                                                    card20 = deck_card_hl_sprites[x-1]
+            elif player_hand[19] is None:
+                card20 = transcard
 
-                                                                                            if player_hand[19] is None:
-                                                                                                card20 = transcard
+            if player_hand[20] == x:
+                if c21 == 1:
+                    card21 = deck_card_sprites[x-1]
+                else:
+                    card21 = deck_card_hl_sprites[x-1]
 
-                                                                                            if len(player_hand) >= 21:
-                                                                                                if player_hand[20] == x:
-                                                                                                    if c21 == 1:
-                                                                                                        card21 = deck_card_sprites[x-1]
-                                                                                                    else:
-                                                                                                        card21 = deck_card_hl_sprites[x-1]
+            elif player_hand[20] is None:
+                card21 = transcard
 
-                                                                                                if player_hand[20] is None:
-                                                                                                    card21 = transcard
+            if player_hand[21] == x:
+                if c22 == 1:
+                    card22 = deck_card_sprites[x-1]
+                else:
+                    card22 = deck_card_hl_sprites[x-1]
 
-                                                                                                if len(player_hand) >= 22:
-                                                                                                    if player_hand[21] == x:
-                                                                                                        if c22 == 1:
-                                                                                                            card22 = deck_card_sprites[x-1]
-                                                                                                        else:
-                                                                                                            card22 = deck_card_hl_sprites[x-1]
+            elif player_hand[21] is None:
+                card22 = transcard
 
-                                                                                                    if player_hand[21] is None:
-                                                                                                        card22 = transcard
+            if player_hand[22] == x:
+                if c23 == 1:
+                    card23 = deck_card_sprites[x-1]
+                else:
+                    card23 = deck_card_hl_sprites[x-1]
 
-                                                                                                    if len(player_hand) >= 23:
-                                                                                                        if player_hand[22] == x:
-                                                                                                            if c23 == 1:
-                                                                                                                card23 = deck_card_sprites[x-1]
-                                                                                                            else:
-                                                                                                                card23 = deck_card_hl_sprites[x-1]
+            elif player_hand[22] is None:
+                card23 = transcard
 
-                                                                                                        if player_hand[22] is None:
-                                                                                                            card23 = transcard
+            if player_hand[23] == x:
+                if c24 == 1:
+                    card24 = deck_card_sprites[x-1]
+                else:
+                    card24 = deck_card_hl_sprites[x-1]
 
-                                                                                                        if len(player_hand) >= 24:
-                                                                                                            if player_hand[23] == x:
-                                                                                                                if c24 == 1:
-                                                                                                                    card24 = deck_card_sprites[x-1]
-                                                                                                                else:
-                                                                                                                    card24 = deck_card_hl_sprites[x-1]
+            elif player_hand[23] is None:
+                card24 = transcard
 
-                                                                                                            if player_hand[23] is None:
-                                                                                                                card24 = transcard
+            if player_hand[24] == x:
+                if c25 == 1:
+                    card25 = deck_card_sprites[x-1]
+                else:
+                    card25 = deck_card_hl_sprites[x-1]
 
-                                                                                                            if len(player_hand) >= 25:
-                                                                                                                if player_hand[24] == x:
-                                                                                                                    if c25 == 1:
-                                                                                                                        card25 = deck_card_sprites[
-                                                                                                                            x-1]
-                                                                                                                    else:
-                                                                                                                        card25 = \
-                                                                                                                            deck_card_hl_sprites[x-1]
+            elif player_hand[24] is None:
+                card25 = transcard
 
-                                                                                                                if player_hand[24] is None:
-                                                                                                                    card25 = transcard
-
-        list_to_return = [card1, card2, card3, card4, card5, card6, card7, card8, card9, card10, card11, card12, card13, card14, card15, card16,
-                          card17, card18, card19, card20, card21, card22, card23, card24, card25]
-        return list_to_return
-
+        return [card1, card2, card3, card4, card5, card6, card7, card8, card9, card10, card11, card12, card13, card14, card15, card16,
+                card17, card18, card19, card20, card21, card22, card23, card24, card25]
     @staticmethod
     def blit_Cards(player_hand_sprites, player_hand, computer_hand, back_of_card, screen, pile, card_sprites, deck, backRect, turn):
 
