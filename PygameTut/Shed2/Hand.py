@@ -100,24 +100,23 @@ class HandClass:
 
         self.hand = new_hand
 
+    @staticmethod
+    def flip_c(c_to_flip):
+
+        if c_to_flip == 1:
+            c_to_flip = 0
+
+        return c_to_flip
 
     @staticmethod
-    def flipC(C_To_Flip):
+    def un_flip_all(c_list):
 
-        if C_To_Flip == 1:
-            C_To_Flip = 0
+        for x in range(len(c_list)):
+            c_list[x] = 1
 
-        return C_To_Flip
+        return c_list
 
-    @staticmethod
-    def unflipAll(cList):
-
-         for x in range(len(cList)):
-            cList[x] = 1
-
-         return cList
-
-    def pickUp(self, pile, player):
+    def pick_up(self, pile, player):
 
         if not player:
             self.hand.extend(pile.cards_in_middle)

@@ -1,11 +1,69 @@
 import pygame
-#TRANSPARANT = (0, 0, 0)
 import Load_Image
 
 
 class BlitPlayer:
 
+    @staticmethod
+    def gen_face_up_table_cards(player_face_up, comp_face_up, list_of_c, deck_card_sprites, deck_card_hl_sprites, transcard):
 
+        c1 = list_of_c[0]
+        c2 = list_of_c[1]
+        c3 = list_of_c[2]
+
+        for x in range(1, 53):
+            if player_face_up[0] == x:  # sees if a card has been clicked with the mouse. If so,
+                #  and if that card is "playable", the card in highlighted
+                if c1 == 1:
+                    card1 = deck_card_sprites[x-1]
+
+                else:
+                    card1 = deck_card_hl_sprites[x-1]
+
+            elif player_face_up[0] is None:
+                card1 = transcard
+
+            if player_face_up[1] == x:  # sees if a card has been clicked with the mouse. If so,
+                #  and if that card is "playable", the card in highlighted
+                if c2 == 1:
+                    card2 = deck_card_sprites[x-1]
+
+                else:
+                    card2 = deck_card_hl_sprites[x-1]
+
+            elif player_face_up[1] is None:
+                card2 = transcard
+
+            if player_face_up[2] == x:  # sees if a card has been clicked with the mouse. If so,
+                #  and if that card is "playable", the card in highlighted
+                if c3 == 1:
+                    card3 = deck_card_sprites[x-1]
+
+                else:
+                    card3 = deck_card_hl_sprites[x-1]
+
+            elif player_face_up[2] is None:
+                card3 = transcard
+
+            if comp_face_up[0] == x:
+                comp_card1 = deck_card_sprites[x-1]
+
+            elif comp_face_up[0] is None:
+                comp_card1 = transcard
+
+            if comp_face_up[1] == x:
+                comp_card2 = deck_card_sprites[x-1]
+
+            elif comp_face_up[1] is None:
+                comp_card2 = transcard
+
+            if comp_face_up[2] == x:
+                comp_card3 = deck_card_sprites[x-1]
+
+            elif comp_face_up[2] is None:
+                comp_card3 = transcard
+
+        return [[card1, card2, card3], [comp_card1, comp_card2, comp_card3]]
 
     @staticmethod
     def gen_player_blit_cards(player_hand, deck_card_sprites, deck_card_hl_sprites, list_of_c, transcard):
@@ -268,25 +326,25 @@ class BlitPlayer:
 
         return [card1, card2, card3, card4, card5, card6, card7, card8, card9, card10, card11, card12, card13, card14, card15, card16,
                 card17, card18, card19, card20, card21, card22, card23, card24, card25]
+
     @staticmethod
-    def blit_Cards(player_hand_sprites, player_hand, computer_hand, back_of_card, screen, pile, card_sprites, deck, backRect, turn):
+    def blit_cards(player_hand_sprites, player_hand, computer_hand, back_of_card, screen, pile, card_sprites, deck, backrect, turn,
+                   player_table_sprites, comp_table_sprites, player_face_down, comp_face_down):
 
+        width = backrect.w
+        height = backrect.h
 
+        """ CODE TO GET TRANSPARENT IMAGES"""
 
-        width = backRect.w
-        height = backRect.h
-
-        """ CODE TO GET TRANSPARANT IMAGES"""
-
-        TRANSPARANT = pygame.Surface((width, height), pygame.SRCALPHA)
-        TRANSPARANT.set_alpha(0)
-        TRANSPARANT.fill((255, 255, 255, 0))
+        transparent = pygame.Surface((width, height), pygame.SRCALPHA)
+        transparent.set_alpha(0)
+        transparent.fill((255, 255, 255, 0))
 
         """"""
 
-        SEMI_TRANSPARANT = pygame.Surface((width, height), pygame.SRCALPHA)
-        SEMI_TRANSPARANT.set_alpha(2)
-        SEMI_TRANSPARANT.fill((255, 255, 255, 2))
+        semi_transparent = pygame.Surface((width, height), pygame.SRCALPHA)
+        semi_transparent.set_alpha(2)
+        semi_transparent.fill((255, 255, 255, 2))
 
         """"""
         # Region for computer cards 1 -> 25
@@ -670,6 +728,72 @@ class BlitPlayer:
             screen.blit(back_of_card, (420, 5))
             screen.blit(back_of_card, (430, 5))
 
+        # Face down table cards for player
+        if player_face_down[0] is not None:
+            screen.blit(back_of_card, (210, 400))
+        else:
+            screen.blit(transparent, (210, 400))
+
+        if player_face_down[1] is not None:
+            screen.blit(back_of_card, (310, 400))
+        else:
+            screen.blit(transparent, (310, 400))
+
+        if player_face_down[2] is not None:
+            screen.blit(back_of_card, (410, 400))
+        else:
+            screen.blit(transparent, (410, 400))
+
+        # Face down table cards for computer
+        if comp_face_down[0] is not None:
+            screen.blit(back_of_card, (210, 120))
+        else:
+            screen.blit(transparent, (210, 120))
+
+        if comp_face_down[1] is not None:
+            screen.blit(back_of_card, (310, 120))
+        else:
+            screen.blit(transparent, (310, 120))
+
+        if comp_face_down[2] is not None:
+            screen.blit(back_of_card, (410, 120))
+        else:
+            screen.blit(transparent, (410, 120))
+
+        # Face up cards for player
+        if player_table_sprites[0] is not None:
+            screen.blit(player_table_sprites[0], (205, 400))
+        else:
+            screen.blit(transparent, (205, 400))
+
+        if player_table_sprites[1] is not None:
+            screen.blit(player_table_sprites[1], (305, 400))
+        else:
+            screen.blit(transparent, (305, 400))
+
+        if player_table_sprites[2] is not None:
+            screen.blit(player_table_sprites[2], (405, 400))
+        else:
+            screen.blit(transparent, (405, 400))
+
+        # Face up cards for computer
+        if comp_table_sprites[0] is not None:
+            screen.blit(comp_table_sprites[0], (205, 120))
+        else:
+            screen.blit(transparent, (205, 120))
+
+        if comp_table_sprites[1] is not None:
+            screen.blit(comp_table_sprites[1], (305, 120))
+        else:
+            screen.blit(transparent, (305, 120))
+
+        if comp_table_sprites[2] is not None:
+            screen.blit(comp_table_sprites[2], (405, 120))
+        else:
+            screen.blit(transparent, (405, 120))
+
+
+
         # Player Cards
         if len(player_hand) == 25:
             screen.blit(player_hand_sprites[0], (160 - 140, 550))
@@ -701,7 +825,7 @@ class BlitPlayer:
         eights = [7, 20, 33, 46]
         for x in range(1, 53):
             if len(pile.cards_in_middle) == 0:
-                screen.blit(SEMI_TRANSPARANT, (300, 255))
+                screen.blit(semi_transparent, (300, 255))
             elif pile.card_on_top == x and pile.card_on_top in eights:
                 card_under_eight = pile.cards_in_middle[-2:]
                 card_under_eight_sprite = card_sprites[card_under_eight[0] - 1]
@@ -737,9 +861,8 @@ class BlitPlayer:
             screen.blit(back_of_card, (520, 255))
 
         if turn == 1:
-            RULES, RULES_rect = Load_Image.ImageLoad.imageLoadfnc("rules.jpg", False)
-            screen.blit(RULES, (50, 50))
-
+            rules, rules_rect = Load_Image.ImageLoad.imageLoadfnc("rules.jpg", False)
+            screen.blit(rules, (50, 50))
 
 class Animation:
 
@@ -751,16 +874,11 @@ class Animation:
 
                 screen.blit(card, (x, y))
 
-    # @staticmethod
-    # def rules(screen):
-    #     RULES, RULES_rect = Load_Image.ImageLoad.imageLoadfnc("rules.jpg", False)
-    #     screen.blit(RULES, (100, 100))
-    #     # pygame.display.update()
-
     @staticmethod  # used for both player and computer animations
-    def animate_Play_Card(card, screen, card_sprites, FPSCLOCK, player_hand_sprites, phand, chand, back_of_card,
-                          middle_pile, card_Sprites, cards, back_of_card_Rect, background, background_Rect, player):
-        moveSpeed = 1
+    def animate_play_card(card, screen, card_sprites, fpsclock, player_hand_sprites, phand, chand, back_of_card,
+                          middle_pile, cards, back_of_card_rect, background, background_rect, player, player_face_up_sprites,
+                          computer_face_up_sprites, player_table_cards_down, computer_table_cards_down):
+        move_speed = 1
 
         # Middle pile has position = 300, 255
         # Middle of Computer hand = 310, 5
@@ -772,35 +890,36 @@ class Animation:
 
         x = 300     # not exactly middle of pile but makes moving easier
 
-        ENDY = 255
+        end_y = 255
 
         while True:
             if not player:
-                y += moveSpeed
+                y += move_speed
             else:
-                y -= moveSpeed
-            if y == ENDY:
+                y -= move_speed
+            if y == end_y:
                 return
             turn = 0
             # the following two functions let the other images render so the moving images do not leave black lines
-            screen.blit(background, background_Rect)
-            BlitPlayer.blit_Cards(player_hand_sprites, phand, chand, back_of_card, screen, middle_pile,
-                                  card_Sprites, cards, back_of_card_Rect, turn)
+            screen.blit(background, background_rect)
+            BlitPlayer.blit_cards(player_hand_sprites, phand, chand, back_of_card, screen, middle_pile,
+                                  card_sprites, cards, back_of_card_rect, turn, player_face_up_sprites,
+                                  computer_face_up_sprites, player_table_cards_down, computer_table_cards_down)
             Animation.computer_card_move(card_sprites, card, x, y, screen)
 
             pygame.display.update()
-            FPSCLOCK.tick()
+            fpsclock.tick()
 
 
 class Misc:
     @staticmethod
-    def gameOver(img, screen):
+    def game_over(img, screen):
         screen.blit(img, (100, 100))
 
     @staticmethod
-    def pickUpDeck(img, screen):
+    def pick_up_deck(img, screen):
         screen.blit(img, (100, 255))
 
     @staticmethod
-    def bgImg(bg, bgRect, screen):
-        screen.blit(bg, bgRect)
+    def bg_img(bg, bgrect, screen):
+        screen.blit(bg, bgrect)

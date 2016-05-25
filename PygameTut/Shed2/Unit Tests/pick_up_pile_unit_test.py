@@ -16,7 +16,7 @@ class PickUpPileTest(unittest.TestCase):
         self.deck.cards = self.hand.setUp(self.deck.cards)
         self.deck.cards = self.middle.Start_game(self.deck.cards)
 
-        self.middle = self.hand.pickUp(self.middle, False)
+        self.middle = self.hand.pick_up(self.middle, False)
 
         self.assertEquals(len(self.hand.hand), 6)
         self.assertEquals(len(self.middle.cards_in_middle), 0)

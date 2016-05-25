@@ -1,11 +1,13 @@
 import pygame
 import os
-import Hand
+from Hand import HandClass
 import Load_Image
 import Deck
-import Render_Images
+from TableCards import TableCardsClass
 import MiddlePile
-from ComputerAI import *
+from ComputerAI import ComputerAI
+from Render_Images import *
+
 pygame.init()
 
 FPS = 30
@@ -13,6 +15,7 @@ FPS = 30
 startx = 200
 starty = 40
 os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (startx, starty)
+
 
 # Size of the screen and its variable
 screen = pygame.display.set_mode((700, 700))
@@ -22,9 +25,9 @@ back_of_card, back_of_card_Rect = Load_Image.ImageLoad.imageLoadfnc('back.png', 
 width = back_of_card_Rect.w
 height = back_of_card_Rect.h
 
-TRANSPARANT = pygame.Surface((width, height), pygame.SRCALPHA)
-TRANSPARANT.set_alpha(0)
-TRANSPARANT.fill((255, 255, 255, 0))
+transparent = pygame.Surface((width, height), pygame.SRCALPHA)
+transparent.set_alpha(0)
+transparent.fill((255, 255, 255, 0))
 
 playerWinnerIMG, playerWinnerIMG_Rect = Load_Image.ImageLoad.imageLoadfnc("win.jpg", False)
 computerWinnerIMG, computerWinnerIMG_Rect = Load_Image.ImageLoad.imageLoadfnc("lose.jpg", False)
@@ -32,11 +35,18 @@ pickUpDeckIMG, pickUpDeckIMG_Rect = Load_Image.ImageLoad.imageLoadfnc("PickUpThe
 
 game_deck = Deck.DeckClass()  # deck of 52 cards, sprites are also in here
 
-computer_hand = Hand.HandClass()  # The hand of cards that the computer holds
-player_hand = Hand.HandClass()   # The hand for the player
+computer_hand = HandClass()  # The hand of cards that the computer holds
+player_hand = HandClass()   # The hand for the player
 
 # Object for the middle pile, holds all the cards in the middle pile and which card is on top
 middle_pile = MiddlePile.Pile()
+
+computer_table_cards = TableCardsClass()
+player_table_cards = TableCardsClass()
+
+game_deck.cards = computer_table_cards.setup(game_deck.cards)
+game_deck.cards = player_table_cards.setup(game_deck.cards)
+
 
 # Set up the computer hand
 game_deck.cards = computer_hand.setUp(game_deck.cards)
@@ -73,6 +83,13 @@ c24 = 1
 c25 = 1
 
 list_of_c = [c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, c15, c16, c17, c18, c19, c20, c21, c22, c23, c24, c25]
+
+c_table1 = 1
+c_table2 = 1
+c_table3 = 1
+
+list_of_c_table = [c_table1, c_table2, c_table3]
+
 clicked = 0
 
 # if card is used, used will be equal to 'spent' and the player cannot select that card anymore.
@@ -102,6 +119,10 @@ used23 = ''
 used24 = ''
 used25 = ''
 
+table1 = ''
+table2 = ''
+table3 = ''
+
 running = True  # Boolean for the main loop
 # counter = True  #
 move = True  # boolean to keep track of whose move it is True for player, False for computer
@@ -112,13 +133,19 @@ while running:
     # font = pygame.font.Font(None, 36)
     FPSCLOCK = pygame.time.Clock()
     # Put the background image in place
-    Render_Images.Misc.bgImg(background, background_Rect, screen)
-    Render_Images.Misc.pickUpDeck(pickUpDeckIMG, screen)
+    Misc.bg_img(background, background_Rect, screen)
+    Misc.pick_up_deck(pickUpDeckIMG, screen)
 
     # all of these x's and y's set up rectangular coordinates that, when clicked, perform a certain action.
     # Middle Pile
     x_mid = list(range(300, 375))
     y_mid = list(range(255, 360))
+
+    y_table_cards = list(range(400, 500))
+
+    x_table_1 = list(range(205, 275))
+    x_table_2 = list(range(305, 375))
+    x_table_3 = list(range(405, 475))
 
     x_pick_up = list(range(100, 250))
     y_pick_up = list(range(255, 355))
@@ -131,8 +158,14 @@ while running:
     LEFT = 1  # need these for the x's and y's clickers.
     RIGHT = 1
 
-    player_hand_sprites = Render_Images.BlitPlayer.gen_player_blit_cards(player_hand.hand, game_deck.card_Sprites, game_deck.highlighted_Card_Sprites,
-                                                                         list_of_c, TRANSPARANT)
+    player_hand_sprites = BlitPlayer.gen_player_blit_cards(player_hand.hand, game_deck.card_Sprites,
+                                                           game_deck.highlighted_Card_Sprites, list_of_c, transparent)
+
+    list_to_alter = BlitPlayer.gen_face_up_table_cards(player_table_cards.face_up, computer_table_cards.face_up, list_of_c_table,
+                                                       game_deck.card_Sprites, game_deck.highlighted_Card_Sprites, transparent)
+
+    player_face_up_sprites = list_to_alter[0]
+    computer_face_up_sprites = list_to_alter[1]
 
     # X-Coord's of each card
     x_card_1 = list(range(20, 44))
@@ -164,7 +197,7 @@ while running:
         x_card_11 = list(range(271, 295))
 
         if player_hand.hand[12] is None:
-            x_card_12 = list(range(296, 320))
+            x_card_12 = list(range(296, 365))
             x_card_13 = list(range(321, 345))
             x_card_14 = list(range(346, 417))
             x_card_15 = list(range(420, 440))
@@ -313,8 +346,9 @@ while running:
         turn += 1  # counter to show the rules
 
     # puts ALL (computer, player and pile) the cards on the screen, and keeps updating them during the while loop
-    Render_Images.BlitPlayer.blit_Cards(player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card, screen, middle_pile,
-                                        game_deck.card_Sprites, Deck.DeckClass.cards, back_of_card_Rect, turn)
+    BlitPlayer.blit_cards(player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card, screen, middle_pile,
+                          game_deck.card_Sprites, Deck.DeckClass.cards, back_of_card_Rect, turn, player_face_up_sprites,
+                          computer_face_up_sprites, player_table_cards.face_down, computer_table_cards.face_down)
 
     middle_pile.PlayableCards()
 
@@ -331,23 +365,24 @@ while running:
             print("Computer Hand =", computer_hand.hand)
             print("Cards in the middle =", middle_pile.cards_in_middle)
             print("Discarded cards =", middle_pile.discarded_cards)
+            print("Player Table Cards =", player_table_cards.face_up, "&", player_table_cards.face_down)
+            print("Computer Table Cards =", computer_table_cards.face_up, "&", computer_table_cards.face_down)
 
             # Closes the game if all cards in the hand are gone
-            if all(card is None for card in player_hand.hand):
-                Render_Images.Misc.gameOver(playerWinnerIMG, screen)
+            if all(card is None for card in player_hand.hand) and all(card is None for card in player_table_cards.face_down):
+                Misc.game_over(playerWinnerIMG, screen)
                 pygame.display.flip()
                 if x in x_all and y in y_all:
                     running = False
                     pygame.time.delay(3000)
 
-            if len(computer_hand.hand) == 0:
-                Render_Images.Misc.gameOver(computerWinnerIMG, screen)
+            if len(computer_hand.hand) == 0 and all(card is None for card in computer_table_cards.face_down):
+                Misc.game_over(computerWinnerIMG, screen)
                 pygame.display.flip()
                 if x in x_all and y in y_all:
                     # print("QUITTING")
                     running = False
                     pygame.time.delay(3000)
-
 
             # Code to move a card from the players hand to the middle
             # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -358,265 +393,349 @@ while running:
                         # C1
                         if list_of_c[0] == 0:  # ie clicked. This says that if a card is clicked, and therefore able to be played,
                             #  the card in the middle is now the clicked number. and etc.
-                            Render_Images.Animation.animate_Play_Card(player_hand.hand[0], screen, game_deck.card_Sprites, FPSCLOCK,
-                                                                      player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
-                                                                      middle_pile, game_deck.card_Sprites, Deck.DeckClass.cards, back_of_card_Rect,
-                                                                      background, background_Rect, True)
+                            Animation.animate_play_card(player_hand.hand[0], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                        player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                        middle_pile, Deck.DeckClass.cards, back_of_card_Rect,
+                                                        background, background_Rect, True, player_face_up_sprites,
+                                                        computer_face_up_sprites, player_table_cards.face_down,
+                                                        computer_table_cards.face_down)
                             middle_pile.moveCard(player_hand.hand[0])
                             used1 = 'spent'
-                            list_of_c = Hand.HandClass.unflipAll(list_of_c)
+                            list_of_c = HandClass.un_flip_all(list_of_c)
                             this = 0
 
                         # C2
                         elif list_of_c[1] == 0:
-                            Render_Images.Animation.animate_Play_Card(player_hand.hand[1], screen, game_deck.card_Sprites, FPSCLOCK,
-                                                                      player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
-                                                                      middle_pile, game_deck.card_Sprites, Deck.DeckClass.cards, back_of_card_Rect,
-                                                                      background, background_Rect, True)
+                            Animation.animate_play_card(player_hand.hand[1], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                        player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                        middle_pile, Deck.DeckClass.cards, back_of_card_Rect,
+                                                        background, background_Rect, True, player_face_up_sprites,
+                                                        computer_face_up_sprites, player_table_cards.face_down,
+                                                        computer_table_cards.face_down)
                             middle_pile.moveCard(player_hand.hand[1])
                             used2 = 'spent'
-                            list_of_c = Hand.HandClass.unflipAll(list_of_c)
+                            list_of_c = HandClass.un_flip_all(list_of_c)
                             this = 0
 
                         elif list_of_c[2] == 0:
-                            Render_Images.Animation.animate_Play_Card(player_hand.hand[2], screen, game_deck.card_Sprites, FPSCLOCK,
-                                                                      player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
-                                                                      middle_pile, game_deck.card_Sprites, Deck.DeckClass.cards, back_of_card_Rect,
-                                                                      background, background_Rect, True)
+                            Animation.animate_play_card(player_hand.hand[2], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                        player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                        middle_pile, Deck.DeckClass.cards, back_of_card_Rect,
+                                                        background, background_Rect, True, player_face_up_sprites,
+                                                        computer_face_up_sprites, player_table_cards.face_down,
+                                                        computer_table_cards.face_down)
                             middle_pile.moveCard(player_hand.hand[2])
                             used3 = 'spent'
-                            list_of_c = Hand.HandClass.unflipAll(list_of_c)
+                            list_of_c = HandClass.un_flip_all(list_of_c)
                             this = 0
 
                         elif list_of_c[3] == 0:
-                            Render_Images.Animation.animate_Play_Card(player_hand.hand[3], screen, game_deck.card_Sprites, FPSCLOCK,
-                                                                      player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
-                                                                      middle_pile, game_deck.card_Sprites, Deck.DeckClass.cards, back_of_card_Rect,
-                                                                      background, background_Rect, True)
+                            Animation.animate_play_card(player_hand.hand[3], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                        player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                        middle_pile, Deck.DeckClass.cards, back_of_card_Rect,
+                                                        background, background_Rect, True, player_face_up_sprites,
+                                                        computer_face_up_sprites, player_table_cards.face_down,
+                                                        computer_table_cards.face_down)
                             middle_pile.moveCard(player_hand.hand[3])
                             used4 = 'spent'
-                            list_of_c = Hand.HandClass.unflipAll(list_of_c)
+                            list_of_c = HandClass.un_flip_all(list_of_c)
                             this = 0
 
                         elif list_of_c[4] == 0:
-                            Render_Images.Animation.animate_Play_Card(player_hand.hand[4], screen, game_deck.card_Sprites, FPSCLOCK,
-                                                                      player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
-                                                                      middle_pile, game_deck.card_Sprites, Deck.DeckClass.cards, back_of_card_Rect,
-                                                                      background, background_Rect, True)
+                            Animation.animate_play_card(player_hand.hand[4], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                        player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                        middle_pile, Deck.DeckClass.cards, back_of_card_Rect,
+                                                        background, background_Rect, True, player_face_up_sprites,
+                                                        computer_face_up_sprites, player_table_cards.face_down,
+                                                        computer_table_cards.face_down)
                             middle_pile.moveCard(player_hand.hand[4])
                             used5 = 'spent'
-                            list_of_c = Hand.HandClass.unflipAll(list_of_c)
+                            list_of_c = HandClass.un_flip_all(list_of_c)
                             this = 0
 
                         elif list_of_c[5] == 0:
-                            Render_Images.Animation.animate_Play_Card(player_hand.hand[5], screen, game_deck.card_Sprites, FPSCLOCK,
-                                                                      player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
-                                                                      middle_pile, game_deck.card_Sprites, Deck.DeckClass.cards, back_of_card_Rect,
-                                                                      background, background_Rect, True)
+                            Animation.animate_play_card(player_hand.hand[5], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                        player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                        middle_pile, Deck.DeckClass.cards, back_of_card_Rect,
+                                                        background, background_Rect, True, player_face_up_sprites,
+                                                        computer_face_up_sprites, player_table_cards.face_down,
+                                                        computer_table_cards.face_down)
                             middle_pile.moveCard(player_hand.hand[5])
                             used6 = 'spent'
-                            list_of_c = Hand.HandClass.unflipAll(list_of_c)
+                            list_of_c = HandClass.un_flip_all(list_of_c)
                             this = 0
 
                         elif list_of_c[6] == 0:
-                            Render_Images.Animation.animate_Play_Card(player_hand.hand[6], screen, game_deck.card_Sprites, FPSCLOCK,
-                                                                      player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
-                                                                      middle_pile, game_deck.card_Sprites, Deck.DeckClass.cards, back_of_card_Rect,
-                                                                      background, background_Rect, True)
+                            Animation.animate_play_card(player_hand.hand[6], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                        player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                        middle_pile, Deck.DeckClass.cards, back_of_card_Rect,
+                                                        background, background_Rect, True, player_face_up_sprites,
+                                                        computer_face_up_sprites, player_table_cards.face_down,
+                                                        computer_table_cards.face_down)
                             middle_pile.moveCard(player_hand.hand[6])
                             used7 = 'spent'
-                            list_of_c = Hand.HandClass.unflipAll(list_of_c)
+                            list_of_c = HandClass.un_flip_all(list_of_c)
                             this = 0
 
                         elif list_of_c[7] == 0:
-                            Render_Images.Animation.animate_Play_Card(player_hand.hand[7], screen, game_deck.card_Sprites, FPSCLOCK,
-                                                                      player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
-                                                                      middle_pile, game_deck.card_Sprites, Deck.DeckClass.cards, back_of_card_Rect,
-                                                                      background, background_Rect, True)
+                            Animation.animate_play_card(player_hand.hand[7], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                        player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                        middle_pile, Deck.DeckClass.cards, back_of_card_Rect,
+                                                        background, background_Rect, True, player_face_up_sprites,
+                                                        computer_face_up_sprites, player_table_cards.face_down,
+                                                        computer_table_cards.face_down)
                             middle_pile.moveCard(player_hand.hand[7])
                             used8 = 'spent'
-                            list_of_c = Hand.HandClass.unflipAll(list_of_c)
+                            list_of_c = HandClass.un_flip_all(list_of_c)
                             this = 0
 
                         elif list_of_c[8] == 0:
-                            Render_Images.Animation.animate_Play_Card(player_hand.hand[8], screen, game_deck.card_Sprites, FPSCLOCK,
-                                                                      player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
-                                                                      middle_pile, game_deck.card_Sprites, Deck.DeckClass.cards, back_of_card_Rect,
-                                                                      background, background_Rect, True)
+                            Animation.animate_play_card(player_hand.hand[8], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                        player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                        middle_pile, Deck.DeckClass.cards, back_of_card_Rect,
+                                                        background, background_Rect, True, player_face_up_sprites,
+                                                        computer_face_up_sprites, player_table_cards.face_down,
+                                                        computer_table_cards.face_down)
                             middle_pile.moveCard(player_hand.hand[8])
                             used9 = 'spent'
-                            list_of_c = Hand.HandClass.unflipAll(list_of_c)
+                            list_of_c = HandClass.un_flip_all(list_of_c)
                             this = 0
 
                         elif list_of_c[9] == 0:
-                            Render_Images.Animation.animate_Play_Card(player_hand.hand[9], screen, game_deck.card_Sprites, FPSCLOCK,
-                                                                      player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
-                                                                      middle_pile, game_deck.card_Sprites, Deck.DeckClass.cards, back_of_card_Rect,
-                                                                      background, background_Rect, True)
+                            Animation.animate_play_card(player_hand.hand[9], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                        player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                        middle_pile, Deck.DeckClass.cards, back_of_card_Rect,
+                                                        background, background_Rect, True, player_face_up_sprites,
+                                                        computer_face_up_sprites, player_table_cards.face_down,
+                                                        computer_table_cards.face_down)
                             middle_pile.moveCard(player_hand.hand[9])
                             used10 = 'spent'
-                            list_of_c = Hand.HandClass.unflipAll(list_of_c)
+                            list_of_c = HandClass.un_flip_all(list_of_c)
                             this = 0
 
                         elif list_of_c[10] == 0:
-                            Render_Images.Animation.animate_Play_Card(player_hand.hand[10], screen, game_deck.card_Sprites, FPSCLOCK,
-                                                                      player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
-                                                                      middle_pile, game_deck.card_Sprites, Deck.DeckClass.cards, back_of_card_Rect,
-                                                                      background, background_Rect, True)
+                            Animation.animate_play_card(player_hand.hand[10], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                        player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                        middle_pile, Deck.DeckClass.cards, back_of_card_Rect,
+                                                        background, background_Rect, True, player_face_up_sprites,
+                                                        computer_face_up_sprites, player_table_cards.face_down,
+                                                        computer_table_cards.face_down)
                             middle_pile.moveCard(player_hand.hand[10])
                             used11 = 'spent'
-                            list_of_c = Hand.HandClass.unflipAll(list_of_c)
+                            list_of_c = HandClass.un_flip_all(list_of_c)
                             this = 0
 
                         elif list_of_c[11] == 0:
-                            Render_Images.Animation.animate_Play_Card(player_hand.hand[11], screen, game_deck.card_Sprites, FPSCLOCK,
-                                                                      player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
-                                                                      middle_pile, game_deck.card_Sprites, Deck.DeckClass.cards, back_of_card_Rect,
-                                                                      background, background_Rect, True)
+                            Animation.animate_play_card(player_hand.hand[11], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                        player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                        middle_pile, Deck.DeckClass.cards, back_of_card_Rect,
+                                                        background, background_Rect, True, player_face_up_sprites,
+                                                        computer_face_up_sprites, player_table_cards.face_down,
+                                                        computer_table_cards.face_down)
                             middle_pile.moveCard(player_hand.hand[11])
                             used12 = 'spent'
-                            list_of_c = Hand.HandClass.unflipAll(list_of_c)
+                            list_of_c = HandClass.un_flip_all(list_of_c)
                             this = 0
 
                         elif list_of_c[12] == 0:
-                            Render_Images.Animation.animate_Play_Card(player_hand.hand[12], screen, game_deck.card_Sprites, FPSCLOCK,
-                                                                      player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
-                                                                      middle_pile, game_deck.card_Sprites, Deck.DeckClass.cards, back_of_card_Rect,
-                                                                      background, background_Rect, True)
+                            Animation.animate_play_card(player_hand.hand[12], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                        player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                        middle_pile, Deck.DeckClass.cards, back_of_card_Rect,
+                                                        background, background_Rect, True, player_face_up_sprites,
+                                                        computer_face_up_sprites, player_table_cards.face_down,
+                                                        computer_table_cards.face_down)
                             middle_pile.moveCard(player_hand.hand[12])
                             used13 = 'spent'
-                            list_of_c = Hand.HandClass.unflipAll(list_of_c)
+                            list_of_c = HandClass.un_flip_all(list_of_c)
                             this = 0
 
                         elif list_of_c[13] == 0:
-                            Render_Images.Animation.animate_Play_Card(player_hand.hand[13], screen, game_deck.card_Sprites, FPSCLOCK,
-                                                                      player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
-                                                                      middle_pile, game_deck.card_Sprites, Deck.DeckClass.cards, back_of_card_Rect,
-                                                                      background, background_Rect, True)
+                            Animation.animate_play_card(player_hand.hand[13], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                        player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                        middle_pile, Deck.DeckClass.cards, back_of_card_Rect,
+                                                        background, background_Rect, True, player_face_up_sprites,
+                                                        computer_face_up_sprites, player_table_cards.face_down,
+                                                        computer_table_cards.face_down)
                             middle_pile.moveCard(player_hand.hand[13])
                             used14 = 'spent'
-                            list_of_c = Hand.HandClass.unflipAll(list_of_c)
+                            list_of_c = HandClass.un_flip_all(list_of_c)
                             this = 0
 
                         elif list_of_c[14] == 0:
-                            Render_Images.Animation.animate_Play_Card(player_hand.hand[14], screen, game_deck.card_Sprites, FPSCLOCK,
-                                                                      player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
-                                                                      middle_pile, game_deck.card_Sprites, Deck.DeckClass.cards, back_of_card_Rect,
-                                                                      background, background_Rect, True)
+                            Animation.animate_play_card(player_hand.hand[14], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                        player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                        middle_pile, Deck.DeckClass.cards, back_of_card_Rect,
+                                                        background, background_Rect, True, player_face_up_sprites,
+                                                        computer_face_up_sprites, player_table_cards.face_down,
+                                                        computer_table_cards.face_down)
                             middle_pile.moveCard(player_hand.hand[14])
                             used15 = 'spent'
-                            list_of_c = Hand.HandClass.unflipAll(list_of_c)
+                            list_of_c = HandClass.un_flip_all(list_of_c)
                             this = 0
 
                         elif list_of_c[15] == 0:
-                            Render_Images.Animation.animate_Play_Card(player_hand.hand[15], screen, game_deck.card_Sprites, FPSCLOCK,
-                                                                      player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
-                                                                      middle_pile, game_deck.card_Sprites, Deck.DeckClass.cards, back_of_card_Rect,
-                                                                      background, background_Rect, True)
+                            Animation.animate_play_card(player_hand.hand[15], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                        player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                        middle_pile, Deck.DeckClass.cards, back_of_card_Rect,
+                                                        background, background_Rect, True, player_face_up_sprites,
+                                                        computer_face_up_sprites, player_table_cards.face_down,
+                                                        computer_table_cards.face_down)
                             middle_pile.moveCard(player_hand.hand[15])
                             used16 = 'spent'
-                            list_of_c = Hand.HandClass.unflipAll(list_of_c)
+                            list_of_c = HandClass.un_flip_all(list_of_c)
                             this = 0
 
                         elif list_of_c[16] == 0:
-                            Render_Images.Animation.animate_Play_Card(player_hand.hand[16], screen, game_deck.card_Sprites, FPSCLOCK,
-                                                                      player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
-                                                                      middle_pile, game_deck.card_Sprites, Deck.DeckClass.cards, back_of_card_Rect,
-                                                                      background, background_Rect, True)
+                            Animation.animate_play_card(player_hand.hand[16], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                        player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                        middle_pile, Deck.DeckClass.cards, back_of_card_Rect,
+                                                        background, background_Rect, True, player_face_up_sprites,
+                                                        computer_face_up_sprites, player_table_cards.face_down,
+                                                        computer_table_cards.face_down)
                             middle_pile.moveCard(player_hand.hand[16])
                             used17 = 'spent'
-                            list_of_c = Hand.HandClass.unflipAll(list_of_c)
+                            list_of_c = HandClass.un_flip_all(list_of_c)
                             this = 0
 
                         elif list_of_c[17] == 0:
-                            Render_Images.Animation.animate_Play_Card(player_hand.hand[17], screen, game_deck.card_Sprites, FPSCLOCK,
-                                                                      player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
-                                                                      middle_pile, game_deck.card_Sprites, Deck.DeckClass.cards, back_of_card_Rect,
-                                                                      background, background_Rect, True)
+                            Animation.animate_play_card(player_hand.hand[17], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                        player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                        middle_pile, Deck.DeckClass.cards, back_of_card_Rect,
+                                                        background, background_Rect, True, player_face_up_sprites,
+                                                        computer_face_up_sprites, player_table_cards.face_down,
+                                                        computer_table_cards.face_down)
                             middle_pile.moveCard(player_hand.hand[17])
                             used18 = 'spent'
-                            list_of_c = Hand.HandClass.unflipAll(list_of_c)
+                            list_of_c = HandClass.un_flip_all(list_of_c)
                             this = 0
 
                         elif list_of_c[18] == 0:
-                            Render_Images.Animation.animate_Play_Card(player_hand.hand[18], screen, game_deck.card_Sprites, FPSCLOCK,
-                                                                      player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
-                                                                      middle_pile, game_deck.card_Sprites, Deck.DeckClass.cards, back_of_card_Rect,
-                                                                      background, background_Rect, True)
+                            Animation.animate_play_card(player_hand.hand[18], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                        player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                        middle_pile, Deck.DeckClass.cards, back_of_card_Rect,
+                                                        background, background_Rect, True, player_face_up_sprites,
+                                                        computer_face_up_sprites, player_table_cards.face_down,
+                                                        computer_table_cards.face_down)
                             middle_pile.moveCard(player_hand.hand[18])
                             used19 = 'spent'
-                            list_of_c = Hand.HandClass.unflipAll(list_of_c)
+                            list_of_c = HandClass.un_flip_all(list_of_c)
                             this = 0
 
                         elif list_of_c[19] == 0:
-                            Render_Images.Animation.animate_Play_Card(player_hand.hand[19], screen, game_deck.card_Sprites, FPSCLOCK,
-                                                                      player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
-                                                                      middle_pile, game_deck.card_Sprites, Deck.DeckClass.cards, back_of_card_Rect,
-                                                                      background, background_Rect, True)
+                            Animation.animate_play_card(player_hand.hand[19], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                        player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                        middle_pile, Deck.DeckClass.cards, back_of_card_Rect,
+                                                        background, background_Rect, True, player_face_up_sprites,
+                                                        computer_face_up_sprites, player_table_cards.face_down,
+                                                        computer_table_cards.face_down)
                             middle_pile.moveCard(player_hand.hand[19])
                             used20 = 'spent'
-                            list_of_c = Hand.HandClass.unflipAll(list_of_c)
+                            list_of_c = HandClass.un_flip_all(list_of_c)
                             this = 0
 
                         elif list_of_c[20] == 0:
-                            Render_Images.Animation.animate_Play_Card(player_hand.hand[20], screen, game_deck.card_Sprites, FPSCLOCK,
-                                                                      player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
-                                                                      middle_pile, game_deck.card_Sprites, Deck.DeckClass.cards, back_of_card_Rect,
-                                                                      background, background_Rect, True)
+                            Animation.animate_play_card(player_hand.hand[20], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                        player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                        middle_pile, Deck.DeckClass.cards, back_of_card_Rect,
+                                                        background, background_Rect, True, player_face_up_sprites,
+                                                        computer_face_up_sprites, player_table_cards.face_down,
+                                                        computer_table_cards.face_down)
                             middle_pile.moveCard(player_hand.hand[20])
                             used21 = 'spent'
-                            list_of_c = Hand.HandClass.unflipAll(list_of_c)
+                            list_of_c = HandClass.un_flip_all(list_of_c)
                             this = 0
 
                         elif list_of_c[21] == 0:
-                            Render_Images.Animation.animate_Play_Card(player_hand.hand[21], screen, game_deck.card_Sprites, FPSCLOCK,
-                                                                      player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
-                                                                      middle_pile, game_deck.card_Sprites, Deck.DeckClass.cards, back_of_card_Rect,
-                                                                      background, background_Rect, True)
+                            Animation.animate_play_card(player_hand.hand[21], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                        player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                        middle_pile, Deck.DeckClass.cards, back_of_card_Rect,
+                                                        background, background_Rect, True, player_face_up_sprites,
+                                                        computer_face_up_sprites, player_table_cards.face_down,
+                                                        computer_table_cards.face_down)
                             middle_pile.moveCard(player_hand.hand[21])
                             used22 = 'spent'
-                            list_of_c = Hand.HandClass.unflipAll(list_of_c)
+                            list_of_c = HandClass.un_flip_all(list_of_c)
                             this = 0
 
                         elif list_of_c[22] == 0:
-                            Render_Images.Animation.animate_Play_Card(player_hand.hand[22], screen, game_deck.card_Sprites, FPSCLOCK,
-                                                                      player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
-                                                                      middle_pile, game_deck.card_Sprites, Deck.DeckClass.cards, back_of_card_Rect,
-                                                                      background, background_Rect, True)
+                            Animation.animate_play_card(player_hand.hand[22], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                        player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                        middle_pile, Deck.DeckClass.cards, back_of_card_Rect,
+                                                        background, background_Rect, True, player_face_up_sprites,
+                                                        computer_face_up_sprites, player_table_cards.face_down,
+                                                        computer_table_cards.face_down)
                             middle_pile.moveCard(player_hand.hand[22])
                             used23 = 'spent'
-                            list_of_c = Hand.HandClass.unflipAll(list_of_c)
+                            list_of_c = HandClass.un_flip_all(list_of_c)
                             this = 0
 
                         elif list_of_c[23] == 0:
-                            Render_Images.Animation.animate_Play_Card(player_hand.hand[23], screen, game_deck.card_Sprites, FPSCLOCK,
-                                                                      player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
-                                                                      middle_pile, game_deck.card_Sprites, Deck.DeckClass.cards, back_of_card_Rect,
-                                                                      background, background_Rect, True)
+                            Animation.animate_play_card(player_hand.hand[23], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                        player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                        middle_pile, Deck.DeckClass.cards, back_of_card_Rect,
+                                                        background, background_Rect, True, player_face_up_sprites,
+                                                        computer_face_up_sprites, player_table_cards.face_down,
+                                                        computer_table_cards.face_down)
                             middle_pile.moveCard(player_hand.hand[23])
                             used24 = 'spent'
-                            list_of_c = Hand.HandClass.unflipAll(list_of_c)
+                            list_of_c = HandClass.un_flip_all(list_of_c)
                             this = 0
 
                         elif list_of_c[24] == 0:
-                            Render_Images.Animation.animate_Play_Card(player_hand.hand[24], screen, game_deck.card_Sprites, FPSCLOCK,
-                                                                      player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
-                                                                      middle_pile, game_deck.card_Sprites, Deck.DeckClass.cards, back_of_card_Rect,
-                                                                      background, background_Rect, True)
+                            Animation.animate_play_card(player_hand.hand[24], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                        player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                        middle_pile, Deck.DeckClass.cards, back_of_card_Rect,
+                                                        background, background_Rect, True, player_face_up_sprites,
+                                                        computer_face_up_sprites, player_table_cards.face_down,
+                                                        computer_table_cards.face_down)
                             middle_pile.moveCard(player_hand.hand[24])
                             used25 = 'spent'
-                            list_of_c = Hand.HandClass.unflipAll(list_of_c)
+                            list_of_c = HandClass.un_flip_all(list_of_c)
+                            this = 0
+                        # Table Cards for player
+                        elif list_of_c_table[0] == 0:
+                            Animation.animate_play_card(player_table_cards.face_up[0], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                        player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                        middle_pile, Deck.DeckClass.cards, back_of_card_Rect,
+                                                        background, background_Rect, True, player_face_up_sprites,
+                                                        computer_face_up_sprites, player_table_cards.face_down,
+                                                        computer_table_cards.face_down)
+                            middle_pile.moveCard(player_table_cards.face_up[0])
+                            table1 = 'spent'
+                            list_of_c_table = HandClass.un_flip_all(list_of_c_table)
+                            this = 0
+                        elif list_of_c_table[1] == 0:
+                            Animation.animate_play_card(player_table_cards.face_up[1], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                        player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                        middle_pile, Deck.DeckClass.cards, back_of_card_Rect,
+                                                        background, background_Rect, True, player_face_up_sprites,
+                                                        computer_face_up_sprites, player_table_cards.face_down,
+                                                        computer_table_cards.face_down)
+                            middle_pile.moveCard(player_table_cards.face_up[1])
+                            table2 = 'spent'
+                            list_of_c_table = HandClass.un_flip_all(list_of_c_table)
+                            this = 0
+                        elif list_of_c_table[2] == 0:
+                            Animation.animate_play_card(player_table_cards.face_up[2], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                        player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                        middle_pile, Deck.DeckClass.cards, back_of_card_Rect,
+                                                        background, background_Rect, True, player_face_up_sprites,
+                                                        computer_face_up_sprites, player_table_cards.face_down,
+                                                        computer_table_cards.face_down)
+                            middle_pile.moveCard(player_table_cards.face_up[2])
+                            table3 = 'spent'
+                            list_of_c_table = HandClass.un_flip_all(list_of_c_table)
                             this = 0
                         else:
                             this = 0
-                            continue
+                            # continue
 
             if x in x_pick_up:
                 if y in y_pick_up:
                     if len(computer_hand.hand) != 0:
                         this = 0
                     if len(middle_pile.cards_in_middle) > 0:
-                        middle_pile = player_hand.pickUp(middle_pile, True)
+                        middle_pile = player_hand.pick_up(middle_pile, True)
                         player_hand.rejig()
                         move = False
 
@@ -632,11 +751,11 @@ while running:
                         if used1 != 'spent':
                             # C1
                             if list_of_c[0] == 0:
-                                list_of_c = Hand.HandClass.unflipAll(list_of_c)
+                                list_of_c = HandClass.un_flip_all(list_of_c)
 
                             elif list_of_c[0] == 1:
-                                list_of_c = Hand.HandClass.unflipAll(list_of_c)
-                                list_of_c[0] = Hand.HandClass.flipC(list_of_c[0])
+                                list_of_c = HandClass.un_flip_all(list_of_c)
+                                list_of_c[0] = HandClass.flip_c(list_of_c[0])
 
             if x in x_card_2:
                 if y in y_card_all:
@@ -646,11 +765,11 @@ while running:
                         if used2 != 'spent':
                             # C2
                             if list_of_c[1] == 0:
-                                list_of_c = Hand.HandClass.unflipAll(list_of_c)
+                                list_of_c = HandClass.un_flip_all(list_of_c)
 
                             elif list_of_c[1] == 1:
-                                list_of_c = Hand.HandClass.unflipAll(list_of_c)
-                                list_of_c[1] = Hand.HandClass.flipC(list_of_c[1])
+                                list_of_c = HandClass.un_flip_all(list_of_c)
+                                list_of_c[1] = HandClass.flip_c(list_of_c[1])
 
             if x in x_card_3:
                 if y in y_card_all:
@@ -660,11 +779,11 @@ while running:
                         if used3 != 'spent':
                             # C3
                             if list_of_c[2] == 0:
-                                list_of_c = Hand.HandClass.unflipAll(list_of_c)
+                                list_of_c = HandClass.un_flip_all(list_of_c)
 
                             elif list_of_c[2] == 1:
-                                list_of_c = Hand.HandClass.unflipAll(list_of_c)
-                                list_of_c[2] = Hand.HandClass.flipC(list_of_c[2])
+                                list_of_c = HandClass.un_flip_all(list_of_c)
+                                list_of_c[2] = HandClass.flip_c(list_of_c[2])
 
             if x in x_card_4:
                 if y in y_card_all:
@@ -674,11 +793,11 @@ while running:
                         if used4 != 'spent':
                             # C4
                             if list_of_c[3] == 0:
-                                list_of_c = Hand.HandClass.unflipAll(list_of_c)
+                                list_of_c = HandClass.un_flip_all(list_of_c)
 
                             elif list_of_c[3] == 1:
-                                list_of_c = Hand.HandClass.unflipAll(list_of_c)
-                                list_of_c[3] = Hand.HandClass.flipC(list_of_c[3])
+                                list_of_c = HandClass.un_flip_all(list_of_c)
+                                list_of_c[3] = HandClass.flip_c(list_of_c[3])
 
             if x in x_card_5:
                 if y in y_card_all:
@@ -687,12 +806,11 @@ while running:
                         if used5 != 'spent':
                             # C5
                             if list_of_c[4] == 0:
-                                list_of_c = Hand.HandClass.unflipAll(list_of_c)
+                                list_of_c = HandClass.un_flip_all(list_of_c)
 
                             elif list_of_c[4] == 1:
-                                list_of_c = Hand.HandClass.unflipAll(list_of_c)
-                                list_of_c[4] = Hand.HandClass.flipC(list_of_c[4])
-
+                                list_of_c = HandClass.un_flip_all(list_of_c)
+                                list_of_c[4] = HandClass.flip_c(list_of_c[4])
 
             if x in x_card_6:
                 if y in y_card_all:
@@ -702,12 +820,11 @@ while running:
                         if used6 != 'spent':
                             # C6
                             if list_of_c[5] == 0:
-                                list_of_c = Hand.HandClass.unflipAll(list_of_c)
+                                list_of_c = HandClass.un_flip_all(list_of_c)
 
                             elif list_of_c[5] == 1:
-                                list_of_c = Hand.HandClass.unflipAll(list_of_c)
-                                list_of_c[5] = Hand.HandClass.flipC(list_of_c[5])
-
+                                list_of_c = HandClass.un_flip_all(list_of_c)
+                                list_of_c[5] = HandClass.flip_c(list_of_c[5])
 
             if x in x_card_7:
                 if y in y_card_all:
@@ -717,12 +834,11 @@ while running:
                         if used7 != 'spent':
                             # C7
                             if list_of_c[6] == 0:
-                                list_of_c = Hand.HandClass.unflipAll(list_of_c)
+                                list_of_c = HandClass.un_flip_all(list_of_c)
 
                             elif list_of_c[6] == 1:
-                                list_of_c = Hand.HandClass.unflipAll(list_of_c)
-                                list_of_c[6] = Hand.HandClass.flipC(list_of_c[6])
-
+                                list_of_c = HandClass.un_flip_all(list_of_c)
+                                list_of_c[6] = HandClass.flip_c(list_of_c[6])
 
             if x in x_card_8:
                 if y in y_card_all:
@@ -732,10 +848,10 @@ while running:
                         if used8 != 'spent':
                             # C8
                             if list_of_c[7] == 0:
-                                list_of_c = Hand.HandClass.unflipAll(list_of_c)
+                                list_of_c = HandClass.un_flip_all(list_of_c)
                             elif list_of_c[7] == 1:
-                                list_of_c = Hand.HandClass.unflipAll(list_of_c)
-                                list_of_c[7] = Hand.HandClass.flipC(list_of_c[7])
+                                list_of_c = HandClass.un_flip_all(list_of_c)
+                                list_of_c[7] = HandClass.flip_c(list_of_c[7])
 
             if x in x_card_9:
                 if y in y_card_all:
@@ -747,11 +863,11 @@ while running:
                         if used9 != 'spent':
                             # C9
                             if list_of_c[8] == 0:
-                                list_of_c = Hand.HandClass.unflipAll(list_of_c)
+                                list_of_c = HandClass.un_flip_all(list_of_c)
 
                             elif list_of_c[8] == 1:
-                                list_of_c = Hand.HandClass.unflipAll(list_of_c)
-                                list_of_c[8] = Hand.HandClass.flipC(list_of_c[8])
+                                list_of_c = HandClass.un_flip_all(list_of_c)
+                                list_of_c[8] = HandClass.flip_c(list_of_c[8])
 
             if x in x_card_10:
                 if y in y_card_all:
@@ -762,11 +878,11 @@ while running:
                         if used10 != 'spent':
                             # C10
                             if list_of_c[9] == 0:
-                                list_of_c = Hand.HandClass.unflipAll(list_of_c)
+                                list_of_c = HandClass.un_flip_all(list_of_c)
 
                             elif list_of_c[9] == 1:
-                                list_of_c = Hand.HandClass.unflipAll(list_of_c)
-                                list_of_c[9] = Hand.HandClass.flipC(list_of_c[9])
+                                list_of_c = HandClass.un_flip_all(list_of_c)
+                                list_of_c[9] = HandClass.flip_c(list_of_c[9])
 
             if x in x_card_11:
                 if y in y_card_all:
@@ -777,11 +893,11 @@ while running:
                         if used11 != 'spent':
                             # C11
                             if list_of_c[10] == 0:
-                                list_of_c = Hand.HandClass.unflipAll(list_of_c)
+                                list_of_c = HandClass.un_flip_all(list_of_c)
 
                             elif list_of_c[10] == 1:
-                                list_of_c = Hand.HandClass.unflipAll(list_of_c)
-                                list_of_c[10] = Hand.HandClass.flipC(list_of_c[10])
+                                list_of_c = HandClass.un_flip_all(list_of_c)
+                                list_of_c[10] = HandClass.flip_c(list_of_c[10])
 
             if x in x_card_12:
                 if y in y_card_all:
@@ -792,11 +908,11 @@ while running:
                         if used12 != 'spent':
                             # C12
                             if list_of_c[11] == 0:
-                                list_of_c = Hand.HandClass.unflipAll(list_of_c)
+                                list_of_c = HandClass.un_flip_all(list_of_c)
 
                             elif list_of_c[11] == 1:
-                                list_of_c = Hand.HandClass.unflipAll(list_of_c)
-                                list_of_c[11] = Hand.HandClass.flipC(list_of_c[11])
+                                list_of_c = HandClass.un_flip_all(list_of_c)
+                                list_of_c[11] = HandClass.flip_c(list_of_c[11])
 
             if x in x_card_13:
                 if y in y_card_all:
@@ -807,11 +923,11 @@ while running:
                         if used13 != 'spent':
                             # C13
                             if list_of_c[12] == 0:
-                                list_of_c = Hand.HandClass.unflipAll(list_of_c)
+                                list_of_c = HandClass.un_flip_all(list_of_c)
 
                             elif list_of_c[12] == 1:
-                                list_of_c = Hand.HandClass.unflipAll(list_of_c)
-                                list_of_c[12] = Hand.HandClass.flipC(list_of_c[12])
+                                list_of_c = HandClass.un_flip_all(list_of_c)
+                                list_of_c[12] = HandClass.flip_c(list_of_c[12])
 
             if x in x_card_14:
                 if y in y_card_all:
@@ -822,24 +938,24 @@ while running:
                         if used14 != 'spent':
                             # C14
                             if list_of_c[13] == 0:
-                                list_of_c = Hand.HandClass.unflipAll(list_of_c)
+                                list_of_c = HandClass.un_flip_all(list_of_c)
 
                             elif list_of_c[13] == 1:
-                                list_of_c = Hand.HandClass.unflipAll(list_of_c)
-                                list_of_c[13] = Hand.HandClass.flipC(list_of_c[13])
+                                list_of_c = HandClass.un_flip_all(list_of_c)
+                                list_of_c[13] = HandClass.flip_c(list_of_c[13])
             if x in x_card_15:
                 if y in y_card_all:
                     print("Card 15 selected")
-                    if player_hand.hand[15] in middle_pile.playable_cards_list:
+                    if player_hand.hand[14] in middle_pile.playable_cards_list:
 
                         if used15 != 'spent':
                             # C15
                             if list_of_c[14] == 0:
-                                list_of_c = Hand.HandClass.unflipAll(list_of_c)
+                                list_of_c = HandClass.un_flip_all(list_of_c)
 
                             elif list_of_c[14] == 1:
-                                list_of_c = Hand.HandClass.unflipAll(list_of_c)
-                                list_of_c[14] = Hand.HandClass.flipC(list_of_c[14])
+                                list_of_c = HandClass.un_flip_all(list_of_c)
+                                list_of_c[14] = HandClass.flip_c(list_of_c[14])
             if x in x_card_16:
                 if y in y_card_all:
                     print("Card 16 selected")
@@ -848,11 +964,11 @@ while running:
                         if used16 != 'spent':
                             # C16
                             if list_of_c[15] == 0:
-                                list_of_c = Hand.HandClass.unflipAll(list_of_c)
+                                list_of_c = HandClass.un_flip_all(list_of_c)
 
                             elif list_of_c[15] == 1:
-                                list_of_c = Hand.HandClass.unflipAll(list_of_c)
-                                list_of_c[15] = Hand.HandClass.flipC(list_of_c[15])
+                                list_of_c = HandClass.un_flip_all(list_of_c)
+                                list_of_c[15] = HandClass.flip_c(list_of_c[15])
 
             if x in x_card_17:
                 if y in y_card_all:
@@ -862,11 +978,11 @@ while running:
                         if used17 != 'spent':
                             # C17
                             if list_of_c[16] == 0:
-                                list_of_c = Hand.HandClass.unflipAll(list_of_c)
+                                list_of_c = HandClass.un_flip_all(list_of_c)
 
                             elif list_of_c[16] == 1:
-                                list_of_c = Hand.HandClass.unflipAll(list_of_c)
-                                list_of_c[16] = Hand.HandClass.flipC(list_of_c[16])
+                                list_of_c = HandClass.un_flip_all(list_of_c)
+                                list_of_c[16] = HandClass.flip_c(list_of_c[16])
             if x in x_card_18:
                 if y in y_card_all:
                     print("Card 18 selected")
@@ -875,11 +991,11 @@ while running:
                         if used18 != 'spent':
                             # C18
                             if list_of_c[17] == 0:
-                                list_of_c = Hand.HandClass.unflipAll(list_of_c)
+                                list_of_c = HandClass.un_flip_all(list_of_c)
 
                             elif list_of_c[17] == 1:
-                                list_of_c = Hand.HandClass.unflipAll(list_of_c)
-                                list_of_c[17] = Hand.HandClass.flipC(list_of_c[17])
+                                list_of_c = HandClass.un_flip_all(list_of_c)
+                                list_of_c[17] = HandClass.flip_c(list_of_c[17])
 
             if x in x_card_19:
                 if y in y_card_all:
@@ -889,11 +1005,11 @@ while running:
                         if used19 != 'spent':
                             # C19
                             if list_of_c[18] == 0:
-                                list_of_c = Hand.HandClass.unflipAll(list_of_c)
+                                list_of_c = HandClass.un_flip_all(list_of_c)
 
                             elif list_of_c[18] == 1:
-                                list_of_c = Hand.HandClass.unflipAll(list_of_c)
-                                list_of_c[18] = Hand.HandClass.flipC(list_of_c[18])
+                                list_of_c = HandClass.un_flip_all(list_of_c)
+                                list_of_c[18] = HandClass.flip_c(list_of_c[18])
 
             if x in x_card_20:
                 if y in y_card_all:
@@ -903,11 +1019,11 @@ while running:
                         if used20 != 'spent':
                             # C20
                             if list_of_c[19] == 0:
-                                list_of_c = Hand.HandClass.unflipAll(list_of_c)
+                                list_of_c = HandClass.un_flip_all(list_of_c)
 
                             elif list_of_c[19] == 1:
-                                list_of_c = Hand.HandClass.unflipAll(list_of_c)
-                                list_of_c[19] = Hand.HandClass.flipC(list_of_c[19])
+                                list_of_c = HandClass.un_flip_all(list_of_c)
+                                list_of_c[19] = HandClass.flip_c(list_of_c[19])
 
             if x in x_card_21:
                 if y in y_card_all:
@@ -917,11 +1033,11 @@ while running:
                         if used21 != 'spent':
                             # C21
                             if list_of_c[20] == 0:
-                                list_of_c = Hand.HandClass.unflipAll(list_of_c)
+                                list_of_c = HandClass.un_flip_all(list_of_c)
 
                             elif list_of_c[20] == 1:
-                                list_of_c = Hand.HandClass.unflipAll(list_of_c)
-                                list_of_c[20] = Hand.HandClass.flipC(list_of_c[20])
+                                list_of_c = HandClass.un_flip_all(list_of_c)
+                                list_of_c[20] = HandClass.flip_c(list_of_c[20])
             if x in x_card_22:
                 if y in y_card_all:
                     print("Card 22 selected")
@@ -930,11 +1046,11 @@ while running:
                         if used22 != 'spent':
                             # C22
                             if list_of_c[21] == 0:
-                                list_of_c = Hand.HandClass.unflipAll(list_of_c)
+                                list_of_c = HandClass.un_flip_all(list_of_c)
 
                             elif list_of_c[21] == 1:
-                                list_of_c = Hand.HandClass.unflipAll(list_of_c)
-                                list_of_c[21] = Hand.HandClass.flipC(list_of_c[21])
+                                list_of_c = HandClass.un_flip_all(list_of_c)
+                                list_of_c[21] = HandClass.flip_c(list_of_c[21])
 
             if x in x_card_23:
                 if y in y_card_all:
@@ -944,11 +1060,11 @@ while running:
                         if used23 != 'spent':
                             # C23
                             if list_of_c[22] == 0:
-                                list_of_c = Hand.HandClass.unflipAll(list_of_c)
+                                list_of_c = HandClass.un_flip_all(list_of_c)
 
                             elif list_of_c[22] == 1:
-                                list_of_c = Hand.HandClass.unflipAll(list_of_c)
-                                list_of_c[22] = Hand.HandClass.flipC(list_of_c[22])
+                                list_of_c = HandClass.un_flip_all(list_of_c)
+                                list_of_c[22] = HandClass.flip_c(list_of_c[22])
             if x in x_card_24:
                 if y in y_card_all:
                     print("Card 24 selected")
@@ -957,11 +1073,11 @@ while running:
                         if used24 != 'spent':
                             # C21
                             if list_of_c[23] == 0:
-                                list_of_c = Hand.HandClass.unflipAll(list_of_c)
+                                list_of_c = HandClass.un_flip_all(list_of_c)
 
                             elif list_of_c[23] == 1:
-                                list_of_c = Hand.HandClass.unflipAll(list_of_c)
-                                list_of_c[23] = Hand.HandClass.flipC(list_of_c[23])
+                                list_of_c = HandClass.un_flip_all(list_of_c)
+                                list_of_c[23] = HandClass.flip_c(list_of_c[23])
             if x in x_card_25:
                 if y in y_card_all:
                     print("Card 25 selected")
@@ -970,11 +1086,91 @@ while running:
                         if used25 != 'spent':
                             # C25
                             if list_of_c[24] == 0:
-                                list_of_c = Hand.HandClass.unflipAll(list_of_c)
+                                list_of_c = HandClass.un_flip_all(list_of_c)
 
                             elif list_of_c[24] == 1:
-                                list_of_c = Hand.HandClass.unflipAll(list_of_c)
-                                list_of_c[24] = Hand.HandClass.flipC(list_of_c[24])
+                                list_of_c = HandClass.un_flip_all(list_of_c)
+                                list_of_c[24] = HandClass.flip_c(list_of_c[24])
+
+            # Player Table Cards
+            # Face Up
+            if all(card is None for card in player_hand.hand):
+                if any(card is not None for card in player_table_cards.face_up):
+                    if x in x_table_1:
+                        if y in y_table_cards:
+                            print("Table card 1 selected")
+                            if player_table_cards.face_up[0] in middle_pile.playable_cards_list:
+                                if table1 != 'spent':
+                                    if list_of_c_table[0] == 0:
+                                        list_of_c_table = HandClass.un_flip_all(list_of_c_table)
+
+                                    elif list_of_c_table[0] == 1:
+                                        list_of_c_table = HandClass.un_flip_all(list_of_c_table)
+                                        list_of_c_table[0] = HandClass.flip_c(list_of_c_table[0])
+
+                    if x in x_table_2:
+                        if y in y_table_cards:
+                            print("Table card 2 selected")
+                            if player_table_cards.face_up[1] in middle_pile.playable_cards_list:
+                                if table2 != 'spent':
+                                    if list_of_c_table[1] == 0:
+                                        list_of_c_table = HandClass.un_flip_all(list_of_c_table)
+
+                                    elif list_of_c_table[1] == 1:
+                                        list_of_c_table = HandClass.un_flip_all(list_of_c_table)
+                                        list_of_c_table[1] = HandClass.flip_c(list_of_c_table[1])
+
+                    if x in x_table_3:
+                        if y in y_table_cards:
+                            print("Table card 3 selected")
+                            if player_table_cards.face_up[2] in middle_pile.playable_cards_list:
+                                if table3 != 'spent':
+                                    if list_of_c_table[2] == 0:
+                                        list_of_c_table = HandClass.un_flip_all(list_of_c_table)
+
+                                    elif list_of_c_table[2] == 1:
+                                        list_of_c_table = HandClass.un_flip_all(list_of_c_table)
+                                        list_of_c_table[2] = HandClass.flip_c(list_of_c_table[2])
+
+                # Face Down
+                elif any(card is not None for card in player_table_cards.face_down):
+                    if x in x_table_1:
+                        if y in y_table_cards:
+                            Animation.animate_play_card(player_table_cards.face_down[0], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                        player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                        middle_pile, Deck.DeckClass.cards, back_of_card_Rect,
+                                                        background, background_Rect, True, player_face_up_sprites,
+                                                        computer_face_up_sprites, player_table_cards.face_down,
+                                                        computer_table_cards.face_down)
+                            returnList = player_table_cards.play_face_down_card(0, player_hand, middle_pile)
+                            player_hand = returnList[0]
+                            middle_pile = returnList[1]
+                            move = False
+                    if x in x_table_2:
+                        if y in y_table_cards:
+                            Animation.animate_play_card(player_table_cards.face_down[1], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                        player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                        middle_pile, Deck.DeckClass.cards, back_of_card_Rect,
+                                                        background, background_Rect, True, player_face_up_sprites,
+                                                        computer_face_up_sprites, player_table_cards.face_down,
+                                                        computer_table_cards.face_down)
+                            returnList = player_table_cards.play_face_down_card(1, player_hand, middle_pile)
+                            player_hand = returnList[0]
+                            middle_pile = returnList[1]
+                            move = False
+                    if x in x_table_3:
+                        if y in y_table_cards:
+                            Animation.animate_play_card(player_table_cards.face_down[2], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                        player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                        middle_pile, Deck.DeckClass.cards, back_of_card_Rect,
+                                                        background, background_Rect, True, player_face_up_sprites,
+                                                        computer_face_up_sprites, player_table_cards.face_down,
+                                                        computer_table_cards.face_down)
+                            returnList = player_table_cards.play_face_down_card(2, player_hand, middle_pile)
+                            player_hand = returnList[0]
+                            middle_pile = returnList[1]
+                            move = False
+
             # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
             # Code to draw a card and end move
@@ -1155,44 +1351,84 @@ while running:
                 player_hand.rejig()
                 used25 = ""
                 move = False
+
+            if table1 == "spent":
+                player_table_cards.face_up[0] = None
+                table1 = "used"
+                move = False
+            if table2 == "spent":
+                player_table_cards.face_up[1] = None
+                table2 = "used"
+                move = False
+            if table3 == "spent":
+                player_table_cards.face_up[2] = None
+                table3 = "used"
+                move = False
+
             # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     # This logic is for the computers turn
     if not move:
-
+        fromHand = False
+        fromTableFaceUp = False
+        fromTableFaceDown = False
         middle_pile.PlayableCards()
         # print("Playable list before passed to Computer AI =", middle_pile.playable_cards_list)
 
         # Get the card the computer will play
-        computer_move = ComputerAI.play_a_card(computer_hand.hand, middle_pile.playable_cards_list)
+        if len(computer_hand.hand) != 0:
+            computer_move = ComputerAI.play_a_card(computer_hand.hand, middle_pile.playable_cards_list)
+            fromHand = True
+
+        elif any(card is not None for card in computer_table_cards.face_up):
+            computer_move = ComputerAI.play_a_card(computer_table_cards.face_up, middle_pile.playable_cards_list)
+            fromTableFaceUp = True
+
+        elif any(card is not None for card in computer_table_cards.face_down):
+            computer_move = ComputerAI.play_face_down_card(computer_table_cards.face_down)
+            fromTableFaceDown = True
 
         if computer_move is not None:
-            # What position said card is in
-            comp_move_position = computer_hand.hand.index(computer_move)
 
             # Play moving the card to the middle, needs lots of variables for rendering
-            Render_Images.Animation.animate_Play_Card(computer_move, screen, game_deck.card_Sprites, FPSCLOCK,
-                                                      player_hand_sprites, player_hand.hand, computer_hand.hand,
-                                                      back_of_card, middle_pile, game_deck.card_Sprites, Deck.DeckClass.cards,
-                                                      back_of_card_Rect, background, background_Rect, False)
+            Animation.animate_play_card(computer_move, screen, game_deck.card_Sprites, FPSCLOCK,
+                                        player_hand_sprites, player_hand.hand, computer_hand.hand,
+                                        back_of_card, middle_pile, Deck.DeckClass.cards,
+                                        back_of_card_Rect, background, background_Rect, False, player_face_up_sprites,
+                                        computer_face_up_sprites, player_table_cards.face_down, computer_table_cards.face_down)
             # Put the card on the pile of cards
             middle_pile.moveCard(computer_move)
-            # remove the card from the hand
-            computer_hand.hand[comp_move_position] = None
+            if fromHand:
+                # What position said card is in
+                comp_move_position = computer_hand.hand.index(computer_move)
+                # remove the card from the hand
+                computer_hand.hand[comp_move_position] = None
 
-            if len(computer_hand.hand) <= 5:
-                # draw another card
-                print("The computer is drawing a card")
-                game_deck.draw(computer_hand.hand, comp_move_position)
+                if len(computer_hand.hand) <= 5:
+                    # draw another card
+                    print("The computer is drawing a card")
+                    game_deck.draw(computer_hand.hand, comp_move_position)
 
-            # if no cards can be added
-            if computer_hand.hand[comp_move_position] is None:
-                computer_hand.hand.pop(comp_move_position)
+                # if no cards can be added
+                if computer_hand.hand[comp_move_position] is None:
+                    computer_hand.hand.pop(comp_move_position)
+
+            if fromTableFaceUp:
+                comp_move_position = computer_table_cards.face_up.index(computer_move)
+                computer_table_cards.face_up[comp_move_position] = None
+
+            if fromTableFaceDown:
+                comp_move_position = computer_table_cards.face_down.index(computer_move)
+                computer_table_cards.face_down[comp_move_position] = None
+
+                if computer_move not in middle_pile.playable_cards_list:
+                    print("The computers random choice was incorrect, picking up the pile")
+                    middle_pile = computer_hand.pick_up(middle_pile, False)
 
         # if the computer has no move
         elif computer_move is None:
 
-            middle_pile = computer_hand.pickUp(middle_pile, False)
+            middle_pile = computer_hand.pick_up(middle_pile, False)
             print("No Computer move")
         move = True
         turn += 1

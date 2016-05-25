@@ -45,8 +45,16 @@ class ComputerAI:
             print("The computer has no play..")
             return None
 
+    @staticmethod
+    def play_face_down_card(face_down_cards):
+        # need to avoid None
+        list_of_cards_to_choose_from = []
 
+        for card in face_down_cards:
+            if card is not None:
+                list_of_cards_to_choose_from.append(card)
 
+        return random.choice(list_of_cards_to_choose_from)
 
 
 
