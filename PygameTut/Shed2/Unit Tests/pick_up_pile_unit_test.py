@@ -13,8 +13,8 @@ class PickUpPileTest(unittest.TestCase):
 
     def testDescription(self):
 
-        self.deck.cards = self.hand.setUp(self.deck.cards)
-        self.deck.cards = self.middle.Start_game(self.deck.cards)
+        self.deck.cards = self.hand.set_up(self.deck.cards)
+        self.deck.cards = self.middle.start_game(self.deck.cards)
 
         self.middle = self.hand.pick_up(self.middle, False)
 

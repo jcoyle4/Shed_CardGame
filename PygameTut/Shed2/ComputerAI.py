@@ -1,5 +1,4 @@
-import random, pygame
-import Render_Images
+import random
 
 
 class ComputerAI:
@@ -12,7 +11,6 @@ class ComputerAI:
 
         playable = []  # List of potential plays
         playable_values = {}
-        the_play = None  # the card that will be played
 
         for card in hand:
             if card in playable_cards:
@@ -22,7 +20,6 @@ class ComputerAI:
         # print("Playable cards =", playable)
 
         # Basic AI, plays card with the lowest value, Aces high
-        print("The computer has", len(playable), "playable cards")
         for potentialCard in range(len(playable)):
             a = playable[potentialCard] % 13
             if a == 0:  # need to add 13 to stop the computer playing an Ace when it shouldn't
@@ -36,13 +33,10 @@ class ComputerAI:
                 if playable_values[the_play] == 13:
                     playable_values[the_play] -= 13
                     the_play = min(playable_values, key=playable_values.get)
-                print("The computer is playing card number", the_play)
                 return the_play
             elif the_play is None:
-                print("The computer has no play..")
                 return None
         else:
-            print("The computer has no play..")
             return None
 
     @staticmethod

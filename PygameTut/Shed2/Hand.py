@@ -8,25 +8,31 @@ class HandClass:
     def __init__(self):
         self.hand = []
 
-    def setUp(self, deck):
+    # The initial drawing of a hand from the deck
+    def set_up(self, deck):
+        # Draw up until 5 cards
         while len(self.hand) < 5:
+            # Randomly pick a card from the deck
             card = random.choice(deck)
+            # Put that card into the hand
             self.hand.append(card)
+            # Remove the card from the deck
             deck.remove(card)
 
         return deck
 
-    def drawACard(self, deck, cardPosition):
+    def draw_a_card(self, deck, card_position):
         if len(deck) == 0:
             card = random.choice(deck)
             deck.remove(card)
             for x in range(0, 15):
-                if cardPosition == x:
-                    self.hand[cardPosition] = card
+                if card_position == x:
+                    self.hand[card_position] = card
 
         return deck
 
-    def initialRejig(self):
+    # Take a hand of 5 cards, and return a list of 25 indexes, 20 will be None, 5 will not
+    def initial_rejig(self):
         list_of_25 = [None] * 25
 
         list_of_25[11] = self.hand[2]
@@ -37,6 +43,7 @@ class HandClass:
 
         self.hand = list_of_25
 
+    # This method always ensures that the cards in a players hand are in the middle
     def rejig(self):
         new_hand = [None] * 25
         new_hand2 = []
@@ -100,6 +107,7 @@ class HandClass:
 
         self.hand = new_hand
 
+    # Flip a C value to make a card highlighted
     @staticmethod
     def flip_c(c_to_flip):
 
@@ -108,6 +116,7 @@ class HandClass:
 
         return c_to_flip
 
+    # Un flip all c values so no cards are highlighted
     @staticmethod
     def un_flip_all(c_list):
 
@@ -116,21 +125,26 @@ class HandClass:
 
         return c_list
 
+    # Pick up the pile
     def pick_up(self, pile, player):
 
+        # If the computer picks up the pile
         if not player:
             self.hand.extend(pile.cards_in_middle)
-            # pile.cards_in_middle = []
-            # pile.card_on_top = 0
 
+        # If the player picks up the pile
         else:
             for card_in_hand in range(len(self.hand)):
                 for card_in_pile in range(len(pile.cards_in_middle)):
+                    # If a space in the hand is None and if the card does not exist in the hand before
                     if self.hand[card_in_hand] is None and pile.cards_in_middle[card_in_pile] not in self.hand:
                         self.hand[card_in_hand] = pile.cards_in_middle[card_in_pile]
+            # Rejig to ensure the hand is in the middle
             self.rejig()
 
+        # Clear the middle pile
         pile.cards_in_middle = []
+        # Remove the card from the top
         pile.card_on_top = 0
 
         return pile

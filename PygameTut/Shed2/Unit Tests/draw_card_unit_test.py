@@ -18,7 +18,7 @@ class DrawACardTest(unittest.TestCase):
 
     def testDescription(self):
 
-        self.deck.cards = self.hand.setUp(self.deck.cards)
+        self.deck.cards = self.hand.set_up(self.deck.cards)
 
         self.hand.hand[0] = None
         self.assertTrue(any(card is None for card in self.hand.hand))

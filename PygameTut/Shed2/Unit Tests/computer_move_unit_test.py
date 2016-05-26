@@ -22,9 +22,9 @@ class ComputerMoveTest(unittest.TestCase):
         self.hand.hand.append(20)  # 8 of Diamonds
         self.hand.hand.append(25)  # King of Diamonds
 
-        self.middle.moveCard(17)  # five of Diamonds
+        self.middle.move_card(17)  # five of Diamonds
 
-        self.middle.PlayableCards()
+        self.middle.playable_cards()
 
         test_move = ComputerAI.play_a_card(self.hand.hand, self.middle.playable_cards_list)
 

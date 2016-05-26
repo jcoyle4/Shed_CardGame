@@ -14,13 +14,13 @@ class MagicCardTest(unittest.TestCase):
     def testDescription(self):
         # two on top, every card playable
         self.middle.card_on_top = 1
-        self.middle.PlayableCards()
+        self.middle.playable_cards()
 
         self.assertEquals(len(self.middle.playable_cards_list), 52)
 
         # 7 on top, a 2,3,4,5,6,7,8 or 10 maybe played
         self.middle.card_on_top = 32
-        self.middle.PlayableCards()
+        self.middle.playable_cards()
         seven_counter = 0
         for card in self.middle.playable_cards_list:
             if card == 1:
@@ -46,7 +46,7 @@ class MagicCardTest(unittest.TestCase):
 
         self.middle.card_on_top = 33
         self.middle.cards_in_middle = [32, 33]
-        self.middle.PlayableCards()
+        self.middle.playable_cards()
         eight_counter = 0
         for card in self.middle.playable_cards_list:
             if card == 1:
@@ -71,7 +71,7 @@ class MagicCardTest(unittest.TestCase):
         # 10 on top, cards in the discarded pile, no cards in the middle, every card may be played
         self.middle.card_on_top = 35
         self.middle.cards_in_middle = [32, 33, 35]
-        self.middle.PlayableCards()
+        self.middle.playable_cards()
 
         self.assertEquals(len(self.middle.discarded_cards), 3)
         self.assertEquals(len(self.middle.cards_in_middle), 0)

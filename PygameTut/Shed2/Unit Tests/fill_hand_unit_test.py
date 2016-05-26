@@ -16,8 +16,8 @@ class FillHandTest(unittest.TestCase):
 
     def testDescription(self):
 
-        self.deck.cards = self.computer_hand.setUp(self.deck.cards)
-        self.deck.cards = self.player_hand.setUp(self.deck.cards)
+        self.deck.cards = self.computer_hand.set_up(self.deck.cards)
+        self.deck.cards = self.player_hand.set_up(self.deck.cards)
 
         self.assertEquals(self.expected_values[2], len(self.deck.cards))
         self.assertEquals(self.expected_values[1], len(self.computer_hand.hand))

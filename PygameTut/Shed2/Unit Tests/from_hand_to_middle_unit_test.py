@@ -14,10 +14,10 @@ class HandToMiddleTest(unittest.TestCase):
 
     def testDescription(self):
 
-        self.deck.cards = self.hand.setUp(self.deck.cards)
-        self.deck.cards = self.middle.Start_game(self.deck.cards)
+        self.deck.cards = self.hand.set_up(self.deck.cards)
+        self.deck.cards = self.middle.start_game(self.deck.cards)
 
-        self.middle.PlayableCards()
+        self.middle.playable_cards()
 
         self.assertEquals(len(self.middle.cards_in_middle), 1)
 
@@ -27,7 +27,7 @@ class HandToMiddleTest(unittest.TestCase):
         for card in self.hand.hand:
             if card in self.middle.playable_cards_list:
                 card_moved = True
-                self.middle.moveCard(card)
+                self.middle.move_card(card)
                 # need to break as only one card at a time should be moved
                 break
 
