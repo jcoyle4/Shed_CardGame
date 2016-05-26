@@ -15,6 +15,7 @@ FPS = 30
 startx = 200
 starty = 40
 os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (startx, starty)
+font = pygame.font.Font(None, 25)
 
 
 # Size of the screen and its variable
@@ -129,8 +130,40 @@ move = True  # boolean to keep track of whose move it is True for player, False 
 # Switch to int if more than one computer
 turn = 0  # Which turn of the game we are on
 
+dblClickGlobal = None
+
+dblClick1 = None
+dblClick2 = None
+dblClick3 = None
+dblClick4 = None
+dblClick5 = None
+dblClick6 = None
+dblClick7 = None
+dblClick8 = None
+dblClick9 = None
+dblClick10 = None
+dblClick11 = None
+dblClick12 = None
+dblClick13 = None
+dblClick14 = None
+dblClick15 = None
+dblClick16 = None
+dblClick17 = None
+dblClick18 = None
+dblClick19 = None
+dblClick20 = None
+dblClick21 = None
+dblClick22 = None
+dblClick23 = None
+dblClick24 = None
+dblClick25 = None
+
+
 while running:
-    # font = pygame.font.Font(None, 36)
+    listOfDblClicks = [dblClickGlobal, dblClick1, dblClick2, dblClick3, dblClick4, dblClick5, dblClick6, dblClick7, dblClick8,
+                       dblClick9, dblClick10, dblClick11, dblClick12, dblClick13, dblClick14, dblClick15, dblClick16,
+                       dblClick17, dblClick18, dblClick19, dblClick20, dblClick21, dblClick22, dblClick23, dblClick24, dblClick25]
+
     FPSCLOCK = pygame.time.Clock()
     # Put the background image in place
     Misc.bg_img(background, background_Rect, screen)
@@ -154,9 +187,6 @@ while running:
     y_card_all = list(range(550, 660))
     x_all = list(range(0, 700))
     y_all = list(range(0, 700))
-
-    LEFT = 1  # need these for the x's and y's clickers.
-    RIGHT = 1
 
     player_hand_sprites = BlitPlayer.gen_player_blit_cards(player_hand.hand, game_deck.card_Sprites,
                                                            game_deck.highlighted_Card_Sprites, list_of_c, transparent)
@@ -352,21 +382,44 @@ while running:
 
     middle_pile.PlayableCards()
 
+    # Text Notification for when the player need to pick up the pile
+    if any(card is not None for card in player_hand.hand):
+        if all(card not in middle_pile.playable_cards_list for card in player_hand.hand):
+            Misc.render_font(font, screen, "You must pick up the deck")
+    if all(card is None for card in player_hand.hand) and any(card is not None for card in player_table_cards.face_up):
+        if all(card not in middle_pile.playable_cards_list for card in player_table_cards.face_up):
+            Misc.render_font(font, screen, "You must pick up the deck")
+
+    number_of_player_cards = sum(x is not None for x in player_hand.hand)
+
     for event in pygame.event.get():  # get user input
+        # if dblClick and pygame.time.get_ticks() - dblClick > 600:
+        #     dblClick = None
+        for item in listOfDblClicks:
+            if item is not None and pygame.time.get_ticks() - item > 600:
+                item = None
+
         if event.type == pygame.QUIT:  # if user closes
             running = False
         elif event.type == pygame.MOUSEMOTION:
             # print ("mouse at (%d, %d)" % event.pos)
             x, y = event.pos
-        elif event.type == pygame.MOUSEBUTTONDOWN and event.button == LEFT:
+        elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             # print ("You pressed the left mouse button at (%d, %d)" % event.pos)
             print(x, y)
-            print("Player Hand =", player_hand.hand)
-            print("Computer Hand =", computer_hand.hand)
-            print("Cards in the middle =", middle_pile.cards_in_middle)
-            print("Discarded cards =", middle_pile.discarded_cards)
-            print("Player Table Cards =", player_table_cards.face_up, "&", player_table_cards.face_down)
-            print("Computer Table Cards =", computer_table_cards.face_up, "&", computer_table_cards.face_down)
+            # print("Time between clicks =", pygame.time.get_ticks() - int(dblClick))
+            if dblClickGlobal and pygame.time.get_ticks() - dblClickGlobal < 600:
+                turn += 1
+                print("Time between clicks =", pygame.time.get_ticks() - dblClickGlobal)
+                print("Player Hand =", player_hand.hand)
+                print("Computer Hand =", computer_hand.hand)
+                print("Cards in the middle =", middle_pile.cards_in_middle)
+                print("Discarded cards =", middle_pile.discarded_cards)
+                print("Player Table Cards =", player_table_cards.face_up, "&", player_table_cards.face_down)
+                print("Computer Table Cards =", computer_table_cards.face_up, "&", computer_table_cards.face_down)
+                dblClickGlobal = None
+            else:
+                dblClickGlobal = pygame.time.get_ticks()
 
             # Closes the game if all cards in the hand are gone
             if all(card is None for card in player_hand.hand) and all(card is None for card in player_table_cards.face_down):
@@ -747,6 +800,21 @@ while running:
                     print("Card 1 selected")
 
                     if player_hand.hand[0] in middle_pile.playable_cards_list:
+                        if dblClick1 and pygame.time.get_ticks() - dblClick1 < 600:
+                            Animation.animate_play_card(player_hand.hand[0], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                        player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                        middle_pile, Deck.DeckClass.cards, back_of_card_Rect,
+                                                        background, background_Rect, True, player_face_up_sprites,
+                                                        computer_face_up_sprites, player_table_cards.face_down,
+                                                        computer_table_cards.face_down)
+                            middle_pile.moveCard(player_hand.hand[0])
+                            player_hand.hand[0] = None
+                            if number_of_player_cards <= 5:
+                                game_deck.draw(player_hand.hand, 0)
+                            player_hand.rejig()
+                            move = False
+                        else:
+                            dblClick1 = pygame.time.get_ticks()
 
                         if used1 != 'spent':
                             # C1
@@ -761,6 +829,21 @@ while running:
                 if y in y_card_all:
                     print("Card 2 selected")
                     if player_hand.hand[1] in middle_pile.playable_cards_list:
+                        if dblClick2 and pygame.time.get_ticks() - dblClick2 < 600:
+                            Animation.animate_play_card(player_hand.hand[1], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                        player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                        middle_pile, Deck.DeckClass.cards, back_of_card_Rect,
+                                                        background, background_Rect, True, player_face_up_sprites,
+                                                        computer_face_up_sprites, player_table_cards.face_down,
+                                                        computer_table_cards.face_down)
+                            middle_pile.moveCard(player_hand.hand[1])
+                            player_hand.hand[1] = None
+                            if number_of_player_cards <= 5:
+                                game_deck.draw(player_hand.hand, 1)
+                            player_hand.rejig()
+                            move = False
+                        else:
+                            dblClick2 = pygame.time.get_ticks()
 
                         if used2 != 'spent':
                             # C2
@@ -775,6 +858,21 @@ while running:
                 if y in y_card_all:
                     print("Card 3 selected")
                     if player_hand.hand[2] in middle_pile.playable_cards_list:
+                        if dblClick3 and pygame.time.get_ticks() - dblClick3 < 600:
+                            Animation.animate_play_card(player_hand.hand[2], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                        player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                        middle_pile, Deck.DeckClass.cards, back_of_card_Rect,
+                                                        background, background_Rect, True, player_face_up_sprites,
+                                                        computer_face_up_sprites, player_table_cards.face_down,
+                                                        computer_table_cards.face_down)
+                            middle_pile.moveCard(player_hand.hand[2])
+                            player_hand.hand[2] = None
+                            if number_of_player_cards <= 5:
+                                game_deck.draw(player_hand.hand, 2)
+                            player_hand.rejig()
+                            move = False
+                        else:
+                            dblClick3 = pygame.time.get_ticks()
 
                         if used3 != 'spent':
                             # C3
@@ -789,6 +887,21 @@ while running:
                 if y in y_card_all:
                     print("Card 4 selected")
                     if player_hand.hand[3] in middle_pile.playable_cards_list:
+                        if dblClick4 and pygame.time.get_ticks() - dblClick4 < 600:
+                            Animation.animate_play_card(player_hand.hand[3], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                        player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                        middle_pile, Deck.DeckClass.cards, back_of_card_Rect,
+                                                        background, background_Rect, True, player_face_up_sprites,
+                                                        computer_face_up_sprites, player_table_cards.face_down,
+                                                        computer_table_cards.face_down)
+                            middle_pile.moveCard(player_hand.hand[3])
+                            player_hand.hand[3] = None
+                            if number_of_player_cards <= 5:
+                                game_deck.draw(player_hand.hand, 3)
+                            player_hand.rejig()
+                            move = False
+                        else:
+                            dblClick4 = pygame.time.get_ticks()
 
                         if used4 != 'spent':
                             # C4
@@ -803,6 +916,21 @@ while running:
                 if y in y_card_all:
                     print("Card 5 selected")
                     if player_hand.hand[4] in middle_pile.playable_cards_list:
+                        if dblClick5 and pygame.time.get_ticks() - dblClick5 < 600:
+                            Animation.animate_play_card(player_hand.hand[4], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                        player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                        middle_pile, Deck.DeckClass.cards, back_of_card_Rect,
+                                                        background, background_Rect, True, player_face_up_sprites,
+                                                        computer_face_up_sprites, player_table_cards.face_down,
+                                                        computer_table_cards.face_down)
+                            middle_pile.moveCard(player_hand.hand[4])
+                            player_hand.hand[4] = None
+                            if number_of_player_cards <= 5:
+                                game_deck.draw(player_hand.hand, 4)
+                            player_hand.rejig()
+                            move = False
+                        else:
+                            dblClick5 = pygame.time.get_ticks()
                         if used5 != 'spent':
                             # C5
                             if list_of_c[4] == 0:
@@ -816,6 +944,21 @@ while running:
                 if y in y_card_all:
                     print("Card 6 selected")
                     if player_hand.hand[5] in middle_pile.playable_cards_list:
+                        if dblClick6 and pygame.time.get_ticks() - dblClick6 < 600:
+                            Animation.animate_play_card(player_hand.hand[0], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                        player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                        middle_pile, Deck.DeckClass.cards, back_of_card_Rect,
+                                                        background, background_Rect, True, player_face_up_sprites,
+                                                        computer_face_up_sprites, player_table_cards.face_down,
+                                                        computer_table_cards.face_down)
+                            middle_pile.moveCard(player_hand.hand[5])
+                            player_hand.hand[5] = None
+                            if number_of_player_cards <= 5:
+                                game_deck.draw(player_hand.hand, 5)
+                            player_hand.rejig()
+                            move = False
+                        else:
+                            dblClick6 = pygame.time.get_ticks()
 
                         if used6 != 'spent':
                             # C6
@@ -830,6 +973,21 @@ while running:
                 if y in y_card_all:
                     print("Card 7 selected")
                     if player_hand.hand[6] in middle_pile.playable_cards_list:
+                        if dblClick7 and pygame.time.get_ticks() - dblClick7 < 600:
+                            Animation.animate_play_card(player_hand.hand[6], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                        player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                        middle_pile, Deck.DeckClass.cards, back_of_card_Rect,
+                                                        background, background_Rect, True, player_face_up_sprites,
+                                                        computer_face_up_sprites, player_table_cards.face_down,
+                                                        computer_table_cards.face_down)
+                            middle_pile.moveCard(player_hand.hand[6])
+                            player_hand.hand[6] = None
+                            if number_of_player_cards <= 5:
+                                game_deck.draw(player_hand.hand, 6)
+                            player_hand.rejig()
+                            move = False
+                        else:
+                            dblClick7 = pygame.time.get_ticks()
 
                         if used7 != 'spent':
                             # C7
@@ -844,6 +1002,21 @@ while running:
                 if y in y_card_all:
                     print("Card 8 selected")
                     if player_hand.hand[7] in middle_pile.playable_cards_list:
+                        if dblClick8 and pygame.time.get_ticks() - dblClick8 < 600:
+                            Animation.animate_play_card(player_hand.hand[7], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                        player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                        middle_pile, Deck.DeckClass.cards, back_of_card_Rect,
+                                                        background, background_Rect, True, player_face_up_sprites,
+                                                        computer_face_up_sprites, player_table_cards.face_down,
+                                                        computer_table_cards.face_down)
+                            middle_pile.moveCard(player_hand.hand[7])
+                            player_hand.hand[7] = None
+                            if number_of_player_cards <= 5:
+                                game_deck.draw(player_hand.hand, 7)
+                            player_hand.rejig()
+                            move = False
+                        else:
+                            dblClick8 = pygame.time.get_ticks()
 
                         if used8 != 'spent':
                             # C8
@@ -859,6 +1032,21 @@ while running:
                     turn += 1
                     print("Card 9 selected")
                     if player_hand.hand[8] in middle_pile.playable_cards_list:
+                        if dblClick9 and pygame.time.get_ticks() - dblClick9 < 600:
+                            Animation.animate_play_card(player_hand.hand[8], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                        player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                        middle_pile, Deck.DeckClass.cards, back_of_card_Rect,
+                                                        background, background_Rect, True, player_face_up_sprites,
+                                                        computer_face_up_sprites, player_table_cards.face_down,
+                                                        computer_table_cards.face_down)
+                            middle_pile.moveCard(player_hand.hand[8])
+                            player_hand.hand[8] = None
+                            if number_of_player_cards <= 5:
+                                game_deck.draw(player_hand.hand, 8)
+                            player_hand.rejig()
+                            move = False
+                        else:
+                            dblClick9 = pygame.time.get_ticks()
 
                         if used9 != 'spent':
                             # C9
@@ -871,9 +1059,27 @@ while running:
 
             if x in x_card_10:
                 if y in y_card_all:
-                    turn += 1
+                    # turn += 1
                     print("Card 10 selected")
                     if player_hand.hand[9] in middle_pile.playable_cards_list:
+                        if dblClick9 and pygame.time.get_ticks() - dblClick9 < 600:
+                            Animation.animate_play_card(player_hand.hand[9], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                        player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                        middle_pile, Deck.DeckClass.cards, back_of_card_Rect,
+                                                        background, background_Rect, True, player_face_up_sprites,
+                                                        computer_face_up_sprites, player_table_cards.face_down,
+                                                        computer_table_cards.face_down)
+                            middle_pile.moveCard(player_hand.hand[9])
+                            used14 = 'spent'
+                            player_hand.hand[13] = None
+                            if number_of_player_cards <= 5:
+                                game_deck.draw(player_hand.hand, 9)
+                            player_hand.rejig()
+                            used14 = ""
+                            move = False
+                        else:
+                            dblClick9 = pygame.time.get_ticks()
+                            print("10 here")
 
                         if used10 != 'spent':
                             # C10
@@ -886,9 +1092,27 @@ while running:
 
             if x in x_card_11:
                 if y in y_card_all:
-                    turn += 1
+                    # turn += 1
                     print("Card 11 selected")
                     if player_hand.hand[10] in middle_pile.playable_cards_list:
+                        if dblClick10 and pygame.time.get_ticks() - dblClick10 < 600:
+                            Animation.animate_play_card(player_hand.hand[10], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                        player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                        middle_pile, Deck.DeckClass.cards, back_of_card_Rect,
+                                                        background, background_Rect, True, player_face_up_sprites,
+                                                        computer_face_up_sprites, player_table_cards.face_down,
+                                                        computer_table_cards.face_down)
+                            middle_pile.moveCard(player_hand.hand[10])
+                            used14 = 'spent'
+                            player_hand.hand[13] = None
+                            if number_of_player_cards <= 5:
+                                game_deck.draw(player_hand.hand, 10)
+                            player_hand.rejig()
+                            used14 = ""
+                            move = False
+                        else:
+                            dblClick10 = pygame.time.get_ticks()
+                            print("11 here")
 
                         if used11 != 'spent':
                             # C11
@@ -901,9 +1125,27 @@ while running:
 
             if x in x_card_12:
                 if y in y_card_all:
-                    turn += 1
+                    # turn += 1
                     print("Card 12 selected")
                     if player_hand.hand[11] in middle_pile.playable_cards_list:
+                        if dblClick11 and pygame.time.get_ticks() - dblClick11 < 600:
+                            Animation.animate_play_card(player_hand.hand[11], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                        player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                        middle_pile, Deck.DeckClass.cards, back_of_card_Rect,
+                                                        background, background_Rect, True, player_face_up_sprites,
+                                                        computer_face_up_sprites, player_table_cards.face_down,
+                                                        computer_table_cards.face_down)
+                            middle_pile.moveCard(player_hand.hand[11])
+                            used14 = 'spent'
+                            player_hand.hand[13] = None
+                            if number_of_player_cards <= 5:
+                                game_deck.draw(player_hand.hand, 11)
+                            player_hand.rejig()
+                            used14 = ""
+                            move = False
+                        else:
+                            dblClick11 = pygame.time.get_ticks()
+                            print("12 here")
 
                         if used12 != 'spent':
                             # C12
@@ -916,9 +1158,27 @@ while running:
 
             if x in x_card_13:
                 if y in y_card_all:
-                    turn += 1
+                    # turn += 1
                     print("Card 13 selected")
                     if player_hand.hand[12] in middle_pile.playable_cards_list:
+                        if dblClick12 and pygame.time.get_ticks() - dblClick12 < 600:
+                            Animation.animate_play_card(player_hand.hand[12], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                        player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                        middle_pile, Deck.DeckClass.cards, back_of_card_Rect,
+                                                        background, background_Rect, True, player_face_up_sprites,
+                                                        computer_face_up_sprites, player_table_cards.face_down,
+                                                        computer_table_cards.face_down)
+                            middle_pile.moveCard(player_hand.hand[12])
+                            used14 = 'spent'
+                            player_hand.hand[13] = None
+                            if number_of_player_cards <= 5:
+                                game_deck.draw(player_hand.hand, 12)
+                            player_hand.rejig()
+                            used14 = ""
+                            move = False
+                        else:
+                            print("13 here")
+                            dblClick12 = pygame.time.get_ticks()
 
                         if used13 != 'spent':
                             # C13
@@ -931,9 +1191,27 @@ while running:
 
             if x in x_card_14:
                 if y in y_card_all:
-                    turn += 1
+                    # turn += 1
                     print("Card 14 selected")
                     if player_hand.hand[13] in middle_pile.playable_cards_list:
+                        if dblClick14 and pygame.time.get_ticks() - dblClick14 < 600:
+                            Animation.animate_play_card(player_hand.hand[13], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                        player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                        middle_pile, Deck.DeckClass.cards, back_of_card_Rect,
+                                                        background, background_Rect, True, player_face_up_sprites,
+                                                        computer_face_up_sprites, player_table_cards.face_down,
+                                                        computer_table_cards.face_down)
+                            middle_pile.moveCard(player_hand.hand[13])
+                            used14 = 'spent'
+                            player_hand.hand[13] = None
+                            if number_of_player_cards <= 5:
+                                game_deck.draw(player_hand.hand, 13)
+                            player_hand.rejig()
+                            used14 = ""
+                            move = False
+                        else:
+                            dblClick14 = pygame.time.get_ticks()
+                            print("14 here")
 
                         if used14 != 'spent':
                             # C14
@@ -947,6 +1225,22 @@ while running:
                 if y in y_card_all:
                     print("Card 15 selected")
                     if player_hand.hand[14] in middle_pile.playable_cards_list:
+                        if dblClick15 and pygame.time.get_ticks() - dblClick15 < 600:
+                            Animation.animate_play_card(player_hand.hand[14], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                        player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                        middle_pile, Deck.DeckClass.cards, back_of_card_Rect,
+                                                        background, background_Rect, True, player_face_up_sprites,
+                                                        computer_face_up_sprites, player_table_cards.face_down,
+                                                        computer_table_cards.face_down)
+                            middle_pile.moveCard(player_hand.hand[14])
+                            player_hand.hand[14] = None
+                            if number_of_player_cards <= 5:
+                                game_deck.draw(player_hand.hand, 14)
+                            player_hand.rejig()
+                            move = False
+                        else:
+                            dblClick15 = pygame.time.get_ticks()
+                            print("14 here")
 
                         if used15 != 'spent':
                             # C15
@@ -960,6 +1254,22 @@ while running:
                 if y in y_card_all:
                     print("Card 16 selected")
                     if player_hand.hand[15] in middle_pile.playable_cards_list:
+                        if dblClick16 and pygame.time.get_ticks() - dblClick16 < 600:
+                            Animation.animate_play_card(player_hand.hand[15], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                        player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                        middle_pile, Deck.DeckClass.cards, back_of_card_Rect,
+                                                        background, background_Rect, True, player_face_up_sprites,
+                                                        computer_face_up_sprites, player_table_cards.face_down,
+                                                        computer_table_cards.face_down)
+                            middle_pile.moveCard(player_hand.hand[15])
+                            player_hand.hand[15] = None
+                            if number_of_player_cards <= 5:
+                                game_deck.draw(player_hand.hand, 15)
+                            player_hand.rejig()
+                            move = False
+                        else:
+                            dblClick16 = pygame.time.get_ticks()
+                            print("14 here")
 
                         if used16 != 'spent':
                             # C16
@@ -974,6 +1284,22 @@ while running:
                 if y in y_card_all:
                     print("Card 17 selected")
                     if player_hand.hand[16] in middle_pile.playable_cards_list:
+                        if dblClick17 and pygame.time.get_ticks() - dblClick17 < 600:
+                            Animation.animate_play_card(player_hand.hand[16], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                        player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                        middle_pile, Deck.DeckClass.cards, back_of_card_Rect,
+                                                        background, background_Rect, True, player_face_up_sprites,
+                                                        computer_face_up_sprites, player_table_cards.face_down,
+                                                        computer_table_cards.face_down)
+                            middle_pile.moveCard(player_hand.hand[16])
+                            player_hand.hand[16] = None
+                            if number_of_player_cards <= 5:
+                                game_deck.draw(player_hand.hand, 16)
+                            player_hand.rejig()
+                            move = False
+                        else:
+                            dblClick17 = pygame.time.get_ticks()
+                            print("14 here")
 
                         if used17 != 'spent':
                             # C17
@@ -987,6 +1313,22 @@ while running:
                 if y in y_card_all:
                     print("Card 18 selected")
                     if player_hand.hand[17] in middle_pile.playable_cards_list:
+                        if dblClick18 and pygame.time.get_ticks() - dblClick18 < 600:
+                            Animation.animate_play_card(player_hand.hand[17], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                        player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                        middle_pile, Deck.DeckClass.cards, back_of_card_Rect,
+                                                        background, background_Rect, True, player_face_up_sprites,
+                                                        computer_face_up_sprites, player_table_cards.face_down,
+                                                        computer_table_cards.face_down)
+                            middle_pile.moveCard(player_hand.hand[17])
+                            player_hand.hand[17] = None
+                            if number_of_player_cards <= 5:
+                                game_deck.draw(player_hand.hand, 17)
+                            player_hand.rejig()
+                            move = False
+                        else:
+                            dblClick18 = pygame.time.get_ticks()
+                            print("14 here")
 
                         if used18 != 'spent':
                             # C18
@@ -1001,6 +1343,22 @@ while running:
                 if y in y_card_all:
                     print("Card 19 selected")
                     if player_hand.hand[18] in middle_pile.playable_cards_list:
+                        if dblClick19 and pygame.time.get_ticks() - dblClick19 < 600:
+                            Animation.animate_play_card(player_hand.hand[18], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                        player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                        middle_pile, Deck.DeckClass.cards, back_of_card_Rect,
+                                                        background, background_Rect, True, player_face_up_sprites,
+                                                        computer_face_up_sprites, player_table_cards.face_down,
+                                                        computer_table_cards.face_down)
+                            middle_pile.moveCard(player_hand.hand[18])
+                            player_hand.hand[18] = None
+                            if number_of_player_cards <= 5:
+                                game_deck.draw(player_hand.hand, 18)
+                            player_hand.rejig()
+                            move = False
+                        else:
+                            dblClick19 = pygame.time.get_ticks()
+                            print("14 here")
 
                         if used19 != 'spent':
                             # C19
@@ -1015,6 +1373,22 @@ while running:
                 if y in y_card_all:
                     print("Card 20 selected")
                     if player_hand.hand[19] in middle_pile.playable_cards_list:
+                        if dblClick20 and pygame.time.get_ticks() - dblClick20 < 600:
+                            Animation.animate_play_card(player_hand.hand[19], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                        player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                        middle_pile, Deck.DeckClass.cards, back_of_card_Rect,
+                                                        background, background_Rect, True, player_face_up_sprites,
+                                                        computer_face_up_sprites, player_table_cards.face_down,
+                                                        computer_table_cards.face_down)
+                            middle_pile.moveCard(player_hand.hand[19])
+                            player_hand.hand[19] = None
+                            if number_of_player_cards <= 5:
+                                game_deck.draw(player_hand.hand, 19)
+                            player_hand.rejig()
+                            move = False
+                        else:
+                            dblClick20 = pygame.time.get_ticks()
+                            print("14 here")
 
                         if used20 != 'spent':
                             # C20
@@ -1029,6 +1403,22 @@ while running:
                 if y in y_card_all:
                     print("Card 21 selected")
                     if player_hand.hand[20] in middle_pile.playable_cards_list:
+                        if dblClick21 and pygame.time.get_ticks() - dblClick21 < 600:
+                            Animation.animate_play_card(player_hand.hand[20], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                        player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                        middle_pile, Deck.DeckClass.cards, back_of_card_Rect,
+                                                        background, background_Rect, True, player_face_up_sprites,
+                                                        computer_face_up_sprites, player_table_cards.face_down,
+                                                        computer_table_cards.face_down)
+                            middle_pile.moveCard(player_hand.hand[20])
+                            player_hand.hand[20] = None
+                            if number_of_player_cards <= 5:
+                                game_deck.draw(player_hand.hand, 20)
+                            player_hand.rejig()
+                            move = False
+                        else:
+                            dblClick21 = pygame.time.get_ticks()
+                            print("14 here")
 
                         if used21 != 'spent':
                             # C21
@@ -1042,6 +1432,21 @@ while running:
                 if y in y_card_all:
                     print("Card 22 selected")
                     if player_hand.hand[21] in middle_pile.playable_cards_list:
+                        if dblClick22 and pygame.time.get_ticks() - dblClick22 < 600:
+                            Animation.animate_play_card(player_hand.hand[21], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                        player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                        middle_pile, Deck.DeckClass.cards, back_of_card_Rect,
+                                                        background, background_Rect, True, player_face_up_sprites,
+                                                        computer_face_up_sprites, player_table_cards.face_down,
+                                                        computer_table_cards.face_down)
+                            middle_pile.moveCard(player_hand.hand[21])
+                            player_hand.hand[21] = None
+                            if number_of_player_cards <= 5:
+                                game_deck.draw(player_hand.hand, 21)
+                            player_hand.rejig()
+                            move = False
+                        else:
+                            dblClick22 = pygame.time.get_ticks()
 
                         if used22 != 'spent':
                             # C22
@@ -1056,6 +1461,21 @@ while running:
                 if y in y_card_all:
                     print("Card 23 selected")
                     if player_hand.hand[22] in middle_pile.playable_cards_list:
+                        if dblClick23 and pygame.time.get_ticks() - dblClick23 < 600:
+                            Animation.animate_play_card(player_hand.hand[22], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                        player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                        middle_pile, Deck.DeckClass.cards, back_of_card_Rect,
+                                                        background, background_Rect, True, player_face_up_sprites,
+                                                        computer_face_up_sprites, player_table_cards.face_down,
+                                                        computer_table_cards.face_down)
+                            middle_pile.moveCard(player_hand.hand[22])
+                            player_hand.hand[22] = None
+                            if number_of_player_cards <= 5:
+                                game_deck.draw(player_hand.hand, 22)
+                            player_hand.rejig()
+                            move = False
+                        else:
+                            dblClick23 = pygame.time.get_ticks()
 
                         if used23 != 'spent':
                             # C23
@@ -1069,6 +1489,21 @@ while running:
                 if y in y_card_all:
                     print("Card 24 selected")
                     if player_hand.hand[23] in middle_pile.playable_cards_list:
+                        if dblClick24 and pygame.time.get_ticks() - dblClick24 < 600:
+                            Animation.animate_play_card(player_hand.hand[23], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                        player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                        middle_pile, Deck.DeckClass.cards, back_of_card_Rect,
+                                                        background, background_Rect, True, player_face_up_sprites,
+                                                        computer_face_up_sprites, player_table_cards.face_down,
+                                                        computer_table_cards.face_down)
+                            middle_pile.moveCard(player_hand.hand[23])
+                            player_hand.hand[23] = None
+                            if number_of_player_cards <= 5:
+                                game_deck.draw(player_hand.hand, 23)
+                            player_hand.rejig()
+                            move = False
+                        else:
+                            dblClick24 = pygame.time.get_ticks()
 
                         if used24 != 'spent':
                             # C21
@@ -1082,6 +1517,21 @@ while running:
                 if y in y_card_all:
                     print("Card 25 selected")
                     if player_hand.hand[24] in middle_pile.playable_cards_list:
+                        if dblClick25 and pygame.time.get_ticks() - dblClick25 < 600:
+                            Animation.animate_play_card(player_hand.hand[24], screen, game_deck.card_Sprites, FPSCLOCK,
+                                                        player_hand_sprites, player_hand.hand, computer_hand.hand, back_of_card,
+                                                        middle_pile, Deck.DeckClass.cards, back_of_card_Rect,
+                                                        background, background_Rect, True, player_face_up_sprites,
+                                                        computer_face_up_sprites, player_table_cards.face_down,
+                                                        computer_table_cards.face_down)
+                            middle_pile.moveCard(player_hand.hand[24])
+                            player_hand.hand[24] = None
+                            if number_of_player_cards <= 5:
+                                game_deck.draw(player_hand.hand, 24)
+                            player_hand.rejig()
+                            move = False
+                        else:
+                            dblClick25 = pygame.time.get_ticks()
 
                         if used25 != 'spent':
                             # C25
@@ -1144,6 +1594,9 @@ while running:
                                                         computer_table_cards.face_down)
                             returnList = player_table_cards.play_face_down_card(0, player_hand, middle_pile)
                             player_hand = returnList[0]
+                            if any(card is not None for card in player_hand.hand):
+                                Misc.render_font(font, screen, "Your card was not a valid move, you picked up the pile")
+                                pygame.time.delay(2000)
                             middle_pile = returnList[1]
                             move = False
                     if x in x_table_2:
@@ -1156,6 +1609,9 @@ while running:
                                                         computer_table_cards.face_down)
                             returnList = player_table_cards.play_face_down_card(1, player_hand, middle_pile)
                             player_hand = returnList[0]
+                            if any(card is not None for card in player_hand.hand):
+                                Misc.render_font(font, screen, "Your card was not a valid move, you picked up the pile")
+                                pygame.time.delay(2000)
                             middle_pile = returnList[1]
                             move = False
                     if x in x_table_3:
@@ -1168,6 +1624,9 @@ while running:
                                                         computer_table_cards.face_down)
                             returnList = player_table_cards.play_face_down_card(2, player_hand, middle_pile)
                             player_hand = returnList[0]
+                            if any(card is not None for card in player_hand.hand):
+                                Misc.render_font(font, screen, "Your card was not a valid move, you picked up the pile")
+                                pygame.time.delay(2000)
                             middle_pile = returnList[1]
                             move = False
 
@@ -1175,7 +1634,7 @@ while running:
 
             # Code to draw a card and end move
             # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            number_of_player_cards = sum(x is not None for x in player_hand.hand)
+
             if used1 == "spent":
                 player_hand.hand[0] = None
                 if number_of_player_cards <= 5:

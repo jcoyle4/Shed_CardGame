@@ -39,6 +39,7 @@ class TableCardsClass:
         pile.moveCard(self.face_down[index])
 
         if self.face_down[index] not in pile.playable_cards_list:
+
             pile = hand.pick_up(pile, True)
 
         self.face_down[index] = None

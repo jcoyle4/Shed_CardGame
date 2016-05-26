@@ -864,6 +864,7 @@ class BlitPlayer:
             rules, rules_rect = Load_Image.ImageLoad.imageLoadfnc("rules.jpg", False)
             screen.blit(rules, (50, 50))
 
+
 class Animation:
 
     @staticmethod
@@ -923,3 +924,7 @@ class Misc:
     @staticmethod
     def bg_img(bg, bgrect, screen):
         screen.blit(bg, bgrect)
+
+    @staticmethod
+    def render_font(font, screen, string):
+        screen.blit(font.render(string, True, (0, 0, 0)), (475, 515))
