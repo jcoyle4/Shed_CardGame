@@ -360,10 +360,11 @@ while running:
             running = False
         # If User clicks
         elif event.type == pygame.MOUSEMOTION:
-            # Keep track of WHERE the user clicked
+            # Keep track of WHERE the mouse position is
             x, y = event.pos
         # If User clicks and something needs to happen
         elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            print(computerHand.hand)
             # Double click anywhere to clear the rules
             if dblClickGlobal and pygame.time.get_ticks() - dblClickGlobal < 600:
                 turn += 1

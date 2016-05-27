@@ -130,8 +130,9 @@ class HandClass:
 
         # If the computer picks up the pile
         if not player:
-            self.hand.extend(pile.cards_in_middle)
-
+            for card in pile.cards_in_middle:
+                if card is not None:
+                    self.hand.append(card)
         # If the player picks up the pile
         else:
             for card_in_hand in range(len(self.hand)):
