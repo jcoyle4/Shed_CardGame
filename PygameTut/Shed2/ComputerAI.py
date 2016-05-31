@@ -331,10 +331,6 @@ class Weights:
                 print("MAX TOTAL REACHED")
                 max_total_reached = True
                 card_with_weight[highest_priority] = 0  # giving a 0 weight so skips it the next round, avoids deleting and error giving
-                # del card_with_weight[highest_priority]
-
-        print("Total before return =", self.__total)
-        print("return from pwrs", highest_priority)
 
         if max_total_reached:
             self.__total = 0
