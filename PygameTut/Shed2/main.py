@@ -47,6 +47,8 @@ gameDeck = Deck.DeckClass()
 computerHand = HandClass()
 # The hand for the player
 playerHand = HandClass()
+# the class so can store data the computer needs to remember
+computerAI = ComputerAI()
 
 # Object for the middle pile, holds all the cards in the middle pile and which card is on top
 middlePile = MiddlePile.Pile()
@@ -427,6 +429,7 @@ while running:
             if x in xPickUp:
                 if y in yPickUp:
                     if len(middlePile.cards_in_middle) > 0:
+                        computerAI.knownCards = middlePile.cards_in_middle
                         middlePile = playerHand.pick_up(middlePile, True)
                         playerHand.rejig()
                         move = False
@@ -566,11 +569,11 @@ while running:
 
         # Get the card the computer will play, and where it came from
         if len(computerHand.hand) != 0:
-            computer_move = ComputerAI.play_a_card(computerHand.hand, middlePile.playable_cards_list)
+            computer_move = computerAI.play_a_card(computerHand.hand, middlePile.playable_cards_list, middlePile.card_on_top)
             fromHand = True
 
         elif any(card is not None for card in computerTableCards.face_up):
-            computer_move = ComputerAI.play_a_card(computerTableCards.face_up, middlePile.playable_cards_list)
+            computer_move = computerAI.play_a_card(computerTableCards.face_up, middlePile.playable_cards_list, middlePile.card_on_top)
             fromTableFaceUp = True
 
         elif any(card is not None for card in computerTableCards.face_down):
