@@ -23,297 +23,385 @@ class Weights:
         self.__total = 0
         self.__max_total = 25
 
-    def calc_weight(self, card, known_cards, card_on_top):
+    def fill_beaten_by(self, card):
+        beaten_by = []
+        # If there is nothing on the top of the pile, make it seem as if there is a one, as everything should be allowed on it
+        if card == 0:
+            card = 1
+
+        if card in self.__Aces:
+            for x in self.__Aces:
+                beaten_by.append(x)
+            for x in self.__Tens:
+                beaten_by.append(x)
+            for x in self.__Eights:
+                beaten_by.append(x)
+            for x in self.__Twos:
+                beaten_by.append(x)
+
+        elif card in self.__Kings:
+            for x in self.__Aces:
+                beaten_by.append(x)
+            for x in self.__Kings:
+                beaten_by.append(x)
+            for x in self.__Tens:
+                beaten_by.append(x)
+            for x in self.__Eights:
+                beaten_by.append(x)
+            for x in self.__Twos:
+                beaten_by.append(x)
+
+        elif card in self.__Queens:
+            for x in self.__Aces:
+                beaten_by.append(x)
+            for x in self.__Kings:
+                beaten_by.append(x)
+            for x in self.__Queens:
+                beaten_by.append(x)
+            for x in self.__Tens:
+                beaten_by.append(x)
+            for x in self.__Eights:
+                beaten_by.append(x)
+            for x in self.__Twos:
+                beaten_by.append(x)
+
+        elif card in self.__Jacks:
+            for x in self.__Aces:
+                beaten_by.append(x)
+            for x in self.__Kings:
+                beaten_by.append(x)
+            for x in self.__Queens:
+                beaten_by.append(x)
+            for x in self.__Jacks:
+                beaten_by.append(x)
+            for x in self.__Tens:
+                beaten_by.append(x)
+            for x in self.__Eights:
+                beaten_by.append(x)
+            for x in self.__Twos:
+                beaten_by.append(x)
+
+        elif card in self.__Tens:
+            for x in self.__Aces:
+                beaten_by.append(x)
+            for x in self.__Kings:
+                beaten_by.append(x)
+            for x in self.__Queens:
+                beaten_by.append(x)
+            for x in self.__Jacks:
+                beaten_by.append(x)
+            for x in self.__Tens:
+                beaten_by.append(x)
+            for x in self.__Nines:
+                beaten_by.append(x)
+            for x in self.__Eights:
+                beaten_by.append(x)
+            for x in self.__Sevens:
+                beaten_by.append(x)
+            for x in self.__Sixes:
+                beaten_by.append(x)
+            for x in self.__Fives:
+                beaten_by.append(x)
+            for x in self.__Fours:
+                beaten_by.append(x)
+            for x in self.__Threes:
+                beaten_by.append(x)
+            for x in self.__Twos:
+                beaten_by.append(x)
+
+        elif card in self.__Nines:
+            for x in self.__Aces:
+                beaten_by.append(x)
+            for x in self.__Kings:
+                beaten_by.append(x)
+            for x in self.__Queens:
+                beaten_by.append(x)
+            for x in self.__Jacks:
+                beaten_by.append(x)
+            for x in self.__Tens:
+                beaten_by.append(x)
+            for x in self.__Nines:
+                beaten_by.append(x)
+            for x in self.__Eights:
+                beaten_by.append(x)
+            for x in self.__Twos:
+                beaten_by.append(x)
+
+        elif card in self.__Eights:
+            for x in self.__Aces:
+                beaten_by.append(x)
+            for x in self.__Kings:
+                beaten_by.append(x)
+            for x in self.__Queens:
+                beaten_by.append(x)
+            for x in self.__Jacks:
+                beaten_by.append(x)
+            for x in self.__Tens:
+                beaten_by.append(x)
+            for x in self.__Nines:
+                beaten_by.append(x)
+            for x in self.__Eights:
+                beaten_by.append(x)
+            for x in self.__Sevens:
+                beaten_by.append(x)
+            for x in self.__Sixes:
+                beaten_by.append(x)
+            for x in self.__Fives:
+                beaten_by.append(x)
+            for x in self.__Fours:
+                beaten_by.append(x)
+            for x in self.__Threes:
+                beaten_by.append(x)
+            for x in self.__Twos:
+                beaten_by.append(x)
+
+        elif card in self.__Sevens:
+            for x in self.__Tens:
+                beaten_by.append(x)
+            for x in self.__Eights:
+                beaten_by.append(x)
+            for x in self.__Sevens:
+                beaten_by.append(x)
+            for x in self.__Sixes:
+                beaten_by.append(x)
+            for x in self.__Fives:
+                beaten_by.append(x)
+            for x in self.__Fours:
+                beaten_by.append(x)
+            for x in self.__Threes:
+                beaten_by.append(x)
+            for x in self.__Twos:
+                beaten_by.append(x)
+
+        elif card in self.__Sixes:
+            for x in self.__Aces:
+                beaten_by.append(x)
+            for x in self.__Kings:
+                beaten_by.append(x)
+            for x in self.__Queens:
+                beaten_by.append(x)
+            for x in self.__Jacks:
+                beaten_by.append(x)
+            for x in self.__Tens:
+                beaten_by.append(x)
+            for x in self.__Nines:
+                beaten_by.append(x)
+            for x in self.__Eights:
+                beaten_by.append(x)
+            for x in self.__Sevens:
+                beaten_by.append(x)
+            for x in self.__Sixes:
+                beaten_by.append(x)
+            for x in self.__Twos:
+                beaten_by.append(x)
+
+        elif card in self.__Fives:
+            for x in self.__Aces:
+                beaten_by.append(x)
+            for x in self.__Kings:
+                beaten_by.append(x)
+            for x in self.__Queens:
+                beaten_by.append(x)
+            for x in self.__Jacks:
+                beaten_by.append(x)
+            for x in self.__Tens:
+                beaten_by.append(x)
+            for x in self.__Nines:
+                beaten_by.append(x)
+            for x in self.__Eights:
+                beaten_by.append(x)
+            for x in self.__Sevens:
+                beaten_by.append(x)
+            for x in self.__Sixes:
+                beaten_by.append(x)
+            for x in self.__Fives:
+                beaten_by.append(x)
+            for x in self.__Twos:
+                beaten_by.append(x)
+
+        elif card in self.__Fours:
+            for x in self.__Aces:
+                beaten_by.append(x)
+            for x in self.__Kings:
+                beaten_by.append(x)
+            for x in self.__Queens:
+                beaten_by.append(x)
+            for x in self.__Jacks:
+                beaten_by.append(x)
+            for x in self.__Tens:
+                beaten_by.append(x)
+            for x in self.__Nines:
+                beaten_by.append(x)
+            for x in self.__Eights:
+                beaten_by.append(x)
+            for x in self.__Sevens:
+                beaten_by.append(x)
+            for x in self.__Sixes:
+                beaten_by.append(x)
+            for x in self.__Fives:
+                beaten_by.append(x)
+            for x in self.__Fours:
+                beaten_by.append(x)
+            for x in self.__Twos:
+                beaten_by.append(x)
+
+        elif card in self.__Threes:
+            for x in self.__Aces:
+                beaten_by.append(x)
+            for x in self.__Kings:
+                beaten_by.append(x)
+            for x in self.__Queens:
+                beaten_by.append(x)
+            for x in self.__Jacks:
+                beaten_by.append(x)
+            for x in self.__Tens:
+                beaten_by.append(x)
+            for x in self.__Nines:
+                beaten_by.append(x)
+            for x in self.__Eights:
+                beaten_by.append(x)
+            for x in self.__Sevens:
+                beaten_by.append(x)
+            for x in self.__Sixes:
+                beaten_by.append(x)
+            for x in self.__Fives:
+                beaten_by.append(x)
+            for x in self.__Fours:
+                beaten_by.append(x)
+            for x in self.__Threes:
+                beaten_by.append(x)
+            for x in self.__Twos:
+                beaten_by.append(x)
+
+        elif card in self.__Twos:
+            for x in self.__Aces:
+                beaten_by.append(x)
+            for x in self.__Kings:
+                beaten_by.append(x)
+            for x in self.__Queens:
+                beaten_by.append(x)
+            for x in self.__Jacks:
+                beaten_by.append(x)
+            for x in self.__Tens:
+                beaten_by.append(x)
+            for x in self.__Nines:
+                beaten_by.append(x)
+            for x in self.__Eights:
+                beaten_by.append(x)
+            for x in self.__Sevens:
+                beaten_by.append(x)
+            for x in self.__Sixes:
+                beaten_by.append(x)
+            for x in self.__Fives:
+                beaten_by.append(x)
+            for x in self.__Fours:
+                beaten_by.append(x)
+            for x in self.__Threes:
+                beaten_by.append(x)
+            for x in self.__Twos:
+                beaten_by.append(x)
+
+        return beaten_by
+
+    def calc_weight(self, card, known_cards, pile, comp_hand, length_of_player_hand):
         # card is the card that we are calculating the weight of
         # known cards are the cards that the computer knows the player has in their hand
         # card on top is the card currently on the top of the pile
 
-        # get the weight based on the cards in the players hand, add this onto what ever card is on top
-        weight = 0
-        # Put into a single list, rather than a list of list, for ease or use later
-        lst = [self.__Kings, self.__Queens, self.__Jacks, self.__Nines, self.__Sevens, self.__Sixes, self.__Fives, self.__Fours,
-               self.__Threes]
-        lst2 = []
-        for x in lst:
-            for y in x:
-                lst2.append(y)
+        max_length_of_deck = 52
+        # The length of the deck minus any known cards
+        cards_left = max_length_of_deck - len(comp_hand) - len(pile.cards_in_middle) - len(pile.discarded_cards)
 
-        # Determining the highest value card in known cards of the player
-        for c in known_cards:
-            # Cant play around magic cards or Aces, so return none to run the decision tree
-            if c in self.__magicCards:
-                return None
+        # list of cards that will beat the card handed in
+        if card not in self.__Eights:
+            beaten_by = self.fill_beaten_by(card)
+        else:  # If an 8 is on top, look at the card beneath it
+            beaten_by = self.fill_beaten_by(pile.card_on_top)
 
-            elif c in self.__Aces:
-                return None
+        # if some of the cards in the players hand are unknown
+        if len(known_cards) != length_of_player_hand:
+            # remove cards from the beaten by list that we know aren't available
 
-            elif c in lst2:
-                if card in self.__Aces:
-                    weight = 11
-                    break
-                if card in self.__Kings:
-                    weight = 10
-                    break
-                if card in self.__Queens:
-                    weight = 9
-                    break
-                if card in self.__Jacks:
-                    weight = 8
-                    break
-                if card in self.__Nines:
-                    weight = 7
-                    break
-                if card in self.__Sevens:
-                    weight = 6
-                    break
-                if card in self.__Sixes:
-                    weight = 5
-                    break
-                if card in self.__Fives:
-                    weight = 4
-                    break
-                if card in self.__Fours:
-                    weight = 3
-                    break
-                if card in self.__Threes:
-                    weight = 2
-                    break
-                if card in self.__Tens:
-                    weight = 0.5
-                    break
-                if card in self.__Eights:
-                    weight = 0.4
-                    break
-                if card in self.__Twos:
-                    weight = 0.6
-                    break
+            # Remove cards from the beaten by list if they are in the middle
+            for b in pile.cards_in_middle:
+                if b in beaten_by:
+                    beaten_by.remove(b)
 
-        # Add on the weight depending on the card on the top of the pile, with magic cards given a low weight
-        if card_on_top in self.__Aces:
-            if card in self.__Aces:
-                weight += 1
-            elif card in self.__Tens:
-                weight += 0.05
-            elif card in self.__Eights:
-                weight += 0.05
-            elif card in self.__Twos:
-                weight += 0.1
+            # Remove cards from the beaten by list if they are in the computers hand
+            for c in comp_hand:
+                if c in beaten_by:
+                    beaten_by.remove(c)
 
-        elif card_on_top in self.__Kings:
-            if card in self.__Aces:
-                weight += 0.9
-            elif card in self.__Kings:
-                weight += 1
-            elif card in self.__Tens:
-                weight += 0.05
-            elif card in self.__Eights:
-                weight += 0.05
-            elif card in self.__Twos:
-                weight += 0.1
+            # Remove cards from the beaten by list if they are in the discarded cards
+            for d in pile.discarded_cards:
+                if d in beaten_by:
+                    beaten_by.remove(d)
 
-        elif card_on_top in self.__Queens:
-            if card in self.__Aces:
-                weight += 0.8
-            elif card in self.__Kings:
-                weight += 0.9
-            elif card in self.__Queens:
-                weight += 1
-            elif card in self.__Tens:
-                weight += 0.05
-            elif card in self.__Eights:
-                weight += 0.05
-            elif card in self.__Twos:
-                weight += 0.1
+            # If the player has a card that can beat the card in hand, give the card a 0 weight so the decision tree runs if all values 0
+            # No point playing around something that you know will beat you
+            if any(card in beaten_by for card in known_cards):
+                weight = 0
+            else:
+                # Remove cards from the beaten by list if they are in the known cards, as need this to calc the correct odds (DO I??)
+                for a in known_cards:
+                    if a in beaten_by:
+                        beaten_by.remove(a)
 
-        elif card_on_top in self.__Jacks:
-            if card in self.__Aces:
-                weight += 0.7
-            elif card in self.__Kings:
-                weight += 0.8
-            elif card in self.__Queens:
-                weight += 0.9
-            elif card in self.__Jacks:
-                weight += 1
-            elif card in self.__Tens:
-                weight += 0.05
-            elif card in self.__Eights:
-                weight += 0.05
-            elif card in self.__Twos:
-                weight += 0.1
+                num_of_better_cards = len(beaten_by)
+                num_of_unknown_cards = length_of_player_hand - len(known_cards)
 
-        elif card_on_top in self.__Nines:
-            if card in self.__Aces:
-                weight += 0.6
-            elif card in self.__Kings:
-                weight += 0.7
-            elif card in self.__Queens:
-                weight += 0.8
-            elif card in self.__Jacks:
-                weight += 0.9
-            elif card in self.__Nines:
-                weight += 1
-            elif card in self.__Tens:
-                weight += 0.05
-            elif card in self.__Eights:
-                weight += 0.05
-            elif card in self.__Twos:
-                weight += 0.1
+                cards_left -= (length_of_player_hand - num_of_unknown_cards)
 
-        elif card_on_top in self.__Sevens:
-            if card in self.__Threes:
-                weight += 11
-            elif card in self.__Fours:
-                weight += 10
-            elif card in self.__Fives:
-                weight += 9
-            elif card in self.__Sixes:
-                weight += 8
-            elif card in self.__Sevens:
-                weight += 7
-            elif card in self.__Tens:
-                weight += 0.05
-            elif card in self.__Eights:
-                weight += 0.05
-            elif card in self.__Twos:
-                weight += 0.1
+                probability_to_beat = 1
+                denominator = cards_left
+                for x in range(num_of_unknown_cards):
+                    probability_to_beat *= (num_of_better_cards/denominator)
+                    denominator -= 1
 
-        elif card_on_top in self.__Sixes:
-            if card in self.__Aces:
-                weight += 0.4
-            elif card in self.__Kings:
-                weight += 0.5
-            elif card in self.__Queens:
-                weight += 0.6
-            elif card in self.__Jacks:
-                weight += 0.7
-            elif card in self.__Nines:
-                weight += 0.8
-            elif card in self.__Sevens:
-                weight += 0.9
-            elif card in self.__Sixes:
-                weight += 1
-            elif card in self.__Tens:
-                weight += 0.05
-            elif card in self.__Eights:
-                weight += 0.05
-            elif card in self.__Twos:
-                weight += 0.1
+                probability_to_not_beat = 1 - probability_to_beat
 
-        elif card_on_top in self.__Fives:
-            if card in self.__Aces:
-                weight += 0.3
-            elif card in self.__Kings:
-                weight += 0.4
-            elif card in self.__Queens:
-                weight += 0.5
-            elif card in self.__Jacks:
-                weight += 0.6
-            elif card in self.__Nines:
-                weight += 0.7
-            elif card in self.__Sevens:
-                weight += 0.8
-            elif card in self.__Sixes:
-                weight += 0.9
-            elif card in self.__Fives:
-                weight += 1
-            elif card in self.__Tens:
-                weight += 0.05
-            elif card in self.__Eights:
-                weight += 0.05
-            elif card in self.__Twos:
-                weight += 0.1
+                # Cannot have Aces as the lowest value
+                mod = (card % 13)
+                if mod == 0:
+                    mod = 13
+                if mod in [1, 7, 9]:  # Give the magic cards low, but non-zero, probability to reduce priority in picking
+                    weight = mod * (probability_to_not_beat/2)
+                else:
+                    weight = mod * probability_to_not_beat
 
-        elif card_on_top in self.__Fours:
-            if card in self.__Aces:
-                weight += 0.2
-            elif card in self.__Kings:
-                weight += 0.3
-            elif card in self.__Queens:
-                weight += 0.4
-            elif card in self.__Jacks:
-                weight += 0.5
-            elif card in self.__Nines:
-                weight += 0.6
-            elif card in self.__Sevens:
-                weight += 0.7
-            elif card in self.__Sixes:
-                weight += 0.8
-            elif card in self.__Fives:
-                weight += 0.9
-            elif card in self.__Fours:
-                weight += 1
-            elif card in self.__Tens:
-                weight += 0.05
-            elif card in self.__Eights:
-                weight += 0.05
-            elif card in self.__Twos:
-                weight += 0.1
-
-        elif card_on_top in self.__Threes:
-            if card in self.__Aces:
-                weight += 0.1
-            elif card in self.__Kings:
-                weight += 0.2
-            elif card in self.__Queens:
-                weight += 0.3
-            elif card in self.__Jacks:
-                weight += 0.4
-            elif card in self.__Nines:
-                weight += 0.5
-            elif card in self.__Sevens:
-                weight += 0.6
-            elif card in self.__Sixes:
-                weight += 0.7
-            elif card in self.__Fives:
-                weight += 0.8
-            elif card in self.__Fours:
-                weight += 0.9
-            elif card in self.__Threes:
-                weight += 1
-            elif card in self.__Tens:
-                weight += 0.05
-            elif card in self.__Eights:
-                weight += 0.05
-            elif card in self.__Twos:
-                weight += 0.1
-
-        # No Card on the top, get rid of the lowest value card in hand
-        elif card_on_top == 0:
-            if card in self.__Threes:
-                weight += 12
-            elif card in self.__Fours:
-                weight += 10
-            elif card in self.__Fives:
-                weight += 8
-            elif card in self.__Sixes:
-                weight += 6
-            elif card in self.__Sevens:
-                weight += 4
-            elif card in self.__Nines:
-                weight += 2
-            elif card in self.__Jacks:
-                weight += 0
-            elif card in self.__Queens:
-                weight -= 2
-            elif card in self.__Kings:
-                weight -= 4
-            elif card in self.__Aces:
-                weight -= 6
+        # Know all the cards in the players hand, so each card has a weight of its value, ensuring that the highest card will be played
+        elif length_of_player_hand == len(known_cards):
+            if all(card not in beaten_by for card in known_cards):
+                weight = (card % 13)
+                if weight == 0:
+                    weight = 13
 
         print("Weight =", weight)
         return weight
 
-    def weighted_prioritized_running_sum(self,  playable_cards, known_cards, card_on_top):
+    def weighted_prioritized_running_sum(self,  playable_cards, known_cards, pile, comp_hand, len_of_player_hand):
         print("Running weighted_prioritized_running_sum")
         card_with_weight = {}
 
         if len(playable_cards) == 0:
             return None
 
+        # If the player has an Ace, Two or Eight, return None to run the decision tree
+        highest_value = [self.__Aces, self.__Twos, self.__Eights]
+
+        for lst in highest_value:
+            for x in lst:
+                for y in known_cards:
+                    if y == x:
+                        print("Y =", y, "X =", x)
+                        return None
+
         for card in playable_cards:
-            card_with_weight[card] = self.calc_weight(card, known_cards, card_on_top)
-            if card_with_weight[card] is None:
-                return None  # return none to run the decision tree
+            card_with_weight[card] = self.calc_weight(card, known_cards, pile, comp_hand, len_of_player_hand)
+
+        # If all weights returned 0 (not 0.0), return None to run the decision tree
+        if all(value == 0 and type(value) == int for value in card_with_weight.values()):
+            return None  # return none to run the decision tree
 
         print("Card With Weight Dict =", card_with_weight)
         print("Total =", self.__total)
@@ -330,12 +418,13 @@ class Weights:
             else:
                 print("MAX TOTAL REACHED")
                 max_total_reached = True
-                card_with_weight[highest_priority] = 0  # giving a 0 weight so skips it the next round, avoids deleting and error giving
+                card_with_weight[highest_priority] *= -1  # giving a negative weight so skips it the next round, avoids deleting and error giving
 
         if max_total_reached:
             self.__total = 0
             # max_total_reached = False
 
+        print("New Total =", self.__total)
         return highest_priority
 
 
@@ -348,18 +437,19 @@ class ComputerAI:
         self.knownCards = []
         self.weights = Weights()
 
-    def play_a_card(self, hand, playable_cards, card_on_top):  # Playable cards is the same as middlePile.playable_cards_list
+    def play_a_card(self, hand, pile, length_of_player_hand):  # Playable cards is the same as
+        # middlePile.playable_cards_list
         # This method will return a card which I will then move to the top of the pile somewhere else
 
-        if card_on_top in self.knownCards:
-            self.knownCards.remove(card_on_top)
+        if pile.card_on_top in self.knownCards:
+            self.knownCards.remove(pile.card_on_top)
 
         playable = []  # List of potential plays
         # Dictionary to store plays and their values, the card is the key and the value is the card % 13
         playable_values = {}
 
         for card in hand:
-            if card in playable_cards:
+            if card in pile.playable_cards_list:
                 playable.append(card)
 
         # print("Full list of playable in Computer AI =", playable_cards)
@@ -373,7 +463,7 @@ class ComputerAI:
             playable_values[playable[potentialCard]] = a
 
         if len(self.knownCards) != 0:
-            the_play = self.weights.weighted_prioritized_running_sum(playable, self.knownCards, card_on_top)
+            the_play = self.weights.weighted_prioritized_running_sum(playable, self.knownCards, pile, hand, length_of_player_hand)
             if the_play is None:
                 the_play = ComputerAI.basic_decision_tree(playable_values)
         else:

@@ -37,7 +37,7 @@ transparent.fill((255, 255, 255, 0))
 
 playerWinnerIMG, playerWinnerImgRect = Load_Image.ImageLoad.image_load("win.jpg", False)
 computerWinnerIMG, computerWinnerImgRect = Load_Image.ImageLoad.image_load("lose.jpg", False)
-pickUpDeckIMG, pickUpDeckImgRect = Load_Image.ImageLoad.image_load("PickUpTheDeck.jpg", False)
+pickUpDeckIMG, pickUpDeckImgRect = Load_Image.ImageLoad.image_load("PickUpTheDeck.png", False)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # deck of 52 cards, sprites are also in here
@@ -569,11 +569,11 @@ while running:
 
         # Get the card the computer will play, and where it came from
         if len(computerHand.hand) != 0:
-            computer_move = computerAI.play_a_card(computerHand.hand, middlePile.playable_cards_list, middlePile.card_on_top)
+            computer_move = computerAI.play_a_card(computerHand.hand, middlePile, number_of_player_cards)
             fromHand = True
 
         elif any(card is not None for card in computerTableCards.face_up):
-            computer_move = computerAI.play_a_card(computerTableCards.face_up, middlePile.playable_cards_list, middlePile.card_on_top)
+            computer_move = computerAI.play_a_card(computerTableCards.face_up, middlePile, number_of_player_cards)
             fromTableFaceUp = True
 
         elif any(card is not None for card in computerTableCards.face_down):
