@@ -586,7 +586,7 @@ class BlitPlayer:
 
         # Render the rules if it is at the beginning of the game
         if turn == 1:
-            rules, rules_rect = Load_Image.ImageLoad.image_load("rules.jpg", False)
+            rules, rules_rect = Load_Image.ImageLoad.image_load("Rules.png", False)
             screen.blit(rules, (50, 50))
 
 

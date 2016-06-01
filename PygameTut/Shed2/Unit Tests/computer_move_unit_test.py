@@ -6,11 +6,12 @@ from MiddlePile import *
 from ComputerAI import *
 
 
-class ComputerMoveTest(unittest.TestCase):
+class ComputerDecisionTreeMoveTest(unittest.TestCase):
 
     def setUp(self):
         self.test_hand = HandClass()
         self.middle = Pile()
+        self.comp_ai = ComputerAI()
 
     # this test will need to change/ get more advanced when more AI rules are added
     def testDescription(self):
@@ -26,7 +27,7 @@ class ComputerMoveTest(unittest.TestCase):
 
         self.middle.playable_cards()
 
-        test_move = ComputerAI.play_a_card(self.test_hand.hand, self.middle.playable_cards_list)
+        test_move = self.comp_ai.play_a_card(self.test_hand.hand, self.middle, 0)
 
         self.assertEquals(test_move, 5)
 

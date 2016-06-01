@@ -23,6 +23,20 @@ class Weights:
         self.__total = 0
         self.__max_total = 25
 
+    # Method to set the starting total (Only for testing purposes)
+    def set_total(self, number):
+        self.__total = number
+
+    # Method to set max total (Used in later iteration for difficulty purposes)
+    def set_max_total(self, level):
+
+        if level == 1:
+            self.__max_total = 15
+        if level == 2:
+            self.__max_total = 25
+        if level == 3:
+            self.__max_total = 35
+
     def fill_beaten_by(self, card):
         beaten_by = []
         # If there is nothing on the top of the pile, make it seem as if there is a one, as everything should be allowed on it
@@ -352,6 +366,7 @@ class Weights:
 
                 cards_left -= (length_of_player_hand - num_of_unknown_cards)
 
+                # Calculate the probability that the card will be beaten
                 probability_to_beat = 1
                 denominator = cards_left
                 for x in range(num_of_unknown_cards):
@@ -375,6 +390,9 @@ class Weights:
                 weight = (card % 13)
                 if weight == 0:
                     weight = 13
+            # The cards cannot be beaten, return 0, if all are 0, it will just run the decision tree
+            else:
+                weight = 0
 
         print("Weight =", weight)
         return weight
@@ -441,7 +459,7 @@ class ComputerAI:
         # middlePile.playable_cards_list
         # This method will return a card which I will then move to the top of the pile somewhere else
 
-        if pile.card_on_top in self.knownCards:
+        if pile.card_on_top in self.knownCards and len(self.knownCards) != 0:
             self.knownCards.remove(pile.card_on_top)
 
         playable = []  # List of potential plays
