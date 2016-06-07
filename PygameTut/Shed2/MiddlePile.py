@@ -430,6 +430,12 @@ class Pile:
     def start_game(self, deck):
         # Choose a random card left in the deck
         card = random.choice(deck)
+        # Ensures that the starting card is less than a 7
+        while True:
+            if card % 13 >= 6 or card % 13 == 0:
+                card = random.choice(deck)
+            else:
+                break
         # Remove from the deck
         deck.remove(card)
         # Move onto the pile

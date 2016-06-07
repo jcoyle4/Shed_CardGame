@@ -1,6 +1,3 @@
-import random
-
-
 # Class to store data and functionality for the table cards
 class TableCardsClass:
 
@@ -13,28 +10,8 @@ class TableCardsClass:
 
     # Draw the card from the deck
     def setup(self, deck):
-        deck = self.draw_face_up(deck)
-        deck = self.draw_face_down(deck)
-
-        return deck
-
-    def draw_face_up(self, deck):
-
-        while len(self.face_up) < 3:
-            card = random.choice(deck)
-            self.face_up.append(card)
-            deck.remove(card)
-
-        return deck
-
-    def draw_face_down(self, deck):
-
-        while len(self.face_down) < 3:
-            card = random.choice(deck)
-            self.face_down.append(card)
-            deck.remove(card)
-
-        return deck
+        self.face_down = deck.draw_table_cards(self.face_down)
+        self.face_up = deck.draw_table_cards(self.face_up)
 
     # Method used by the player when playing their face down cards
     def play_face_down_card(self, index, hand, pile):

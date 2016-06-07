@@ -317,7 +317,7 @@ class Weights:
 
         return beaten_by
 
-    def calc_weight(self, card, known_cards, pile, comp_hand, length_of_player_hand):
+    def calc_weight(self, card, known_cards, pile, comp_hand, length_of_player_hand, comp_table_cards, player_table_cards):
         # card is the card that we are calculating the weight of
         # known cards are the cards that the computer knows the player has in their hand
         # card on top is the card currently on the top of the pile
@@ -350,6 +350,15 @@ class Weights:
             for d in pile.discarded_cards:
                 if d in beaten_by:
                     beaten_by.remove(d)
+
+            # Remove Table Cards
+            for e in comp_table_cards:
+                if e in beaten_by:
+                    beaten_by.remove(e)
+
+            for f in player_table_cards:
+                if f in beaten_by:
+                    beaten_by.remove(f)
 
             # If the player has a card that can beat the card in hand, give the card a 0 weight so the decision tree runs if all values 0
             # No point playing around something that you know will beat you
@@ -394,11 +403,10 @@ class Weights:
             else:
                 weight = 0
 
-        print("Weight =", weight)
         return weight
 
-    def weighted_prioritized_running_sum(self,  playable_cards, known_cards, pile, comp_hand, len_of_player_hand):
-        print("Running weighted_prioritized_running_sum")
+    def weighted_prioritized_running_sum(self,  playable_cards, known_cards, pile, comp_hand, len_of_player_hand, comp_table_cards,
+                                         player_table_cards):
         card_with_weight = {}
 
         if len(playable_cards) == 0:
@@ -411,19 +419,14 @@ class Weights:
             for x in lst:
                 for y in known_cards:
                     if y == x:
-                        print("Y =", y, "X =", x)
                         return None
 
         for card in playable_cards:
-            card_with_weight[card] = self.calc_weight(card, known_cards, pile, comp_hand, len_of_player_hand)
+            card_with_weight[card] = self.calc_weight(card, known_cards, pile, comp_hand, len_of_player_hand, comp_table_cards, player_table_cards)
 
         # If all weights returned 0 (not 0.0), return None to run the decision tree
         if all(value == 0 and type(value) == int for value in card_with_weight.values()):
             return None  # return none to run the decision tree
-
-        print("Card With Weight Dict =", card_with_weight)
-        print("Total =", self.__total)
-        print("Max Total =", self.__max_total)
 
         max_total_reached = False
 
@@ -434,7 +437,6 @@ class Weights:
                 self.__total += card_with_weight[highest_priority]
                 break
             else:
-                print("MAX TOTAL REACHED")
                 max_total_reached = True
                 card_with_weight[highest_priority] *= -1  # giving a negative weight so skips it the next round, avoids deleting and error giving
 
@@ -442,7 +444,6 @@ class Weights:
             self.__total = 0
             # max_total_reached = False
 
-        print("New Total =", self.__total)
         return highest_priority
 
 
@@ -455,7 +456,7 @@ class ComputerAI:
         self.knownCards = []
         self.weights = Weights()
 
-    def play_a_card(self, hand, pile, length_of_player_hand):  # Playable cards is the same as
+    def play_a_card(self, hand, pile, length_of_player_hand, comp_table_cards, player_table_cards):  # Playable cards is the same as
         # middlePile.playable_cards_list
         # This method will return a card which I will then move to the top of the pile somewhere else
 
@@ -481,7 +482,8 @@ class ComputerAI:
             playable_values[playable[potentialCard]] = a
 
         if len(self.knownCards) != 0:
-            the_play = self.weights.weighted_prioritized_running_sum(playable, self.knownCards, pile, hand, length_of_player_hand)
+            the_play = self.weights.weighted_prioritized_running_sum(playable, self.knownCards, pile, hand, length_of_player_hand, comp_table_cards,
+                                                                     player_table_cards)
             if the_play is None:
                 the_play = ComputerAI.basic_decision_tree(playable_values)
         else:
@@ -491,7 +493,6 @@ class ComputerAI:
 
     @staticmethod
     def basic_decision_tree(playable_cards_decision_tree):
-        print("Running decision tree")
         num_of_plays = len(playable_cards_decision_tree)
         magic_card_modulo = [1, 7, 9]
         playable_magic_cards = {}
@@ -554,18 +555,3 @@ class ComputerAI:
                 list_of_cards_to_choose_from.append(card)
 
         return random.choice(list_of_cards_to_choose_from)
-
-""" Aaron notes on weighted truncated running sum"""
-# play x cards , only information gain of 50, that's how much the computer learns per move
-#
-# calc weighted priority of each card in hand, only limiting to one card, if more than one card, introduce truncation
-# make an arbitrary threshold, keep track of the value of the weighted priority of the card that the computer plays
-# when this threshold is hit, select the next card that does not cross this threshold
-# then reset the threshold to 0 again
-#
-#
-#
-#
-#
-#
-#

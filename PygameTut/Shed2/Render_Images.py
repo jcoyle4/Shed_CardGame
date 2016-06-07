@@ -422,7 +422,7 @@ class BlitPlayer:
             screen.blit(back_of_card, (410, 5))
             screen.blit(back_of_card, (420, 5))
 
-        elif len(computer_hand) == 25:
+        elif len(computer_hand) >= 25:
             screen.blit(back_of_card, (190, 5))
             screen.blit(back_of_card, (200, 5))
             screen.blit(back_of_card, (210, 5))

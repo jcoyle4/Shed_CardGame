@@ -1,3 +1,13 @@
+"""
+    Code for the card game Shed/Palace
+    One player versus computer
+    Images created in Microsoft Paint or from https://pixabay.com/
+    Ideas for some solutions adapted from
+    http://www.pygame.org/project-Pyhole-2010-.html
+    and
+    Making Games with Python & Pygame, Al Sweigart, 2012
+"""
+
 # ----------------- Imports ---------
 import os
 from Hand import HandClass
@@ -25,7 +35,7 @@ screen = pygame.display.set_mode((700, 700))
 
 # Loading Images ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 background, backgroundRect = Load_Image.ImageLoad.image_load("table.jpg", False)
-backOfCard, backOfCardRect = Load_Image.ImageLoad.image_load('back.png', False)
+backOfCard, backOfCardRect = Load_Image.ImageLoad.image_load('cardback.png', False)
 
 
 width = backOfCardRect.w
@@ -35,8 +45,8 @@ transparent = pygame.Surface((width, height), pygame.SRCALPHA)
 transparent.set_alpha(0)
 transparent.fill((255, 255, 255, 0))
 
-playerWinnerIMG, playerWinnerImgRect = Load_Image.ImageLoad.image_load("win.jpg", False)
-computerWinnerIMG, computerWinnerImgRect = Load_Image.ImageLoad.image_load("lose.jpg", False)
+playerWinnerIMG, playerWinnerImgRect = Load_Image.ImageLoad.image_load("win.png", False)
+computerWinnerIMG, computerWinnerImgRect = Load_Image.ImageLoad.image_load("lose.png", False)
 pickUpDeckIMG, pickUpDeckImgRect = Load_Image.ImageLoad.image_load("PickUpTheDeck.png", False)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -58,13 +68,13 @@ computerTableCards = TableCardsClass()
 playerTableCards = TableCardsClass()
 
 # Draw the 6 table cards for each players
-gameDeck.cards = computerTableCards.setup(gameDeck.cards)
-gameDeck.cards = playerTableCards.setup(gameDeck.cards)
+computerTableCards.setup(gameDeck)
+playerTableCards.setup(gameDeck)
 
 # Set up the computer hand
-gameDeck.cards = computerHand.set_up(gameDeck.cards)
+computerHand.hand = gameDeck.draw_hand(computerHand.hand)
 # Set up the player hand
-gameDeck.cards = playerHand.set_up(gameDeck.cards)
+playerHand.hand = gameDeck.draw_hand(playerHand.hand)
 
 # Use this to center the cards for playing, and make the hand a list of 25 entries, mostly None
 playerHand.initial_rejig()
@@ -349,6 +359,12 @@ while running:
     # Count how many cards the player has, used to draw a card
     number_of_player_cards = sum(x is not None for x in playerHand.hand)
 
+    # add the table cards to the list of computers known cards
+    if sum(x is not None for x in playerTableCards.face_up) != 0:
+        for card in playerTableCards.face_up:
+            if card not in computerAI.knownCards:
+                computerAI.knownCards.append(card)
+
     # Anything in this For Loop depends on Whether and Where the mouse was clicked
     for event in pygame.event.get():
 
@@ -366,7 +382,6 @@ while running:
             x, y = event.pos
         # If User clicks and something needs to happen
         elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-            print(computerHand.hand)
             # Double click anywhere to clear the rules
             if dblClickGlobal and pygame.time.get_ticks() - dblClickGlobal < 600:
                 turn += 1
@@ -472,7 +487,7 @@ while running:
                                     # Card un-highlighted
                                     elif listOfC[indexToPlay] == 1:
                                         listOfC = HandClass.un_flip_all(listOfC)
-                                        listOfC[indexToPlay] = HandClass.flip_c(listOfC[indexToPlay])
+                                        listOfC[indexToPlay] = HandClass.flip(listOfC[indexToPlay])
 
             # Player Table Cards
             # Only allowed to interact if hand is empty
@@ -507,7 +522,7 @@ while running:
 
                                             elif listOfCTable[indexFaceUp] == 1:
                                                 listOfCTable = HandClass.un_flip_all(listOfCTable)
-                                                listOfCTable[indexFaceUp] = HandClass.flip_c(listOfCTable[indexFaceUp])
+                                                listOfCTable[indexFaceUp] = HandClass.flip(listOfCTable[indexFaceUp])
 
                 # Else If statement to interact with FACE DOWN CARDS
                 elif any(card is not None for card in playerTableCards.face_down):
@@ -569,11 +584,13 @@ while running:
 
         # Get the card the computer will play, and where it came from
         if len(computerHand.hand) != 0:
-            computer_move = computerAI.play_a_card(computerHand.hand, middlePile, number_of_player_cards)
+            computer_move = computerAI.play_a_card(computerHand.hand, middlePile, number_of_player_cards, computerTableCards.face_up,
+                                                   playerTableCards.face_up)
             fromHand = True
 
         elif any(card is not None for card in computerTableCards.face_up):
-            computer_move = computerAI.play_a_card(computerTableCards.face_up, middlePile, number_of_player_cards)
+            computer_move = computerAI.play_a_card(computerHand.hand, middlePile, number_of_player_cards, computerTableCards.face_up,
+                                                   playerTableCards.face_up)
             fromTableFaceUp = True
 
         elif any(card is not None for card in computerTableCards.face_down):

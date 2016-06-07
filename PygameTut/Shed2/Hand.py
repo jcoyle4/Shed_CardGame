@@ -8,29 +8,6 @@ class HandClass:
     def __init__(self):
         self.hand = []
 
-    # The initial drawing of a hand from the deck
-    def set_up(self, deck):
-        # Draw up until 5 cards
-        while len(self.hand) < 5:
-            # Randomly pick a card from the deck
-            card = random.choice(deck)
-            # Put that card into the hand
-            self.hand.append(card)
-            # Remove the card from the deck
-            deck.remove(card)
-
-        return deck
-
-    def draw_a_card(self, deck, card_position):
-        if len(deck) == 0:
-            card = random.choice(deck)
-            deck.remove(card)
-            for x in range(0, 15):
-                if card_position == x:
-                    self.hand[card_position] = card
-
-        return deck
-
     # Take a hand of 5 cards, and return a list of 25 indexes, 20 will be None, 5 will not
     def initial_rejig(self):
         list_of_25 = [None] * 25
@@ -109,21 +86,21 @@ class HandClass:
 
     # Flip a C value to make a card highlighted
     @staticmethod
-    def flip_c(c_to_flip):
+    def flip(to_flip):
 
-        if c_to_flip == 1:
-            c_to_flip = 0
+        if to_flip == 1:
+            to_flip = 0
 
-        return c_to_flip
+        return to_flip
 
     # Un flip all c values so no cards are highlighted
     @staticmethod
-    def un_flip_all(c_list):
+    def un_flip_all(_list):
 
-        for x in range(len(c_list)):
-            c_list[x] = 1
+        for x in range(len(_list)):
+            _list[x] = 1
 
-        return c_list
+        return _list
 
     # Pick up the pile
     def pick_up(self, pile, player):

@@ -5,7 +5,7 @@ import Load_Image
 class DeckClass:
 
     # List of Cards
-    cards = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,           # 2-Ace of Clubs
+    cards = [1,   2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13,           # 2-Ace of Clubs
              14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26,  # 2-Ace of Diamonds
              27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39,  # 2-Ace of Hearts
              40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52]  # 2-Ace of Spades
@@ -41,6 +41,26 @@ class DeckClass:
                 self.highlighted_Card_Sprites_rect.append(highlighted_card_image_rect)
         except TypeError:  # Catching a type error as if running a unit test there won't be any, or be a need for images
             pass
+
+    # Method to draw a hand of 5 cards
+    def draw_hand(self, hand):
+        while len(hand) < 5:
+            # Randomly pick a card from the deck
+            card = random.choice(self.cards)
+            # Put that card into the hand
+            hand.append(card)
+            # Remove the card from the deck
+            self.cards.remove(card)
+        return hand
+
+    # Method to draw 3 table cards, similar to draw_hand
+    def draw_table_cards(self, table_cards):
+        while len(table_cards) < 3:
+            card = random.choice(self.cards)
+            table_cards.append(card)
+            self.cards.remove(card)
+
+        return table_cards
 
     # Method to draw a card from the deck
     def draw(self, hand, card_position):
